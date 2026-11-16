@@ -7,7 +7,6 @@ export function MaturityBadge({ level, className }: { level: MaturityLevel; clas
   return (
     <span
       data-maturity={level}
-      style={{ backgroundImage: `var(--pattern-maturity-${level})` }}
       className={cn(
         'inline-flex items-center gap-2 rounded-sm border px-2 py-0.5 text-fine whitespace-nowrap tabular',
         classes,
