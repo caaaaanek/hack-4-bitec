@@ -70,20 +70,23 @@ export type MaturityLevel = 1 | 2 | 3 | 4 | 5
 
 export const MATURITY: Record<MaturityLevel, { name: string; classes: string }> = {
   1: {
-    name: 'Початковий',
+    name: 'Початковий (хаотичний)',
     classes: 'bg-maturity-1-bg text-maturity-1-text border-maturity-1-chart',
   },
-  2: { name: 'Базовий', classes: 'bg-maturity-2-bg text-maturity-2-text border-maturity-2-chart' },
+  2: {
+    name: 'Керований',
+    classes: 'bg-maturity-2-bg text-maturity-2-text border-maturity-2-chart',
+  },
   3: {
     name: 'Визначений',
     classes: 'bg-maturity-3-bg text-maturity-3-text border-maturity-3-chart',
   },
   4: {
-    name: 'Керований',
+    name: 'Вимірюваний',
     classes: 'bg-maturity-4-bg text-maturity-4-text border-maturity-4-chart',
   },
   5: {
-    name: 'Зразковий',
+    name: 'Оптимізуючий',
     classes: 'bg-maturity-5-bg text-maturity-5-text border-maturity-5-chart',
   },
 }

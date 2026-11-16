@@ -3,7 +3,7 @@ import { StatusBadge } from './StatusBadge'
 import { MaturityBadge } from './MaturityBadge'
 import { TrustBadge } from './TrustBadge'
 import { SourceLabel } from './SourceMarker'
-import { STATUSES, type StatusId } from './config'
+import { MATURITY, SOURCES, STATUSES, type StatusId } from './config'
 
 describe('badges', () => {
   it('every status renders label and icon', () => {
@@ -15,6 +15,23 @@ describe('badges', () => {
     }
   })
   it('has nine statuses', () => expect(Object.keys(STATUSES)).toHaveLength(9))
+  it('maturity names match the brief exactly', () => {
+    expect(Object.values(MATURITY).map((m) => m.name)).toEqual([
+      'Початковий (хаотичний)',
+      'Керований',
+      'Визначений',
+      'Вимірюваний',
+      'Оптимізуючий',
+    ])
+  })
+  it('has four data sources', () => {
+    expect(Object.values(SOURCES).map((s) => s.label)).toEqual([
+      'Сприйняття РГ',
+      'Сприйняття ОС',
+      'Експерти',
+      'Факти',
+    ])
+  })
   it('maturity shows digit, name and data attribute', () => {
     const { container } = render(<MaturityBadge level={3} />)
     expect(container).toHaveTextContent('3')
@@ -24,7 +41,7 @@ describe('badges', () => {
   it('trust has accessible text', () => {
     render(<TrustBadge level="medium" />)
     expect(screen.getByText('Середня')).toBeInTheDocument()
-    expect(screen.getByText(/Довіра до даних/)).toBeInTheDocument()
+    expect(screen.getByText(/Довіра до оцінки/)).toBeInTheDocument()
   })
   it('source label has marker shape', () => {
     const { container } = render(<SourceLabel source="experts" />)

@@ -57,4 +57,21 @@
   .touch-h {
     min-height: var(--touch-target);
   }
+  /* Сітка сторінки з брифу: 4 колонки (360), 8 (768), 12 (1280 і 1920) */
+  .grid-page {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  @media (min-width: 48rem) {
+    .grid-page {
+      gap: 1.5rem;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 80rem) {
+    .grid-page {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+  }
 }

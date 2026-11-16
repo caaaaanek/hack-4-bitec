@@ -76,6 +76,8 @@ async function checkPage(page: Page, tag: string, width: number): Promise<string
   if (info.text.includes('—')) out.push(`[${tag}] довге тире у видимому тексті`)
   if (/підприємств/i.test(info.text)) out.push(`[${tag}] слово «підприємство» у видимому тексті`)
   if (/рейтинг/i.test(info.text)) out.push(`[${tag}] слово «рейтинг» у видимому тексті`)
+  if (/порушник|небезпечн|підозр|оцінка командира/i.test(info.text))
+    out.push(`[${tag}] слово-ярлик у видимому тексті`)
   if (info.lang !== 'uk') out.push(`[${tag}] lang=${info.lang}`)
   if (width === 360 && info.scrollW > info.innerW)
     out.push(`[${tag}] горизонтальна прокрутка (${info.scrollW} > ${info.innerW})`)

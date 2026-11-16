@@ -1,7 +1,7 @@
 import { EyeOff } from 'lucide-react'
+import { HIDDEN_GROUP_TEXT } from './messages'
 
-export const HIDDEN_GROUP_TEXT =
-  'Недостатньо відповідей, щоб показати результати цієї групи. Показано дані рівня вище. Це захищає анонімність учасників.'
+export { HIDDEN_GROUP_TEXT }
 
 export function HiddenGroupState() {
   return (

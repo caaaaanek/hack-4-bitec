@@ -14,7 +14,7 @@ export function TrustBadge({ level, className }: { level: TrustLevel; className?
   return (
     <span className={cn(badgeBase, classes, className)} data-trust={level}>
       <Icon aria-hidden className="size-4 shrink-0" />
-      <span className="sr-only">Довіра до даних: </span>
+      <span className="sr-only">Довіра до оцінки: </span>
       {label}
     </span>
   )

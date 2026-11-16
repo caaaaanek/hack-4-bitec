@@ -11,7 +11,10 @@ import {
   Dialog,
   EmptyState,
   ErrorState,
+  ForbiddenState,
+  FlagNote,
   FormField,
+  LoadingState,
   HiddenGroupState,
   IconButton,
   Input,
@@ -312,14 +315,17 @@ export function Design() {
                 <option value="" disabled>
                   Оберіть значення
                 </option>
-                <option>Робоча група</option>
-                <option>Освітня спільнота</option>
+                <option>Робоча група (РГ)</option>
+                <option>Особовий склад</option>
                 <option>Експерт</option>
               </Select>
             )}
           </FormField>
           <div className="md:col-span-2">
-            <FormField label="Коментар" hint="Не вказуйте персональних даних.">
+            <FormField
+              label="Причина відхилення"
+              hint="Обов'язкове поле. Не вказуйте персональних даних."
+            >
               {(p) => <Textarea id={p.id} aria-describedby={p.describedBy} />}
             </FormField>
           </div>
@@ -349,7 +355,7 @@ export function Design() {
             <MaturityBadge key={l} level={l} />
           ))}
         </Row>
-        <Row label="Довіра до даних">
+        <Row label="Довіра до оцінки">
           <TrustBadge level="high" />
           <TrustBadge level="medium" />
           <TrustBadge level="low" />
@@ -431,7 +437,7 @@ export function Design() {
             Підтвердження
           </Button>
           <Button variant="secondary" onClick={() => setConfirmDanger(true)}>
-            Небезпечна дія
+            Незворотна дія
           </Button>
           <Button
             variant="secondary"
@@ -479,13 +485,15 @@ export function Design() {
         <div className="grid gap-4 md:grid-cols-2">
           <Card>
             <p className="text-caption text-text-muted mb-3">Завантаження</p>
-            <Skeleton className="mb-3 h-8 w-1/2" />
-            <SkeletonText lines={3} />
+            <LoadingState>
+              <Skeleton className="mb-3 h-8 w-1/2" />
+              <SkeletonText lines={3} />
+            </LoadingState>
           </Card>
           <EmptyState
             icon={<Inbox className="size-8" aria-hidden />}
             title="Поки немає даних"
-            description="Щойно з'являться відповіді, тут буде видно результати."
+            description="Результати зʼявляться тут, щойно цикл оцінювання збере достатньо відповідей. Оновлення відбувається автоматично."
             action={<Button variant="secondary">Оновити</Button>}
           />
           <div data-demo>
@@ -496,6 +504,10 @@ export function Design() {
             />
           </div>
           <HiddenGroupState />
+          <ForbiddenState />
+          <FlagNote title="Розбіжність між сприйняттям і фактами">
+            Сприйняття ОС помітно вище за факти в компоненті «Підзвітність».
+          </FlagNote>
         </div>
       </Section>
     </div>
