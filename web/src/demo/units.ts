@@ -1,5 +1,5 @@
 /** Синтетична ієрархія підрозділів. Назви нейтральні, глибина довільна (дерево за parentId). */
-import { K_MIN_GROUP } from '@/lib/scoring/methodology'
+import { K_MIN_GROUP } from '../lib/scoring/methodology'
 
 export interface Unit {
   id: string

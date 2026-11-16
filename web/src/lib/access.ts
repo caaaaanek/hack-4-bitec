@@ -1,6 +1,6 @@
 /** Модель доступу: для кожної ролі список доступних маршрутів і маршрут за замовчуванням. */
 import { matchPath } from 'react-router-dom'
-import { ROOT_UNIT_ID } from '@/demo/units'
+import { ROOT_UNIT_ID } from '../demo/units'
 
 export const ROLES = [
   'admin',

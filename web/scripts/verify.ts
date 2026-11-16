@@ -3,7 +3,13 @@ import { mkdirSync, rmSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { chromium, type Page } from 'playwright'
 import { preview } from 'vite'
-import { ROLES, WIDTHS, type VerifyRole, type VerifyRoute } from './verify-config.ts'
+import {
+  FORBIDDEN_FRAGMENT,
+  ROLES,
+  WIDTHS,
+  type VerifyRole,
+  type VerifyRoute,
+} from './verify-config.ts'
 
 const OUT = join(process.cwd(), 'artifacts', 'screens')
 const slug = (p: string) =>
@@ -46,6 +52,13 @@ async function checkRoute(
       await page.waitForSelector(route.ready ?? '[data-ready="true"]', { timeout: 10_000 })
       await page.evaluate(() => document.fonts.ready)
       problems.push(...(await checkPage(page, tag, width)))
+      const body = await page.evaluate(() => document.body.innerText)
+      const isForbidden = body.includes(FORBIDDEN_FRAGMENT)
+      if (route.forbidden && !isForbidden) problems.push(`[${tag}] очікувався ForbiddenState`)
+      if (!route.forbidden && !route.showsForbiddenDemo && isForbidden)
+        problems.push(`[${tag}] несподівано ForbiddenState`)
+      if (route.contains && !body.includes(route.contains))
+        problems.push(`[${tag}] немає тексту «${route.contains}»`)
       const dir = join(OUT, role.id, slug(route.path))
       mkdirSync(dir, { recursive: true })
       await page.screenshot({ path: join(dir, `${width}.png`), fullPage: true })
@@ -84,6 +97,48 @@ async function checkPage(page: Page, tag: string, width: number): Promise<string
   return out
 }
 
+/** Опитування від початку до подяки на 360 px: без горизонтальної прокрутки, цілі від 44 px. */
+async function checkSurveyFlow(base: string, browser: Awaited<ReturnType<typeof chromium.launch>>) {
+  const problems: string[] = []
+  const ctx = await browser.newContext({ viewport: { width: 360, height: 740 }, locale: 'uk-UA' })
+  const page = await ctx.newPage()
+  const overflow = async (where: string) => {
+    const w = await page.evaluate(() => [document.documentElement.scrollWidth, window.innerWidth])
+    if (w[0]! > w[1]!) problems.push(`${where}: горизонтальна прокрутка (${w[0]} > ${w[1]})`)
+  }
+  try {
+    await page.goto(new URL('/s/demo', base).href, { waitUntil: 'networkidle' })
+    await overflow('екран гарантій')
+    await page.getByRole('button', { name: 'Розумію, почати' }).click()
+    for (let step = 0; step < 3; step++) {
+      await overflow(`крок ${step + 1}`)
+      const small = await page.evaluate(
+        () =>
+          [...document.querySelectorAll('fieldset label')].filter(
+            (l) => l.getBoundingClientRect().height < 44,
+          ).length,
+      )
+      if (small) problems.push(`крок ${step + 1}: цілей менше 44 px: ${small}`)
+      if (step === 2) {
+        await page.getByRole('button', { name: 'Надіслати' }).click()
+        await page.getByText(/Залишилось відповісти на/).waitFor()
+        await overflow('перелік пропущених')
+      }
+      const groups = await page.locator('fieldset').count()
+      for (let g = 0; g < groups; g++)
+        await page.locator('fieldset').nth(g).locator('label').nth(2).click()
+      if (step < 2) await page.getByRole('button', { name: 'Далі' }).click()
+    }
+    await page.getByRole('button', { name: 'Надіслати' }).click()
+    await page.getByText('Дякуємо. Ваші відповіді збережено анонімно.').waitFor()
+    await overflow('екран подяки')
+  } catch (e) {
+    problems.push(`потік не пройдено: ${(e as Error).message.split('\n')[0]}`)
+  }
+  await ctx.close()
+  return problems
+}
+
 async function main() {
   if (!existsSync(join(process.cwd(), 'dist'))) {
     console.error('Немає dist/. Запустіть npm run build (або npm run verify).')
@@ -97,6 +152,8 @@ async function main() {
   try {
     for (const role of ROLES)
       for (const route of role.routes) results.push(await checkRoute(base, role, route, browser))
+    const flow = await checkSurveyFlow(base, browser)
+    results.push({ role: 'respondent', path: 'потік опитування 360', problems: flow })
   } finally {
     await browser.close()
     await new Promise<void>((r) => server.httpServer.close(() => r()))

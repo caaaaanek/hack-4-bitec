@@ -2,7 +2,7 @@
  * [ПРОПОЗИЦІЯ] Припущення методики. Уся логіка розрахунку живе лише тут, щоб її можна було замінити
  * без змін в інтерфейсі. Див. docs/DESIGN_SYSTEM.md, розділ «Припущення методики».
  */
-import type { MaturityLevel } from '@/components/ui/config'
+import type { MaturityLevel } from '../../components/ui/config'
 
 export type ComponentId = 'culture' | 'system' | 'accountability'
 

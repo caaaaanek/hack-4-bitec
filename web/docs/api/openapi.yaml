@@ -603,28 +603,102 @@ paths:
                 scope: institution
                 cycle: { id: '2026-11', date: '2026-11-16' }
                 institution: Умовний військовий інститут «Альфа»
-                index: { value: 54.2, level: 3, levelName: Визначений, previousValue: 47.0, delta: 7.2 }
-                summary: { text: '54,2 бала, Визначений, достовірність C', reason: 'Підзвітність: самооцінку не підтверджують факти' }
+                index:
+                  { value: 54.2, level: 3, levelName: Визначений, previousValue: 47.0, delta: 7.2 }
+                summary:
+                  {
+                    text: '54,2 бала, Визначений, достовірність C',
+                    reason: 'Підзвітність: самооцінку не підтверджують факти',
+                  }
                 components:
-                  - { id: culture, label: Культура, perception: 57.5, facts: 40, credited: 57.5, limited: false, previousCredited: 50 }
-                  - { id: system, label: Система, perception: 45, facts: 55, credited: 45, limited: false, previousCredited: 41 }
-                  - { id: accountability, label: Підзвітність, perception: 80, facts: 35, credited: 60, limited: true, previousCredited: 50, limiterReason: 'Сприйняття (80) перевищує факти (35) більш ніж на 25 пунктів, тому зараховано 60.' }
+                  - {
+                      id: culture,
+                      label: Культура,
+                      perception: 57.5,
+                      facts: 40,
+                      credited: 57.5,
+                      limited: false,
+                      previousCredited: 50,
+                    }
+                  - {
+                      id: system,
+                      label: Система,
+                      perception: 45,
+                      facts: 55,
+                      credited: 45,
+                      limited: false,
+                      previousCredited: 41,
+                    }
+                  - {
+                      id: accountability,
+                      label: Підзвітність,
+                      perception: 80,
+                      facts: 35,
+                      credited: 60,
+                      limited: true,
+                      previousCredited: 50,
+                      limiterReason: 'Сприйняття (80) перевищує факти (35) більш ніж на 25 пунктів, тому зараховано 60.',
+                    }
                 trust:
                   grade: C
                   word: потрібна перевірка
                   responses: 48
                   flags:
-                    - { id: tf-gap, weight: major, raised: true, title: 'Розбіжність сприйняття й фактів у Підзвітності (80 проти 35)', explanation: 'Сприйняття значно вище за факти, тому зараховано з обмеженням. Варто звірити з чек-листом.' }
-                    - { id: tf-same, weight: minor, raised: true, title: Однакові відповіді в частині анкет особового складу, explanation: 'У частині анкет усі відповіді однакові. Це може означати, що анкету заповнювали поспіхом. Варто перевірити додатково.' }
-                    - { id: tf-jump, weight: major, raised: false, title: Різка зміна індексу між циклами без пояснення, explanation: 'Індекс змінився помірно, різкого стрибка немає.' }
-                    - { id: tf-experts, weight: minor, raised: false, title: Замало відповідей від експертів, explanation: Отримано всі очікувані експертні анкети. }
+                    - {
+                        id: tf-gap,
+                        weight: major,
+                        raised: true,
+                        title: 'Розбіжність сприйняття й фактів у Підзвітності (80 проти 35)',
+                        explanation: 'Сприйняття значно вище за факти, тому зараховано з обмеженням. Варто звірити з чек-листом.',
+                      }
+                    - {
+                        id: tf-same,
+                        weight: minor,
+                        raised: true,
+                        title: Однакові відповіді в частині анкет особового складу,
+                        explanation: 'У частині анкет усі відповіді однакові. Це може означати, що анкету заповнювали поспіхом. Варто перевірити додатково.',
+                      }
+                    - {
+                        id: tf-jump,
+                        weight: major,
+                        raised: false,
+                        title: Різка зміна індексу між циклами без пояснення,
+                        explanation: 'Індекс змінився помірно, різкого стрибка немає.',
+                      }
+                    - {
+                        id: tf-experts,
+                        weight: minor,
+                        raised: false,
+                        title: Замало відповідей від експертів,
+                        explanation: Отримано всі очікувані експертні анкети.,
+                      }
                 strengths:
-                  - { id: s1, title: 'Культура: відкритість до етичних питань', value: 57.5, component: culture }
+                  - {
+                      id: s1,
+                      title: 'Культура: відкритість до етичних питань',
+                      value: 57.5,
+                      component: culture,
+                    }
                   - { id: s2, title: Зростання індексу два цикли поспіль, value: 13.2 }
                 attention:
-                  - { id: a1, title: 'Підзвітність: підтвердити факти', value: 35, component: accountability }
-                  - { id: a2, title: 'Система: зробити процедури помітнішими', value: 45, component: system }
-                  - { id: a3, title: 'Культура: більше практичних прикладів', value: 40, component: culture }
+                  - {
+                      id: a1,
+                      title: 'Підзвітність: підтвердити факти',
+                      value: 35,
+                      component: accountability,
+                    }
+                  - {
+                      id: a2,
+                      title: 'Система: зробити процедури помітнішими',
+                      value: 45,
+                      component: system,
+                    }
+                  - {
+                      id: a3,
+                      title: 'Культура: більше практичних прикладів',
+                      value: 40,
+                      component: culture,
+                    }
                 conclusion: 'Заклад перебуває на рівні зрілості 3 «Визначений»: індекс доброчесності 54,2 з 100, що на 7,2 пункта вище, ніж у попередньому циклі.'
         '403': { $ref: '#/components/responses/Forbidden' }
   /index/breakdown:
@@ -661,8 +735,22 @@ paths:
                   value: 54.2
                   contribution: 54.17
                   children:
-                    - { id: culture, kind: component, label: Культура, weight: 33.3, value: 57.5, contribution: 19.17 }
-                    - { id: system, kind: component, label: Система, weight: 33.3, value: 45, contribution: 15 }
+                    - {
+                        id: culture,
+                        kind: component,
+                        label: Культура,
+                        weight: 33.3,
+                        value: 57.5,
+                        contribution: 19.17,
+                      }
+                    - {
+                        id: system,
+                        kind: component,
+                        label: Система,
+                        weight: 33.3,
+                        value: 45,
+                        contribution: 15,
+                      }
                     - id: accountability
                       kind: component
                       label: Підзвітність
@@ -672,10 +760,46 @@ paths:
                       limited: true
                       limiterReason: 'Сприйняття (80) перевищує факти (35) більш ніж на 25 пунктів, тому зараховано 60.'
                       children:
-                        - { id: ac-p1, kind: item, label: Прозорість рішень керівництва, weight: 30, value: 63.75, contribution: 6.38, source: wg, limited: true }
-                        - { id: ac-p2, kind: item, label: Оприлюднення результатів перевірок, weight: 30, value: 60, contribution: 6, source: wg, limited: true }
-                        - { id: ac-p3, kind: item, label: Відповідальність за виконання заходів, weight: 20, value: 56.25, contribution: 3.75, source: os, limited: true }
-                        - { id: ac-p4, kind: item, label: Контроль виконання рішень, weight: 20, value: 58.13, contribution: 3.88, source: experts, limited: true }
+                        - {
+                            id: ac-p1,
+                            kind: item,
+                            label: Прозорість рішень керівництва,
+                            weight: 30,
+                            value: 63.75,
+                            contribution: 6.38,
+                            source: wg,
+                            limited: true,
+                          }
+                        - {
+                            id: ac-p2,
+                            kind: item,
+                            label: Оприлюднення результатів перевірок,
+                            weight: 30,
+                            value: 60,
+                            contribution: 6,
+                            source: wg,
+                            limited: true,
+                          }
+                        - {
+                            id: ac-p3,
+                            kind: item,
+                            label: Відповідальність за виконання заходів,
+                            weight: 20,
+                            value: 56.25,
+                            contribution: 3.75,
+                            source: os,
+                            limited: true,
+                          }
+                        - {
+                            id: ac-p4,
+                            kind: item,
+                            label: Контроль виконання рішень,
+                            weight: 20,
+                            value: 58.13,
+                            contribution: 3.88,
+                            source: experts,
+                            limited: true,
+                          }
                 sumCheck: { sum: 54.2, indexValue: 54.2, matches: true }
   /compare:
     get:
@@ -704,11 +828,36 @@ paths:
       x-roles: [leader, observer]
       parameters:
         - $ref: '#/components/parameters/Scope'
-        - { name: from, in: query, description: 'Початок періоду (id циклу або дата YYYY-MM-DD).', schema: { type: string, example: '2025-12' } }
-        - { name: to, in: query, description: 'Кінець періоду (id циклу або дата).', schema: { type: string, example: '2026-11' } }
-        - { name: compare, in: query, description: 'none це один період, periods це порівняння двох періодів.', schema: { type: string, enum: [none, periods], default: none } }
-        - { name: compareFrom, in: query, description: 'Початок другого періоду (лише compare=periods).', schema: { type: string } }
-        - { name: compareTo, in: query, description: 'Кінець другого періоду (лише compare=periods).', schema: { type: string } }
+        - {
+            name: from,
+            in: query,
+            description: 'Початок періоду (id циклу або дата YYYY-MM-DD).',
+            schema: { type: string, example: '2025-12' },
+          }
+        - {
+            name: to,
+            in: query,
+            description: 'Кінець періоду (id циклу або дата).',
+            schema: { type: string, example: '2026-11' },
+          }
+        - {
+            name: compare,
+            in: query,
+            description: 'none це один період, periods це порівняння двох періодів.',
+            schema: { type: string, enum: [none, periods], default: none },
+          }
+        - {
+            name: compareFrom,
+            in: query,
+            description: 'Початок другого періоду (лише compare=periods).',
+            schema: { type: string },
+          }
+        - {
+            name: compareTo,
+            in: query,
+            description: 'Кінець другого періоду (лише compare=periods).',
+            schema: { type: string },
+          }
       responses:
         '200':
           description: Динаміка
@@ -718,9 +867,24 @@ paths:
               example:
                 period: { from: '2025-12', to: '2026-11' }
                 points:
-                  - { cycle: '2025-12', date: '2025-12-15', index: 41.0, components: { culture: 44, system: 36, accountability: 43 } }
-                  - { cycle: '2026-06', date: '2026-06-15', index: 47.0, components: { culture: 50, system: 41, accountability: 50 } }
-                  - { cycle: '2026-11', date: '2026-11-16', index: 54.2, components: { culture: 57.5, system: 45, accountability: 60 } }
+                  - {
+                      cycle: '2025-12',
+                      date: '2025-12-15',
+                      index: 41.0,
+                      components: { culture: 44, system: 36, accountability: 43 },
+                    }
+                  - {
+                      cycle: '2026-06',
+                      date: '2026-06-15',
+                      index: 47.0,
+                      components: { culture: 50, system: 41, accountability: 50 },
+                    }
+                  - {
+                      cycle: '2026-11',
+                      date: '2026-11-16',
+                      index: 54.2,
+                      components: { culture: 57.5, system: 45, accountability: 60 },
+                    }
                 events:
                   - { cycle: '2026-06', title: Виконано захід за рекомендацією, measureId: m1 }
   /facts:
@@ -746,10 +910,62 @@ paths:
                     items: { $ref: '#/components/schemas/FactMetric' }
               example:
                 items:
-                  - { id: ac-f1, component: accountability, label: Подано декларацій вчасно серед зобовʼязаних, kind: percent, value: 45, numerator: 45, denominator: 100, percent: 45, source: Реєстр декларацій, mode: automatic, asOf: '2026-11-10T00:00:00Z', ageDays: 6 }
-                  - { id: ac-f2, component: accountability, label: 'Потенційні конфлікти інтересів, за якими уповноважений дав висновок у строк', kind: percent, value: 30, numerator: 6, denominator: 20, percent: 30, source: Журнал уповноваженого, mode: manual, asOf: '2026-11-01T00:00:00Z', ageDays: 15 }
-                  - { id: cu-f1, component: culture, label: 'Прапорці, за якими прийнято рішення або захід протягом 30 днів', kind: percent, value: 55, numerator: 11, denominator: 20, percent: 55, source: Журнал прапорців, mode: planned, asOf: null, ageDays: null }
-                  - { id: sy-f1, component: system, label: 'Скарги й звернення, розглянуті в строк', kind: percent, value: 60, numerator: 36, denominator: 60, percent: 60, source: Облік звернень, mode: manual, asOf: '2026-11-05T00:00:00Z', ageDays: 11 }
+                  - {
+                      id: ac-f1,
+                      component: accountability,
+                      label: Подано декларацій вчасно серед зобовʼязаних,
+                      kind: percent,
+                      value: 45,
+                      numerator: 45,
+                      denominator: 100,
+                      percent: 45,
+                      source: Реєстр декларацій,
+                      mode: automatic,
+                      asOf: '2026-11-10T00:00:00Z',
+                      ageDays: 6,
+                    }
+                  - {
+                      id: ac-f2,
+                      component: accountability,
+                      label: 'Потенційні конфлікти інтересів, за якими уповноважений дав висновок у строк',
+                      kind: percent,
+                      value: 30,
+                      numerator: 6,
+                      denominator: 20,
+                      percent: 30,
+                      source: Журнал уповноваженого,
+                      mode: manual,
+                      asOf: '2026-11-01T00:00:00Z',
+                      ageDays: 15,
+                    }
+                  - {
+                      id: cu-f1,
+                      component: culture,
+                      label: 'Прапорці, за якими прийнято рішення або захід протягом 30 днів',
+                      kind: percent,
+                      value: 55,
+                      numerator: 11,
+                      denominator: 20,
+                      percent: 55,
+                      source: Журнал прапорців,
+                      mode: planned,
+                      asOf: null,
+                      ageDays: null,
+                    }
+                  - {
+                      id: sy-f1,
+                      component: system,
+                      label: 'Скарги й звернення, розглянуті в строк',
+                      kind: percent,
+                      value: 60,
+                      numerator: 36,
+                      denominator: 60,
+                      percent: 60,
+                      source: Облік звернень,
+                      mode: manual,
+                      asOf: '2026-11-05T00:00:00Z',
+                      ageDays: 11,
+                    }
   /facts/{factId}/manual:
     parameters:
       - name: factId
@@ -817,7 +1033,8 @@ paths:
               required: [done]
               properties:
                 done: { type: boolean }
-                evidenceUrl: { type: string, description: 'Посилання на доказ у внутрішньому контурі' }
+                evidenceUrl:
+                  { type: string, description: 'Посилання на доказ у внутрішньому контурі' }
       responses:
         '200':
           description: Збережено, статус «очікує підтвердження»
@@ -886,7 +1103,11 @@ paths:
               properties:
                 decision: { type: string, enum: [accept, clarify, reject] }
                 reason: { type: string, description: 'Обовʼязкова при reject.' }
-                assigneeRole: { type: string, description: 'Відповідальний (роль або посада, не імʼя), для accept.' }
+                assigneeRole:
+                  {
+                    type: string,
+                    description: 'Відповідальний (роль або посада, не імʼя), для accept.',
+                  }
                 dueDate: { type: string, format: date }
       responses:
         '200':
@@ -969,7 +1190,8 @@ paths:
               example:
                 visibility: hidden_below_k
                 message: Недостатньо відповідей, щоб показати результати цієї групи. Показано дані рівня вище. Це захищає анонімність учасників.
-                fallbackScope: { id: alpha, name: 'Умовний військовий інститут «Альфа»', parentId: null }
+                fallbackScope:
+                  { id: alpha, name: 'Умовний військовий інститут «Альфа»', parentId: null }
   /reports:
     post:
       tags: [reports]
@@ -1077,7 +1299,7 @@ paths:
     get:
       tags: [reports]
       operationId: getMethodology
-      summary: "Методологія: версія, хеш, ваги, пороги"
+      summary: 'Методологія: версія, хеш, ваги, пороги'
       x-roles: [admin, leader, observer, commissioner]
       responses:
         '200':
@@ -1155,7 +1377,12 @@ components:
       content:
         application/json:
           schema: { $ref: '#/components/schemas/Error' }
-          example: { code: forbidden, message: Ця сторінка недоступна для вашої ролі., hint: Поверніться на головну. }
+          example:
+            {
+              code: forbidden,
+              message: Ця сторінка недоступна для вашої ролі.,
+              hint: Поверніться на головну.,
+            }
     NotFound:
       description: Не знайдено
       content:
@@ -1167,13 +1394,23 @@ components:
       content:
         application/json:
           schema: { $ref: '#/components/schemas/Error' }
-          example: { code: conflict, message: Опубліковану анкету змінити не можна., hint: Створіть нову версію. }
+          example:
+            {
+              code: conflict,
+              message: Опубліковану анкету змінити не можна.,
+              hint: Створіть нову версію.,
+            }
     Invalid:
       description: Дані не пройшли перевірку
       content:
         application/json:
           schema: { $ref: '#/components/schemas/Error' }
-          example: { code: invalid, message: Для відхилення потрібна причина., hint: 'Напишіть коротко, чому рекомендацію відхилено.' }
+          example:
+            {
+              code: invalid,
+              message: Для відхилення потрібна причина.,
+              hint: 'Напишіть коротко, чому рекомендацію відхилено.',
+            }
   schemas:
     Error:
       type: object
@@ -1193,7 +1430,17 @@ components:
               items: { type: string }
     Role:
       type: string
-      enum: [admin, commissioner, respondent, leader, observer, checklist_editor, checklist_approver, auditor]
+      enum:
+        [
+          admin,
+          commissioner,
+          respondent,
+          leader,
+          observer,
+          checklist_editor,
+          checklist_approver,
+          auditor,
+        ]
       description: |
         admin, commissioner, respondent вирішені командою. leader і observer додано для дашборда,
         checklist_editor і checklist_approver це «вносить» і «підтверджує», auditor читає журнал (узгодити).
@@ -1253,7 +1500,8 @@ components:
         text: { type: string }
         component: { $ref: '#/components/schemas/ComponentId' }
         respondentCategory: { $ref: '#/components/schemas/RespondentCategory' }
-        weight: { type: number, description: 'Частка в компоненті, % (узгодити, де живуть ваги питань).' }
+        weight:
+          { type: number, description: 'Частка в компоненті, % (узгодити, де живуть ваги питань).' }
         options:
           type: array
           minItems: 5
@@ -1377,13 +1625,22 @@ components:
       properties:
         visibility: { type: string, enum: [hidden_below_k] }
         message: { type: string }
-        fallbackScope: { $ref: '#/components/schemas/Unit', description: 'Батьківський підрозділ (рівень вище), дані якого можна показати.' }
+        fallbackScope:
+          {
+            $ref: '#/components/schemas/Unit',
+            description: 'Батьківський підрозділ (рівень вище), дані якого можна показати.',
+          }
     TrustFlag:
       type: object
       required: [id, weight, raised, title, explanation]
       properties:
         id: { type: string }
-        weight: { type: string, enum: [minor, major], description: 'minor це незначний, major це серйозний.' }
+        weight:
+          {
+            type: string,
+            enum: [minor, major],
+            description: 'minor це незначний, major це серйозний.',
+          }
         raised: { type: boolean, description: 'Так чи ні.' }
         title: { type: string }
         explanation: { type: string, description: 'Пояснення простою мовою.' }
@@ -1397,7 +1654,11 @@ components:
           description: |
             A жоден прапорець; B лише 1-2 незначних; C хоча б один серйозний або 3 і більше незначних;
             insufficient якщо відповідей у групі менше k.
-        word: { type: string, description: 'підтверджується, є зауваження, потрібна перевірка або недостатньо даних.' }
+        word:
+          {
+            type: string,
+            description: 'підтверджується, є зауваження, потрібна перевірка або недостатньо даних.',
+          }
         responses: { type: integer }
         flags:
           type: array
@@ -1516,7 +1777,11 @@ components:
         cycle: { type: string }
         date: { type: string, format: date, description: 'Дата циклу.' }
         index: { type: number }
-        components: { $ref: '#/components/schemas/ComponentWeights', description: 'Зараховані значення компонентів, 0-100.' }
+        components:
+          {
+            $ref: '#/components/schemas/ComponentWeights',
+            description: 'Зараховані значення компонентів, 0-100.',
+          }
     Trends:
       type: object
       required: [points]
@@ -1561,12 +1826,22 @@ components:
         component: { $ref: '#/components/schemas/ComponentId' }
         label: { type: string }
         kind: { type: string, enum: [percent, level] }
-        value: { type: [number, 'null'], description: 'Значення 0-100 (для percent дорівнює percent).' }
-        numerator: { type: [integer, 'null'], description: 'Скільки відповідає умові (лише percent). Без імен.' }
+        value:
+          { type: [number, 'null'], description: 'Значення 0-100 (для percent дорівнює percent).' }
+        numerator:
+          {
+            type: [integer, 'null'],
+            description: 'Скільки відповідає умові (лише percent). Без імен.',
+          }
         denominator: { type: [integer, 'null'], description: 'З скількох (лише percent).' }
         percent: { type: [number, 'null'], description: 'Відсоток 0-100: numerator / denominator.' }
         source: { type: string, description: 'Звідки дані (система або реєстр).' }
-        mode: { type: string, enum: [automatic, manual, planned], description: 'automatic це автоматично, manual це ручний ввід, planned це планується.' }
+        mode:
+          {
+            type: string,
+            enum: [automatic, manual, planned],
+            description: 'automatic це автоматично, manual це ручний ввід, planned це планується.',
+          }
         asOf: { type: [string, 'null'], format: date-time }
         ageDays: { type: [integer, 'null'], description: 'Вік даних у днях.' }
     ChecklistItem:
@@ -1577,8 +1852,16 @@ components:
         title: { type: string }
         status: { type: string, enum: [open, awaiting_confirmation, confirmed] }
         evidenceUrl: { type: [string, 'null'] }
-        enteredBy: { type: [string, 'null'], description: 'Посада або роль того, хто вніс (узгодити, чи потрібне імʼя).' }
-        confirmedBy: { type: [string, 'null'], description: 'Посада або роль того, хто підтвердив; інша особа, ніж enteredBy.' }
+        enteredBy:
+          {
+            type: [string, 'null'],
+            description: 'Посада або роль того, хто вніс (узгодити, чи потрібне імʼя).',
+          }
+        confirmedBy:
+          {
+            type: [string, 'null'],
+            description: 'Посада або роль того, хто підтвердив; інша особа, ніж enteredBy.',
+          }
     ChecklistSection:
       type: object
       required: [id, title, items]
@@ -1604,7 +1887,7 @@ components:
           items: { type: string }
         basis:
           type: array
-          description: "Блок «На підставі»: які агрегати й показники спричинили рекомендацію (без окремих відповідей)."
+          description: 'Блок «На підставі»: які агрегати й показники спричинили рекомендацію (без окремих відповідей).'
           items:
             type: object
             properties:
@@ -1625,7 +1908,8 @@ components:
         assignee: { type: string, description: 'Посада або роль відповідального.' }
         dueDate: { type: string, format: date }
         status: { $ref: '#/components/schemas/MeasureStatus' }
-        verifiedInCycle: { type: [string, 'null'], description: 'Цикл, у якому захід верифіковано.' }
+        verifiedInCycle:
+          { type: [string, 'null'], description: 'Цикл, у якому захід верифіковано.' }
     MyResults:
       type: object
       required: [scope, cycle, index, components]
