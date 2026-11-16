@@ -1,3 +1,2 @@
-# hack-4-bitec
+# hack-4-bitecy
 
-test ruleset
