@@ -273,7 +273,7 @@ function ExplainInner({ initial, nodeId }: { initial: ComponentId | null; nodeId
 
   const flat = useMemo(() => visibleNodes(root, new Set(allIds(root))), [root])
   return (
-    <div data-ready="true" className="flex flex-col gap-3">
+    <div data-ready="true" className="flex flex-col gap-5">
       <PageTitle>Розклад індексу</PageTitle>
       <p className="m-0 text-body text-text-muted">
         Звідки взялося кожне число: індекс, компоненти, питання й показники.
@@ -293,7 +293,7 @@ function ExplainInner({ initial, nodeId }: { initial: ComponentId | null; nodeId
       </Card>
 
       <WhyPanel open={whyOpen} onClose={() => setWhyOpen(false)} inst={inst} />
-      <div className="grid gap-3 xl:grid-cols-12">
+      <div className="grid gap-5 xl:grid-cols-12">
         <Card as="section" aria-labelledby="tree-h" className="xl:col-span-12">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <h2 id="tree-h" className="card-title">

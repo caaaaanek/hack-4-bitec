@@ -44,7 +44,7 @@ function RoleCard() {
           aria-label="Роль для демо"
           value={role}
           onChange={(e) => isRole(e.target.value) && setRole(e.target.value)}
-          className="!h-9 !rounded-[10px] !py-0 !pl-2.5 !pr-7 !text-fine !text-text"
+          className="!h-9 !rounded-[10px] !py-0 !pl-2 !pr-6 !text-[11.5px] !text-text"
         >
           {ROLES.map((r) => (
             <option key={r} value={r}>

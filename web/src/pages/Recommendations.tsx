@@ -358,7 +358,7 @@ export function Recommendations() {
   }
 
   return (
-    <div data-ready="true" className="flex flex-col gap-3">
+    <div data-ready="true" className="flex flex-col gap-5">
       <PageTitle>Рекомендації</PageTitle>
       <Card as="section" aria-labelledby="recs-h" className="flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">

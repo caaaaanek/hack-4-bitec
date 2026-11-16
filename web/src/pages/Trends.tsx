@@ -49,7 +49,7 @@ export function Trends() {
   const down = whole.filter((r) => r.direction === 'down')
 
   return (
-    <div data-ready="true" className="flex flex-col gap-3">
+    <div data-ready="true" className="flex flex-col gap-5">
       <div>
         <PageTitle>Динаміка</PageTitle>
         <p className="m-0 text-body text-text-muted">
@@ -60,7 +60,7 @@ export function Trends() {
 
       <DynamicsPanel series={series} events={events} chartClassName="h-[300px] xl:h-[380px]" />
 
-      <div className="grid gap-3 xl:grid-cols-12">
+      <div className="grid gap-5 xl:grid-cols-12">
         <Card as="section" aria-labelledby="cmp-h" className="p-4 md:p-4 xl:col-span-8">
           <h2 id="cmp-h" className="card-title">
             <GitCompareArrows aria-hidden />

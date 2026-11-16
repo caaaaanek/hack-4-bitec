@@ -31,7 +31,7 @@ const columns: TableColumn<DataSource>[] = [
 export function Integrations() {
   const rows = DATA_SOURCES.map((s) => ({ ...s, modeLabel: SOURCE_MODE_LABEL[s.mode] }))
   return (
-    <div data-ready="true" className="flex flex-col gap-3">
+    <div data-ready="true" className="flex flex-col gap-5">
       <div>
         <PageTitle>Звідки беруться дані</PageTitle>
         <p className="m-0 text-body text-text-muted">

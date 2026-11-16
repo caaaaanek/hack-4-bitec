@@ -223,7 +223,7 @@ export function Tracker() {
   ]
 
   return (
-    <div data-ready="true" className="flex flex-col gap-3">
+    <div data-ready="true" className="flex flex-col gap-5">
       <PageTitle>Трекер заходів</PageTitle>
       <ul aria-label="Підсумок" className="m-0 grid list-none grid-cols-2 gap-5 p-0 xl:grid-cols-4">
         {STATS.map(([label, value, cls]) => (
