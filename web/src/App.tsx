@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ToastProvider } from '@/components/ui'
 import { AppShell } from '@/components/layout/AppShell'
 import { Home } from '@/pages/Home'
+import { Explain } from '@/pages/Explain'
 import { Design } from '@/pages/Design'
 import { Placeholder } from '@/pages/Placeholder'
 
@@ -16,15 +17,7 @@ export function App() {
           <Routes>
             <Route element={<AppShell />}>
               <Route path="/" element={<Home />} />
-              <Route
-                path="/explain"
-                element={
-                  <Placeholder
-                    title="Розклад індексу"
-                    description="Тут буде розклад індексу на компоненти, питання й факти: звідки взялося кожне число. Розділ зʼявиться в наступному етапі."
-                  />
-                }
-              />
+              <Route path="/explain" element={<Explain />} />
               <Route
                 path="/recommendations"
                 element={

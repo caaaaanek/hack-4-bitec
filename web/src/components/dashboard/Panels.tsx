@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/messages'
 import type { TrustFlag, TrustGrade } from '@/lib/scoring/trust'
 import { cn } from '@/lib/cn'
-import { LIMITER_MARGIN, fmt } from '@/lib/scoring/methodology'
+import { LIMITER_MARGIN, fmt, type ComponentId } from '@/lib/scoring/methodology'
 import { Num } from './Num'
 
 export function DevelopmentBanner() {
@@ -175,6 +175,7 @@ export interface Insight {
   title: string
   value: number
   hint: string
+  component?: ComponentId
 }
 
 export function InsightList({
@@ -211,7 +212,7 @@ export function InsightList({
           >
             <Icon aria-hidden className="mt-0.5 size-5 shrink-0" />
             <Link
-              to="/explain"
+              to={it.component ? `/explain?c=${it.component}` : '/explain'}
               className="flex-1 text-body text-inherit underline-offset-2 hover:underline"
             >
               {it.title}

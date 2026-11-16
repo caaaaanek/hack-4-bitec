@@ -1,4 +1,5 @@
-import { fmt } from '@/lib/scoring/methodology'
+import { Link } from 'react-router-dom'
+import { COMPONENT_IDS, COMPONENT_LABELS, fmt } from '@/lib/scoring/methodology'
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer } from 'recharts'
 
 export interface RadarRow {
@@ -13,7 +14,7 @@ const PREV = 'var(--color-neutral-solid)'
 /** Радар по трьох компонентах: поточний цикл суцільний з колом, попередній пунктирний з квадратом. */
 export function ComponentsRadar({ data }: { data: RadarRow[] }) {
   return (
-    <div className="h-full min-h-[200px]" aria-hidden>
+    <div className="h-full min-h-[200px] short:min-h-[120px]" aria-hidden>
       <ResponsiveContainer
         width="100%"
         height="100%"
@@ -89,6 +90,14 @@ export function RadarLegend({ current, previous }: { current: string; previous: 
           <rect x="10" y="2" width="8" height="8" fill={PREV} />
         </svg>
         Цикл {previous}
+      </li>
+      <li className="flex flex-wrap items-center gap-x-2">
+        Розклад:
+        {COMPONENT_IDS.map((id) => (
+          <Link key={id} to={`/explain?c=${id}`} className="text-accent underline">
+            {COMPONENT_LABELS[id]}
+          </Link>
+        ))}
       </li>
     </ul>
   )

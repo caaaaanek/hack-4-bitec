@@ -163,7 +163,7 @@ export function Home() {
           chartClassName="flex flex-col"
           chart={
             <>
-              <div className="min-h-[240px] flex-1 short:min-h-[160px]">
+              <div className="min-h-[240px] flex-1 short:min-h-[110px]">
                 <ComponentsRadar data={radarData} />
               </div>
               <RadarLegend current={CYCLE} previous={prevCycle} />

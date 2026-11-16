@@ -210,6 +210,7 @@ export const strengths = [
   {
     id: 's1',
     title: 'Культура: відкритість до етичних питань',
+    component: 'culture' as ComponentId,
     value: 57.5,
     hint: 'Зараховане значення компонента Культура, 0-100.',
   },
@@ -225,18 +226,21 @@ export const attention = [
   {
     id: 'a1',
     title: 'Підзвітність: підтвердити факти',
+    component: 'accountability' as ComponentId,
     value: 35,
     hint: 'Факти за компонентом Підзвітність, 0-100.',
   },
   {
     id: 'a2',
     title: 'Система: зробити процедури помітнішими',
+    component: 'system' as ComponentId,
     value: 45,
     hint: 'Зараховане значення компонента Система, 0-100.',
   },
   {
     id: 'a3',
     title: 'Культура: більше практичних прикладів',
+    component: 'culture' as ComponentId,
     value: 40,
     hint: 'Факти за компонентом Культура, 0-100.',
   },
