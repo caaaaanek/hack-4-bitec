@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Info, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { ForbiddenState, Logo, SkipLink, Tooltip } from '@/components/ui'
@@ -181,6 +181,15 @@ export function AppShell() {
           key={pathname}
           className="mx-auto min-w-0 max-w-(--content-max) px-(--gutter) py-3 md:py-4"
         >
+          {allowed && role === 'observer' && pathname !== '/institutions' && (
+            <nav aria-label="Хлібні крихти" className="mb-2 text-caption text-text-muted">
+              <Link to="/institutions" className="text-accent underline underline-offset-2">
+                Усі заклади
+              </Link>
+              <span aria-hidden> / </span>
+              <span aria-current="page">{institution.name}</span>
+            </nav>
+          )}
           {allowed ? (
             <Outlet />
           ) : (

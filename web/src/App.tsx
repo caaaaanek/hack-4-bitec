@@ -7,6 +7,8 @@ import { Explain } from '@/pages/Explain'
 import { Recommendations } from '@/pages/Recommendations'
 import { Tracker } from '@/pages/Tracker'
 import { Trends } from '@/pages/Trends'
+import { Integrations } from '@/pages/Integrations'
+import { Institutions } from '@/pages/Institutions'
 import { Me } from '@/pages/Me'
 import { Survey } from '@/pages/Survey'
 import { Design } from '@/pages/Design'
@@ -76,24 +78,8 @@ export function App() {
                 />
                 <Route path="/tracker" element={<Tracker />} />
                 <Route path="/trends" element={<Trends />} />
-                <Route
-                  path="/integrations"
-                  element={
-                    <Placeholder
-                      title="Звідки беруться дані"
-                      description="Тут зʼявиться перелік джерел даних і чесні статуси інтеграцій."
-                    />
-                  }
-                />
-                <Route
-                  path="/institutions"
-                  element={
-                    <Placeholder
-                      title="Заклади"
-                      description="Тут зʼявиться список закладів із узагальненими даними."
-                    />
-                  }
-                />
+                <Route path="/integrations" element={<Integrations />} />
+                <Route path="/institutions" element={<Institutions />} />
                 <Route path="/me" element={<Me />} />
                 <Route path="/design" element={<Design />} />
                 <Route
