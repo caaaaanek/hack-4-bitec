@@ -23,6 +23,8 @@ const TECHNICAL_KEYS = new Set([
   'unitId',
   'status',
   'priority',
+  // Продовження речення після «N питання»: окремо не показується.
+  'about',
 ])
 
 const firstLetter = (s: string): string | undefined => s.match(/\p{L}/u)?.[0]

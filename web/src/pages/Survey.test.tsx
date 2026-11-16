@@ -73,7 +73,7 @@ describe('екран опитування', () => {
     expect(screen.getByText(/не повʼязані з вами і не містять імен/)).toBeInTheDocument()
     expect(screen.getByText(/не менше 10 осіб/)).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Розумію, почати' }))
-    expect(screen.getByText('Крок 1 з 3')).toBeInTheDocument()
+    expect(screen.getByText('Розділ 1 з 3')).toBeInTheDocument()
 
     // відповідь зберігається
     const first = within(
@@ -90,7 +90,7 @@ describe('екран опитування', () => {
 
     // неповна відправка: перелік пропущених
     await user.click(screen.getByRole('button', { name: 'Далі' }))
-    expect(screen.getByText('Крок 2 з 3')).toBeInTheDocument()
+    expect(screen.getByText('Розділ 2 з 3')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Далі' }))
     await user.click(screen.getByRole('button', { name: 'Надіслати' }))
     expect(screen.getByText(/Залишилось відповісти на 8/)).toBeInTheDocument()
@@ -98,7 +98,37 @@ describe('екран опитування', () => {
 
     // перехід за якорем у інший розділ
     await user.click(screen.getByRole('link', { name: 'Розділ «Система», питання 1' }))
-    expect(screen.getByText('Крок 2 з 3')).toBeInTheDocument()
+    expect(screen.getByText('Розділ 2 з 3')).toBeInTheDocument()
+  })
+
+  it('липка верхня смуга, лічильник розділу, закриття з підтвердженням', async () => {
+    const user = userEvent.setup()
+    setup('demo')
+    await user.click(screen.getByRole('button', { name: 'Розумію, почати' }))
+    expect(screen.getByText('Анонімне опитування')).toBeInTheDocument()
+    expect(
+      screen.getByText('Культура: 3 питання про ставлення до доброчесності'),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Відповіли на 0 з 3')).toBeInTheDocument()
+    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuetext', 'Розділ 1 з 3')
+    const first = within(
+      screen.getByRole('group', { name: /1\. Як у вашому підрозділі/ }),
+    ).getAllByRole('radio')
+    await user.click(first[1]!)
+    expect(screen.getByText('Відповіли на 1 з 3')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Закрити' }))
+    expect(screen.getByRole('dialog', { name: 'Закрити опитування?' })).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Продовжити заповнення' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('закриття без відповідей не питає підтвердження', async () => {
+    const user = userEvent.setup()
+    localStorage.clear()
+    setup('demo')
+    await user.click(screen.getByRole('button', { name: 'Розумію, почати' }))
+    await user.click(screen.getByRole('button', { name: 'Закрити' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
   it('повна анкета веде до подяки без імен і часу, чернетку очищено', async () => {

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { CheckCircle2, EyeOff, LinkIcon, ShieldCheck, UserRoundX, UsersRound } from 'lucide-react'
-import { Button, EmptyState } from '@/components/ui'
+import { Button, ConfirmDialog, EmptyState } from '@/components/ui'
 import { cn } from '@/lib/cn'
 import { K_MIN_GROUP } from '@/lib/scoring/methodology'
 import { defaultRoute } from '@/lib/access'
@@ -32,27 +32,74 @@ const GUARANTEES = [
   },
 ]
 
-function Frame({ children }: { children: ReactNode }) {
+function Frame({
+  children,
+  progress,
+  onClose,
+  footer,
+}: {
+  children: ReactNode
+  /** Номер розділу й кількість: показує смугу прогресу в липкій верхній смузі. */
+  progress?: { step: number; total: number }
+  /** Якщо задано, «Закрити» це кнопка (із підтвердженням), інакше посилання. */
+  onClose?: () => void
+  /** Липка нижня панель (кнопки «Назад» і «Далі»). */
+  footer?: ReactNode
+}) {
   const { role } = useDemo()
   return (
-    <div className="min-h-screen bg-bg" data-ready="true">
-      <header className="border-b border-border bg-surface">
-        <div className="mx-auto flex max-w-xl items-center justify-between gap-3 px-4 py-3">
-          <p className="m-0 flex items-center gap-2 text-caption font-semibold text-text">
-            <ShieldCheck aria-hidden className="size-5 text-accent" />
-            Анонімне опитування
-          </p>
-          <Link
-            to={defaultRoute(role)}
-            className="touch-target inline-flex items-center text-caption text-accent underline underline-offset-4"
-          >
-            Закрити
-          </Link>
+    <div className="flex min-h-dvh flex-col bg-bg" data-ready="true">
+      <header className="sticky top-0 z-20 border-b border-border bg-surface pt-[env(safe-area-inset-top)]">
+        <div className="mx-auto flex max-w-xl items-center justify-between gap-3 px-4 py-2">
+          <div className="min-w-0">
+            <p className="m-0 flex items-center gap-2 text-caption font-semibold text-text">
+              <ShieldCheck aria-hidden className="size-5 text-accent" />
+              Анонімне опитування
+            </p>
+            {progress && (
+              <p className="m-0 text-caption text-text-muted">
+                Розділ {progress.step + 1} з {progress.total}
+              </p>
+            )}
+          </div>
+          {onClose ? (
+            <button
+              type="button"
+              onClick={onClose}
+              className="touch-target inline-flex items-center rounded-md px-2 text-caption text-accent underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+            >
+              Закрити
+            </button>
+          ) : (
+            <Link
+              to={defaultRoute(role)}
+              className="touch-target inline-flex items-center text-caption text-accent underline underline-offset-4"
+            >
+              Закрити
+            </Link>
+          )}
         </div>
+        {progress && (
+          <div
+            role="progressbar"
+            aria-label="Прогрес анкети"
+            aria-valuemin={1}
+            aria-valuemax={progress.total}
+            aria-valuenow={progress.step + 1}
+            aria-valuetext={`Розділ ${progress.step + 1} з ${progress.total}`}
+            className="h-1.5 bg-surface-muted"
+          >
+            <div
+              className="h-full bg-accent transition-[width] duration-200"
+              style={{ width: `${((progress.step + 1) / progress.total) * 100}%` }}
+            />
+          </div>
+        )}
       </header>
-      <main id="main" tabIndex={-1} className="mx-auto max-w-xl px-4 py-5">
+      <main id="main" tabIndex={-1} className="mx-auto w-full max-w-xl flex-1 px-4 py-5">
         {children}
       </main>
+      {footer}
     </div>
   )
 }
@@ -97,7 +144,9 @@ export function Survey() {
 }
 
 export function SurveyFlow({ survey, token }: { survey: SurveyModel; token: string }) {
-  const { setRole } = useDemo()
+  const { role, setRole } = useDemo()
+  const navigate = useNavigate()
+  const [confirmClose, setConfirmClose] = useState(false)
   const [phase, setPhase] = useState<Phase>('guarantees')
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState<Answers>(() => loadDraft(survey, token))
@@ -110,6 +159,7 @@ export function SurveyFlow({ survey, token }: { survey: SurveyModel; token: stri
   const section = survey.sections[step]!
   const done = answeredCount(survey, answers)
   const all = questionCount(survey)
+  const sectionDone = section.questions.filter((x) => answers[x.id]).length
 
   useEffect(() => {
     if (!moved.current) {
@@ -129,6 +179,16 @@ export function SurveyFlow({ survey, token }: { survey: SurveyModel; token: stri
     setAnswers(next)
     saveDraft(token, next)
     if (missing) setMissing(missingQuestions(survey, next))
+    // Плавна прокрутка до наступного питання розділу без відповіді (без анімації при reduced-motion).
+    const qs = section.questions
+    const from = qs.findIndex((x) => x.id === qid)
+    const nextQ = qs.slice(from + 1).find((x) => !next[x.id])
+    if (nextQ) {
+      const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      document
+        .getElementById(nextQ.id)
+        ?.scrollIntoView?.({ behavior: reduced ? 'auto' : 'smooth', block: 'center' })
+    }
   }
 
   const submit = () => {
@@ -195,27 +255,58 @@ export function SurveyFlow({ survey, token }: { survey: SurveyModel; token: stri
   }
 
   const last = step === total - 1
-  return (
-    <Frame>
-      <p className="m-0 text-caption font-semibold text-text-muted">
-        Крок {step + 1} з {total}
-      </p>
-      <div
-        role="progressbar"
-        aria-label="Прогрес анкети"
-        aria-valuemin={1}
-        aria-valuemax={total}
-        aria-valuenow={step + 1}
-        aria-valuetext={`Крок ${step + 1} з ${total}`}
-        className="mt-2 h-2 overflow-hidden rounded-full bg-surface-muted"
-      >
-        <div className="h-full bg-accent" style={{ width: `${((step + 1) / total) * 100}%` }} />
+  const n = section.questions.length
+  const word = n % 10 >= 5 || n % 10 === 0 || (n >= 11 && n <= 14) ? 'питань' : 'питання'
+  const closeNow = () => navigate(defaultRoute(role))
+  const footer = (
+    <div className="sticky bottom-0 z-20 border-t border-border bg-surface pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
+      <div className="mx-auto flex max-w-xl gap-3 px-4">
+        <Button
+          variant="secondary"
+          size="lg"
+          className="flex-1"
+          onClick={() => (step === 0 ? setPhase('guarantees') : setStep(step - 1))}
+        >
+          Назад
+        </Button>
+        {last ? (
+          <Button size="lg" className="flex-1" onClick={submit}>
+            Надіслати
+          </Button>
+        ) : (
+          <Button size="lg" className="flex-1" onClick={() => setStep(step + 1)}>
+            Далі
+          </Button>
+        )}
       </div>
-      <h1 ref={headingRef} tabIndex={-1} className="mt-4 text-title outline-none">
+    </div>
+  )
+  return (
+    <Frame
+      progress={{ step, total }}
+      footer={footer}
+      onClose={() => (done > 0 ? setConfirmClose(true) : closeNow())}
+    >
+      <ConfirmDialog
+        open={confirmClose}
+        title="Закрити опитування?"
+        description="Дані вже введених відповідей лишаються на цьому пристрої, ви зможете продовжити пізніше. Відповіді ще не надіслано."
+        confirmLabel="Закрити"
+        cancelLabel="Продовжити заповнення"
+        onConfirm={closeNow}
+        onCancel={() => setConfirmClose(false)}
+      />
+      <h1 ref={headingRef} tabIndex={-1} className="m-0 text-title outline-none">
         {section.title}
       </h1>
-      <p className="mt-1 text-caption text-text-muted">
-        Відповіли на {done} з {all}. Відповіді зберігаються на цьому пристрої, поки ви заповнюєте.
+      <p className="mt-1 text-body-lg text-text-muted">
+        {section.title}: {n} {word} {section.about}
+      </p>
+      <p aria-live="polite" className="mt-1 text-caption font-semibold text-text">
+        Відповіли на {sectionDone} з {n}
+      </p>
+      <p className="mt-0.5 text-caption text-text-muted">
+        Відповіді зберігаються на цьому пристрої, поки ви заповнюєте.
       </p>
 
       <div className="mt-4 flex flex-col gap-6">
@@ -290,26 +381,6 @@ export function SurveyFlow({ survey, token }: { survey: SurveyModel; token: stri
               ))}
             </ul>
           </div>
-        )}
-      </div>
-
-      <div className="mt-6 flex gap-3">
-        <Button
-          variant="secondary"
-          size="lg"
-          className="flex-1"
-          onClick={() => (step === 0 ? setPhase('guarantees') : setStep(step - 1))}
-        >
-          Назад
-        </Button>
-        {last ? (
-          <Button size="lg" className="flex-1" onClick={submit}>
-            Надіслати
-          </Button>
-        ) : (
-          <Button size="lg" className="flex-1" onClick={() => setStep(step + 1)}>
-            Далі
-          </Button>
         )}
       </div>
     </Frame>

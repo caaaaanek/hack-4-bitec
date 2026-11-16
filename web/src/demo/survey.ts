@@ -15,6 +15,8 @@ export interface SurveyQuestion {
 export interface SurveySection {
   id: ComponentId
   title: string
+  /** Про що розділ, одним виразом після «N питання»: «про ставлення до доброчесності». */
+  about: string
   questions: SurveyQuestion[]
 }
 export interface Survey {
@@ -46,6 +48,7 @@ export const DEMO_SURVEY: Survey = {
     {
       id: 'culture',
       title: 'Культура',
+      about: 'про ставлення до доброчесності',
       questions: [
         q('cu-1', 'Як у вашому підрозділі обговорюють питання етики й доброчесності?', [
           'Не обговорюють взагалі, і ніхто цього не планує',
@@ -77,6 +80,7 @@ export const DEMO_SURVEY: Survey = {
     {
       id: 'system',
       title: 'Система',
+      about: 'про процедури й канали звернень',
       questions: [
         q('sy-1', 'Наскільки зрозумілі процедури, за якими приймають рішення щодо доброчесності?', [
           'Процедур не існує або про них нічого не відомо',
@@ -108,6 +112,7 @@ export const DEMO_SURVEY: Survey = {
     {
       id: 'accountability',
       title: 'Підзвітність',
+      about: 'про прозорість рішень і виконання заходів',
       questions: [
         q('ac-1', 'Наскільки прозорі рішення керівництва щодо доброчесності?', [
           'Рішення приймають закрито, причини невідомі',

@@ -44,7 +44,7 @@ export function Me() {
     .join('; ')
 
   return (
-    <div data-ready="true" className="max-w-3xl space-y-4">
+    <div data-ready="true" className="max-w-3xl space-y-4 xl:max-w-none">
       <div>
         <h1 className="text-title">Мої результати</h1>
         <p className="mt-1 flex items-center gap-2 text-body-lg text-text-muted">
@@ -71,92 +71,94 @@ export function Me() {
         </p>
       )}
 
-      <Card as="section" aria-labelledby="level-h" className="space-y-4">
-        <div>
-          <h2 id="level-h" className="text-section">
-            Рівень зрілості: {resolved.unit.name}
-          </h2>
-          <p className="mt-2 flex flex-wrap items-center gap-3">
-            <span className="tabular text-display">{fmtIndex(r.index)}</span>
-            <MaturityBadge level={r.level} />
-          </p>
-          <p className="mt-1 text-caption text-text-muted">
-            Що це: індекс доброчесності від 0 до 100, середнє трьох компонентів. Шкала рівнів від 1
-            до 5.
-          </p>
-        </div>
-        <div>
-          <h3 className="text-card">Три компоненти</h3>
-          <p className="mt-1 text-caption text-text-muted">{VALUE_HINT}</p>
-          <ul className="mt-3 mb-0 flex list-none flex-col gap-4 p-0">
-            {r.components.map((c) => (
-              <Meter key={c.id} c={c} />
-            ))}
-          </ul>
-          <p className="mt-3 text-caption text-text-muted">Текстом: {text}.</p>
-          <details className="mt-2">
-            <summary className="touch-target inline-flex cursor-pointer items-center text-accent underline underline-offset-4">
-              Показати як таблицю
-            </summary>
-            <table className="mt-2 w-full border-collapse text-body">
-              <caption className="sr-only">Значення компонентів підрозділу</caption>
-              <thead>
-                <tr className="bg-surface-muted text-left">
-                  <th scope="col" className="p-2">
-                    Компонент
-                  </th>
-                  <th scope="col" className="p-2">
-                    Значення, з 100
-                  </th>
-                  <th scope="col" className="p-2">
-                    Рівень
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {r.components.map((c) => (
-                  <tr key={c.id} className="border-t border-border">
-                    <th scope="row" className="p-2 text-left font-normal">
-                      {c.label}
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:items-start">
+        <Card as="section" aria-labelledby="level-h" className="space-y-4">
+          <div>
+            <h2 id="level-h" className="text-section">
+              Рівень зрілості: {resolved.unit.name}
+            </h2>
+            <p className="mt-2 flex flex-wrap items-center gap-3">
+              <span className="tabular text-display">{fmtIndex(r.index)}</span>
+              <MaturityBadge level={r.level} />
+            </p>
+            <p className="mt-1 text-caption text-text-muted">
+              Що це: індекс доброчесності від 0 до 100, середнє трьох компонентів. Шкала рівнів від
+              1 до 5.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-card">Три компоненти</h3>
+            <p className="mt-1 text-caption text-text-muted">{VALUE_HINT}</p>
+            <ul className="mt-3 mb-0 flex list-none flex-col gap-4 p-0">
+              {r.components.map((c) => (
+                <Meter key={c.id} c={c} />
+              ))}
+            </ul>
+            <p className="mt-3 text-caption text-text-muted">Текстом: {text}.</p>
+            <details className="mt-2">
+              <summary className="touch-target inline-flex cursor-pointer items-center text-accent underline underline-offset-4">
+                Показати як таблицю
+              </summary>
+              <table className="mt-2 w-full border-collapse text-body">
+                <caption className="sr-only">Значення компонентів підрозділу</caption>
+                <thead>
+                  <tr className="bg-surface-muted text-left">
+                    <th scope="col" className="p-2">
+                      Компонент
                     </th>
-                    <td className="tabular p-2">{fmt(c.value)}</td>
-                    <td className="p-2">
-                      {c.level} {MATURITY[c.level].name}
-                    </td>
+                    <th scope="col" className="p-2">
+                      Значення, з 100
+                    </th>
+                    <th scope="col" className="p-2">
+                      Рівень
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </details>
-        </div>
-      </Card>
+                </thead>
+                <tbody>
+                  {r.components.map((c) => (
+                    <tr key={c.id} className="border-t border-border">
+                      <th scope="row" className="p-2 text-left font-normal">
+                        {c.label}
+                      </th>
+                      <td className="tabular p-2">{fmt(c.value)}</td>
+                      <td className="p-2">
+                        {c.level} {MATURITY[c.level].name}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </details>
+          </div>
+        </Card>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card as="section" aria-labelledby="done-h">
-          <h2 id="done-h" className="card-title">
-            <CheckCheck aria-hidden />
-            Що зроблено з минулого циклу
-          </h2>
-          <ul className="mt-2 mb-0 list-disc space-y-2 pl-5 text-body">
-            {r.done.map((t) => (
-              <li key={t}>{t}</li>
-            ))}
-          </ul>
-        </Card>
-        <Card as="section" aria-labelledby="next-h">
-          <h2 id="next-h" className="card-title">
-            <Compass aria-hidden />
-            Що буде далі
-          </h2>
-          <ul className="mt-2 mb-0 list-disc space-y-2 pl-5 text-body">
-            {r.next.map((t) => (
-              <li key={t}>{t}</li>
-            ))}
-          </ul>
-        </Card>
+        <div className="flex flex-col gap-4">
+          <Card as="section" aria-labelledby="done-h">
+            <h2 id="done-h" className="card-title">
+              <CheckCheck aria-hidden />
+              Що зроблено з минулого циклу
+            </h2>
+            <ul className="mt-2 mb-0 list-disc space-y-2 pl-5 text-body">
+              {r.done.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          </Card>
+          <Card as="section" aria-labelledby="next-h">
+            <h2 id="next-h" className="card-title">
+              <Compass aria-hidden />
+              Що буде далі
+            </h2>
+            <ul className="mt-2 mb-0 list-disc space-y-2 pl-5 text-body">
+              {r.next.map((t) => (
+                <li key={t}>{t}</li>
+              ))}
+            </ul>
+          </Card>
+        </div>
       </div>
 
-      <p className="m-0 text-caption text-text-muted">
+      <p className="m-0 border-t border-border pt-3 text-caption text-text-muted">
         Тут лише узагальнені дані групи. Окремих відповідей, імен і порівнянь підрозділів немає. Це
         інструмент розвитку, а не контролю.
       </p>
