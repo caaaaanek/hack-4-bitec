@@ -8,7 +8,6 @@ import {
   Radar as RadarIcon,
 } from 'lucide-react'
 import { MATURITY, MaturityBadge, buttonBase, buttonSizes, buttonVariants } from '@/components/ui'
-import type { MaturityLevel } from '@/components/ui'
 import { cn } from '@/lib/cn'
 import { TRUST_GRADE_TEXT, TRUST_LABEL } from '@/components/ui/messages'
 import { COMPONENT_LABELS, fmt, fmtIndex, pointsText, scoreText } from '@/lib/scoring/methodology'
@@ -28,6 +27,7 @@ import {
 } from '@/demo/data'
 import { ChartFrame, DataTable } from '@/components/dashboard/ChartFrame'
 import { Gauge } from '@/components/dashboard/Gauge'
+import { MaturitySteps } from '@/components/dashboard/MaturitySteps'
 import { ComponentsRadar, RadarLegend } from '@/components/dashboard/ComponentsRadar'
 import { TrendLine } from '@/components/dashboard/TrendLine'
 import { Num } from '@/components/dashboard/Num'
@@ -40,7 +40,6 @@ import {
   TrustCard,
 } from '@/components/dashboard/Panels'
 
-const LEVELS: MaturityLevel[] = [1, 2, 3, 4, 5]
 const limited = components.find((c) => c.credited.limited)
 
 function buildConclusion(): string {
@@ -114,27 +113,7 @@ export function Home() {
               <Gauge value={currentIndex} level={currentLevel} />
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
                 <MaturityBadge level={currentLevel} />
-                <ol aria-label="Рівні зрілості" className="m-0 flex list-none gap-1.5 p-0">
-                  {LEVELS.map((l) => (
-                    <li
-                      key={l}
-                      title={`${l} ${MATURITY[l].name}`}
-                      aria-current={l === currentLevel ? 'step' : undefined}
-                      className={cn(
-                        'flex size-8 items-center justify-center rounded-sm border text-caption tabular',
-                        l === currentLevel
-                          ? cn(MATURITY[l].classes, 'font-bold ring-2 ring-text')
-                          : 'border-border bg-surface text-text-muted',
-                      )}
-                    >
-                      <span className="sr-only">
-                        Рівень {l}: {MATURITY[l].name}
-                        {l === currentLevel ? ', поточний' : ''}
-                      </span>
-                      <span aria-hidden>{l}</span>
-                    </li>
-                  ))}
-                </ol>
+                <MaturitySteps level={currentLevel} />
               </div>
               <p className="m-0 flex flex-wrap items-center justify-center gap-x-2 text-body font-semibold text-strength-text">
                 <span className="inline-flex items-center gap-1">

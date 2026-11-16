@@ -59,6 +59,7 @@ add('focus', 'bg', LARGE, 'фокус')
 // Зрілість
 for (let i = 1; i <= 5; i++) {
   add(`maturity-${i}-text`, `maturity-${i}-bg`, TEXT, 'текст')
+  add(`maturity-${i}-chart-text`, `maturity-${i}-chart`, TEXT, 'цифра на сегменті')
   add(`maturity-${i}-chart`, 'surface', LARGE, 'графік')
   add(`maturity-${i}-chart`, 'surface-raised', LARGE, 'графік')
 }

@@ -425,7 +425,9 @@ export function Design() {
           </Card>
           <Card interactive tabIndex={0}>
             <CardTitle>Інтерактивна картка</CardTitle>
-            <p className="text-text-muted mt-2">Поверхня піднімається при наведенні, фокус видно.</p>
+            <p className="text-text-muted mt-2">
+              Поверхня піднімається при наведенні, фокус видно.
+            </p>
           </Card>
         </div>
         <div className="grid gap-4 md:grid-cols-4">
