@@ -17,67 +17,76 @@ const setup = () =>
 
 afterEach(() => resetDecisions())
 
-describe('Дашборд', () => {
-  it('має по одному заголовку h2 на картку і без банера', () => {
+describe('Дашборд за композицією еталона', () => {
+  it('сім карток, по одному h2 на картку, без банера і ряду кнопок під заголовком', () => {
     const { container } = setup()
+    expect(screen.getByRole('heading', { level: 1, name: 'Огляд закладу' })).toBeInTheDocument()
     const cards = container.querySelectorAll('section[data-print="card"]')
-    expect(cards.length).toBe(5)
+    expect(cards.length).toBe(7)
     for (const c of cards) expect(c.querySelectorAll('h2')).toHaveLength(1)
     expect(screen.queryByText(/інструмент розвитку/)).not.toBeInTheDocument()
+    expect(screen.queryByRole('navigation', { name: 'Швидкі переходи' })).toBeNull()
   })
 
-  it('заголовок і три кнопки швидких переходів', () => {
-    setup()
-    expect(screen.getByRole('heading', { name: 'Огляд закладу' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Чому такий індекс' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: 'Рекомендації' })).toHaveAttribute(
-      'href',
-      '/recommendations',
-    )
-    expect(screen.getByRole('link', { name: 'Звіт' })).toHaveAttribute('href', '/reports')
-  })
-
-  it('чотири KPI-плитки пояснені текстом', () => {
-    setup()
-    const tiles = within(screen.getByRole('list', { name: 'Ключові показники' }))
-    expect(tiles.getAllByRole('listitem')).toHaveLength(4)
-    expect(tiles.getByText('Рівень 3: Визначений')).toBeInTheDocument()
-    expect(tiles.getByText('Прапорці: 2')).toBeInTheDocument()
-    expect(tiles.getByText('З них 1 прострочено')).toBeInTheDocument()
-    expect(tiles.getByRole('link', { name: /Заходи в трекері: 6/ })).toHaveAttribute(
-      'href',
-      '/tracker',
-    )
-  })
-
-  it('показує індекс, рівень, дельту, достовірність і причину', () => {
+  it('картка індексу: число, рівень, приріст, достовірність, причина, шкала й дата даних', () => {
     const { container } = setup()
+    const card = screen.getByRole('region', { name: 'Індекс доброчесності' })
     expect(screen.getByTestId('summary')).toHaveTextContent(
       '54,2 бала, Визначений, достовірність C',
     )
-    expect(screen.getAllByText('Зросло на 7,2 пункта').length).toBeGreaterThan(0)
-    expect(screen.getByText('Підзвітність: самооцінку не підтверджують факти')).toBeInTheDocument()
-    expect(screen.getAllByText('Потрібна перевірка').length).toBeGreaterThan(0)
-    expect(screen.getByText('Дані станом на 16.11.2026 · цикл 2026-11')).toBeInTheDocument()
+    expect(within(card).getByText('Умовний військовий інститут «Альфа»')).toBeInTheDocument()
+    expect(within(card).getByText('Зросло на 7,2 пункта')).toBeInTheDocument()
+    expect(
+      within(card).getByText('Підзвітність: самооцінку не підтверджують факти'),
+    ).toBeInTheDocument()
+    expect(within(card).getByText('Дані станом на 16.11.2026 · цикл 2026-11')).toBeInTheDocument()
+    const scale = within(card).getByRole('list', { name: 'Шкала рівнів зрілості' })
+    expect(within(scale).getAllByRole('listitem')).toHaveLength(5)
+    expect(within(scale).getByText(/Початковий \(хаотичний\)/)).toBeInTheDocument()
     expect(container.textContent).not.toMatch(/—|підприємств|рейтинг/i)
   })
 
-  it('компоненти ведуть на розклад компонента, обмеження пояснено підказкою', async () => {
+  it('«Участь»: категорії, «N з M», k = 10 і примітка для групи менше k', () => {
     setup()
-    const section = screen.getByRole('region', { name: 'Компоненти індексу' })
-    expect(within(section).getByRole('link', { name: /Підзвітність/ })).toHaveAttribute(
+    const card = screen.getByRole('region', { name: 'Участь' })
+    expect(within(card).getByText('k = 10')).toBeInTheDocument()
+    expect(within(card).getByText('Робоча група')).toBeInTheDocument()
+    expect(within(card).getByText('Особовий склад')).toBeInTheDocument()
+    expect(within(card).getByText('Експерти')).toBeInTheDocument()
+    expect(within(card).getByRole('img', { name: 'Експерти: відповіли 4 з 6' })).toBeInTheDocument()
+    expect(within(card).getAllByText(/Менше мінімальної групи/)).toHaveLength(1)
+  })
+
+  it('три компоненти ведуть на розклад, обмеження пояснено підказкою', async () => {
+    setup()
+    const acc = screen.getByRole('region', { name: 'Підзвітність' })
+    expect(within(acc).getByRole('link', { name: /Підзвітність/ })).toHaveAttribute(
       'href',
       '/explain?c=accountability',
     )
-    await userEvent.hover(screen.getByText('Зараховано з обмеженням'))
+    expect(within(acc).getByText('Потребує уваги')).toBeInTheDocument()
+    await userEvent.hover(within(acc).getByText('Зараховано з обмеженням'))
     expect(screen.getByRole('tooltip')).toHaveTextContent('Сприйняття 80, факти 35, зараховано 60')
+    expect(
+      within(screen.getByRole('region', { name: 'Культура' })).getByText('+7,5'),
+    ).toBeInTheDocument()
   })
 
-  it('«Що потребує уваги»: нейтральні рядки з великої літери, сильні сторони окремо', () => {
+  it('«Що потребує уваги»: напрями, сильні сторони, заходи й переходи', () => {
     setup()
-    const section = screen.getByRole('region', { name: 'Що потребує уваги' })
-    expect(within(section).getByText('Підтвердити факти')).toBeInTheDocument()
-    expect(within(section).getByText('Сильні сторони')).toBeInTheDocument()
+    const card = screen.getByRole('region', { name: 'Що потребує уваги' })
+    expect(within(card).getByText('Підтвердити факти')).toBeInTheDocument()
+    expect(within(card).getByText('Сильні сторони')).toBeInTheDocument()
+    expect(within(card).getByRole('link', { name: /Заходи в трекері: 6/ })).toHaveAttribute(
+      'href',
+      '/tracker',
+    )
+    expect(within(card).getByText(/З них 1 прострочено/)).toBeInTheDocument()
+    expect(within(card).getByRole('link', { name: 'Рекомендації' })).toHaveAttribute(
+      'href',
+      '/recommendations',
+    )
+    expect(within(card).getByRole('link', { name: 'Звіт' })).toHaveAttribute('href', '/reports')
   })
 
   it('«Чому такий індекс» відкриває панель із фокусом, закривається Esc', async () => {
@@ -92,7 +101,7 @@ describe('Дашборд', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
-  it('плитка достовірності відкриває панель на прапорцях', async () => {
+  it('пігулка достовірності відкриває панель на прапорцях', async () => {
     setup()
     await userEvent.click(screen.getByRole('button', { name: /Достовірність C, прапорці: 2/ }))
     const dialog = screen.getByRole('dialog')
@@ -110,7 +119,6 @@ describe('Дашборд', () => {
       '/trends',
     )
     const culture = within(card).getByRole('button', { name: /Культура/ })
-    expect(culture).toHaveAttribute('aria-pressed', 'false')
     await userEvent.click(culture)
     expect(culture).toHaveAttribute('aria-pressed', 'true')
     await userEvent.selectOptions(within(card).getByLabelText('Початок періоду'), '2025-12')
@@ -118,13 +126,5 @@ describe('Дашборд', () => {
     const table = within(card).getByRole('table', { name: /Індекс і компоненти/ })
     expect(within(table).getByText('2025-12')).toBeInTheDocument()
     expect(within(table).queryByText('2025-06')).not.toBeInTheDocument()
-    expect(within(table).getByRole('columnheader', { name: 'Культура' })).toBeInTheDocument()
-  })
-
-  it('радар має таблицю-дубль', async () => {
-    setup()
-    const card = screen.getByRole('region', { name: 'Радар компонентів' })
-    await userEvent.click(within(card).getByRole('button', { name: 'Показати як таблицю' }))
-    expect(within(card).getByRole('table', { name: /компонентів/ })).toBeInTheDocument()
   })
 })

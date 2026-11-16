@@ -67,6 +67,11 @@ describe('заклади для спостерігача', () => {
             )
       })
 
+      it('участь за категоріями дає суму відповідей, відповіли не більше за запрошених', () => {
+        expect(inst.participation.reduce((s, p) => s + p.answered, 0)).toBe(inst.responses)
+        for (const p of inst.participation) expect(p.answered).toBeLessThanOrEqual(p.invited)
+      })
+
       it('є що показати: напрями, сильні сторони, події', () => {
         expect(inst.attention.length).toBeGreaterThanOrEqual(3)
         expect(inst.strengths.length).toBeGreaterThanOrEqual(2)

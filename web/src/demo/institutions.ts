@@ -30,6 +30,28 @@ export interface Insight {
   component?: ComponentId
 }
 
+export type ParticipationId = 'wg' | 'os' | 'experts'
+
+/** Участь за категоріями респондентів: відповіли з запрошених (без імен, лише кількості). */
+export interface ParticipationRow {
+  id: ParticipationId
+  answered: number
+  invited: number
+}
+
+/** Розбиває загальну кількість відповідей на категорії: РГ 25%, ОС 67%, експерти 8% (сума завжди дорівнює total). */
+export function splitParticipation(
+  total: number,
+  spare: [number, number, number],
+): ParticipationRow[] {
+  const wg = Math.round(total * 0.25)
+  const experts = Math.max(1, Math.round(total * 0.08))
+  const os = total - wg - experts
+  const ans = [wg, os, experts]
+  const ids: ParticipationId[] = ['wg', 'os', 'experts']
+  return ids.map((id, i) => ({ id, answered: ans[i]!, invited: ans[i]! + spare[i]! }))
+}
+
 export interface Institution {
   id: string
   name: string
@@ -42,6 +64,7 @@ export interface Institution {
   flags: TrustFlag[]
   trust: { grade: TrustGrade; raised: TrustFlag[] }
   responses: number
+  participation: ParticipationRow[]
   index: number
   level: MaturityLevel
   previousIndex: number
@@ -229,6 +252,11 @@ function generate(p: Profile): Institution {
     flags,
     trust,
     responses,
+    participation: splitParticipation(responses, [
+      1 + Math.floor(r() * 3),
+      5 + Math.floor(r() * 8),
+      1 + Math.floor(r() * 2),
+    ]),
     index,
     level: levelOf(index),
     previousIndex,
@@ -252,6 +280,11 @@ const ALPHA: Institution = {
   flags: alpha.trustFlags,
   trust: alpha.trustSummary,
   responses: alpha.RESPONSES,
+  participation: [
+    { id: 'wg', answered: 12, invited: 14 },
+    { id: 'os', answered: 32, invited: 40 },
+    { id: 'experts', answered: 4, invited: 6 },
+  ],
   index: alpha.currentIndex,
   level: alpha.currentLevel,
   previousIndex: alpha.previousIndex,
