@@ -6,6 +6,7 @@ import { Home } from '@/pages/Home'
 import { Explain } from '@/pages/Explain'
 import { Recommendations } from '@/pages/Recommendations'
 import { Tracker } from '@/pages/Tracker'
+import { Trends } from '@/pages/Trends'
 import { Me } from '@/pages/Me'
 import { Survey } from '@/pages/Survey'
 import { Design } from '@/pages/Design'
@@ -74,15 +75,7 @@ export function App() {
                   }
                 />
                 <Route path="/tracker" element={<Tracker />} />
-                <Route
-                  path="/trends"
-                  element={
-                    <Placeholder
-                      title="Динаміка"
-                      description="Тут зʼявиться повна версія графіка динаміки індексу."
-                    />
-                  }
-                />
+                <Route path="/trends" element={<Trends />} />
                 <Route
                   path="/integrations"
                   element={
