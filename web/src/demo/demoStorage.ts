@@ -1,5 +1,6 @@
 /** Збереження демо-стану в sessionStorage. Усі звернення в try/catch: сховище може бути недоступним. */
 import { isRole, type Role } from '@/lib/access'
+import { resetDecisions } from './decisionsStore'
 
 const ROLE_KEY = 'demo.role'
 const UNIT_KEY = 'demo.unit'
@@ -33,8 +34,9 @@ export function loadUnit(): string {
 }
 export const saveUnit = (u: string) => write(UNIT_KEY, u)
 
-/** Скидає демо-стан і чернетки анкет. */
+/** Скидає демо-стан, рішення за рекомендаціями й чернетки анкет. */
 export function clearDemoStorage() {
+  resetDecisions()
   try {
     sessionStorage.removeItem(ROLE_KEY)
     sessionStorage.removeItem(UNIT_KEY)

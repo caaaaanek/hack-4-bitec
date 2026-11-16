@@ -177,6 +177,7 @@ export const currentLevel = levelOf(currentIndex)
 
 /** Попередні цикли: лише зараховані значення компонентів. */
 export const history: { cycle: string; credited: Record<ComponentId, number> }[] = [
+  { cycle: '2025-06', credited: { culture: 38, system: 30, accountability: 36 } },
   { cycle: '2025-12', credited: { culture: 44, system: 36, accountability: 43 } },
   { cycle: '2026-06', credited: { culture: 50, system: 41, accountability: 50 } },
 ]
