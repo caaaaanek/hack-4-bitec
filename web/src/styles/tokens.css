@@ -3,124 +3,141 @@
 
 @theme {
   /* ---------- Шрифт ---------- */
-  --font-sans:
-    'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    sans-serif;
+  --font-sans: 'Onest Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Для хешів: системний моноширинний (еталон моноширинного шрифту не має, там tabular-nums). */
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
   /* ---------- Темна тема (за замовчуванням): чорнильно-синя, рівні поверхонь за світлотою ---------- */
-  --color-bg: #0b1220;
-  --color-surface: #111a2c;
-  --color-surface-raised: #182540;
-  --color-surface-muted: #16223a;
-  --color-border: #25334f;
-  --color-border-strong: #6b7f9f; /* межі полів і контролів, >=3:1 до поверхні */
-  --color-text: #d9e1ee;
-  --color-text-muted: #9aa9c1;
+  --color-bg: #0d121d;
+  --color-surface: #141a27;
+  --color-surface-raised: #1c2434;
+  --color-surface-muted: #1b2232;
+  --color-border: #242c3d;
+  --color-border-strong: #67718a;
+  --color-text: #eef1f6;
+  --color-text-muted: #9aa2b3;
+  --color-accent: #2cc9a0;
+  --color-accent-hover: #4fd9b5;
+  --color-accent-active: #7be6c9;
+  --color-accent-soft: #15302a;
+  --color-on-accent: #06150f;
+  --color-focus: #4fd9b5;
 
-  --color-accent: #5eb3d6;
-  --color-accent-hover: #7cc4e2;
-  --color-accent-active: #9ad3ea;
-  --color-accent-soft: #143349;
-  --color-on-accent: #08131f;
-  --color-focus: #7cc4e2;
+  --color-primary: #a8e88a;
+  --color-primary-hover: #bcf0a2;
+  --color-primary-active: #cff5bb;
+  --color-primary-soft: #1d2f1f;
 
-  --color-maturity-1-bg: #1d3556;
-  --color-maturity-1-text: #d9e1ee;
-  --color-maturity-1-chart: #4677b0;
+  --color-on-primary: #0d230d;
+
+  --color-data: #2cc9a0;
+  --color-data-soft: #15302a;
+
+  --color-strength-bg: #15302a;
+  --color-strength-text: #7fe0c2;
+  --color-strength-solid: #2cc9a0;
+
+  --color-attention-bg: #33281a;
+  --color-attention-text: #f0b453;
+  --color-attention-solid: #f0b453;
+
+  --color-critical-bg: #3a1f1f;
+  --color-critical-text: #f5a39b;
+  --color-critical-solid: #f07f75;
+
+  --color-neutral-bg: #1f2636;
+  --color-neutral-text: #b3bbcb;
+  --color-neutral-solid: #8b93a5;
+
+  --color-status-proposed-bg: #1f2636;
+  --color-status-proposed-text: #b3bbcb;
+  --color-status-accepted-bg: #1c2740;
+  --color-status-accepted-text: #9bbcf8;
+  --color-status-clarified-bg: #272440;
+  --color-status-clarified-text: #bdb2f2;
+  --color-status-rejected-bg: #232a38;
+  --color-status-rejected-text: #a6aebd;
+  --color-status-inprogress-bg: #15302a;
+  --color-status-inprogress-text: #7fe0c2;
+  --color-status-done-bg: #1d2f1f;
+  --color-status-done-text: #b3ec9a;
+  --color-status-confirmed-bg: #1d4a3e;
+  --color-status-confirmed-text: #a6efd8;
+  --color-status-notconfirmed-bg: #33281a;
+  --color-status-notconfirmed-text: #f0b453;
+  --color-status-overdue-bg: #3a1f1f;
+  --color-status-overdue-text: #f5a39b;
+
+  --color-source-wg: #7ea6f5;
+  --color-source-os: #f0b453;
+  --color-source-experts: #b79af0;
+  --color-source-facts: #2cc9a0;
+
+  --color-cat-culture: #2cc9a0;
+  --color-cat-system: #7ea6f5;
+  --color-cat-accountability: #f0b453;
+  --color-cat-neutral: #8b93a5;
+  --color-cat-culture-soft: #15302a;
+  --color-cat-system-soft: #1c2740;
+  --color-cat-accountability-soft: #33281a;
+
+  --color-maturity-1-bg: #1b3a31;
+  --color-maturity-1-text: #ffffff;
+  --color-maturity-1-chart: #1e8265;
   --color-maturity-1-chart-text: #ffffff;
-  --color-maturity-2-bg: #2c5282;
-  --color-maturity-2-text: #f2f6fc;
-  --color-maturity-2-chart: #5a8bc5;
-  --color-maturity-2-chart-text: #020812;
-  --color-maturity-3-bg: #4a7cb8;
-  --color-maturity-3-text: #020812;
-  --color-maturity-3-chart: #74a2d8;
-  --color-maturity-3-chart-text: #020812;
-  --color-maturity-4-bg: #7aa5da;
-  --color-maturity-4-text: #06101c;
-  --color-maturity-4-chart: #93b9e4;
-  --color-maturity-4-chart-text: #06101c;
-  --color-maturity-5-bg: #b5d0f0;
-  --color-maturity-5-text: #06101c;
-  --color-maturity-5-chart: #b9d3f1;
-  --color-maturity-5-chart-text: #06101c;
-
-  --color-strength-bg: #12342a;
-  --color-strength-text: #8fdcb8;
-  --color-strength-solid: #3fb985;
-  --color-attention-bg: #3a2a0e;
-  --color-attention-text: #f0c46a;
-  --color-attention-solid: #d9962b;
-  --color-critical-bg: #3d1a1d;
-  --color-critical-text: #f4a3a3;
-  --color-critical-solid: #e5665f; /* лише стани системи */
-  --color-neutral-bg: #1d2940;
-  --color-neutral-text: #b4c1d6;
-  --color-neutral-solid: #8294b0;
-
-  --color-status-proposed-bg: #1d2940;
-  --color-status-proposed-text: #b4c1d6;
-  --color-status-accepted-bg: #17304f;
-  --color-status-accepted-text: #9cc3f2;
-  --color-status-clarified-bg: #2a2650;
-  --color-status-clarified-text: #bfbdf2;
-  --color-status-rejected-bg: #232c3b;
-  --color-status-rejected-text: #a8b3c4;
-  --color-status-inprogress-bg: #12353f;
-  --color-status-inprogress-text: #8fd6e6;
-  --color-status-done-bg: #12342a;
-  --color-status-done-text: #8fdcb8;
-  --color-status-confirmed-bg: #0f3a2a;
-  --color-status-confirmed-text: #7fe0b4;
-  --color-status-notconfirmed-bg: #3a2a0e;
-  --color-status-notconfirmed-text: #f0c46a;
-  --color-status-overdue-bg: #3d1a1d;
-  --color-status-overdue-text: #f4a3a3;
-
-  --color-source-wg: #5eb3d6;
-  --color-source-os: #e08a52;
-  --color-source-experts: #b48ae0;
-  --color-source-facts: #4cc28f;
-
-  /* Категорії вмісту: верхня лінія картки */
-  --color-cat-culture: #4cc2a8;
-  --color-cat-system: #6f9be0;
-  --color-cat-accountability: #d9a24c;
-  --color-cat-neutral: #6b7f9f;
+  --color-maturity-2-bg: #235445;
+  --color-maturity-2-text: #ffffff;
+  --color-maturity-2-chart: #239574;
+  --color-maturity-2-chart-text: #06150f;
+  --color-maturity-3-bg: #2f7b66;
+  --color-maturity-3-text: #ffffff;
+  --color-maturity-3-chart: #28ac87;
+  --color-maturity-3-chart-text: #06150f;
+  --color-maturity-4-bg: #5cc4a6;
+  --color-maturity-4-text: #06150f;
+  --color-maturity-4-chart: #30cc9f;
+  --color-maturity-4-chart-text: #06150f;
+  --color-maturity-5-bg: #a9e6d1;
+  --color-maturity-5-text: #06150f;
+  --color-maturity-5-chart: #86e3c8;
+  --color-maturity-5-chart-text: #06150f;
 
   --shadow-sm: 0 0 0 rgb(0 0 0 / 0);
-  --shadow-md: 0 2px 8px rgb(0 0 0 / 0.35);
+  --shadow-md: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px rgb(0 0 0 / 0.35);
   --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.5);
 
   /* ---------- Типографіка (тіло 14 px, підписи 12 px) ---------- */
-  --text-display: 3.5rem;
+  --text-display: 3.25rem; /* 52: велике число індексу */
   --text-display--line-height: 1;
-  --text-display--font-weight: 700;
-  --text-display--letter-spacing: -0.02em;
-  --text-title: 2rem;
-  --text-title--line-height: 2.5rem;
-  --text-title--font-weight: 700;
-  --text-title--letter-spacing: -0.01em;
-  --text-section: 1.375rem;
-  --text-section--line-height: 1.875rem;
+  --text-display--font-weight: 600;
+  --text-display--letter-spacing: 0;
+  --text-numeral: 1.875rem; /* 30: число в плитці */
+  --text-numeral--line-height: 1.1;
+  --text-numeral--font-weight: 600;
+  --text-title: 1.375rem; /* 22: заголовок сторінки */
+  --text-title--line-height: 1.75rem;
+  --text-title--font-weight: 600;
+  --text-section: 1.125rem; /* 18 */
+  --text-section--line-height: 1.625rem;
   --text-section--font-weight: 600;
-  --text-card: 1.125rem;
-  --text-card--line-height: 1.625rem;
+  --text-card: 1rem; /* 16: заголовок картки */
+  --text-card--line-height: 1.5rem;
   --text-card--font-weight: 600;
   --text-body-lg: 1rem;
   --text-body-lg--line-height: 1.5rem;
-  --text-body: 0.875rem;
+  --text-body: 0.875rem; /* 14 */
   --text-body--line-height: 1.25rem;
-  --text-caption: 0.75rem;
-  --text-caption--line-height: 1rem;
-  --text-fine: 0.75rem;
+  --text-caption: 0.8125rem; /* 13: підписи-мітки */
+  --text-caption--line-height: 1.125rem;
+  --text-fine: 0.75rem; /* 12 */
   --text-fine--line-height: 1rem;
   --text-fine--font-weight: 500;
 
   /* ---------- Радіуси ---------- */
-  --radius-sm: 6px;
-  --radius-md: 10px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
   --radius-lg: 16px;
+  --radius-pill: 999px;
 
   /* ---------- Рух ---------- */
   --duration-fast: 150ms;
@@ -154,175 +171,205 @@
 
 /* Світла тема: вмикається перемикачем у шапці (data-theme="light" на html) */
 :root[data-theme='light'] {
-  --color-bg: #f4f6f9;
+  --color-bg: #f6f7f9;
   --color-surface: #ffffff;
   --color-surface-raised: #ffffff;
-  --color-surface-muted: #ebeff4;
-  --color-border: #d3dae4;
-  --color-border-strong: #7b889c;
-  --color-text: #16202e;
-  --color-text-muted: #455166;
-
-  --color-accent: #1f4e9c;
-  --color-accent-hover: #173f80;
-  --color-accent-active: #11326a;
-  --color-accent-soft: #e4ecf8;
+  --color-surface-muted: #f2f3f5;
+  --color-border: #e8eaee;
+  --color-border-strong: #7b818b;
+  --color-text: #111418;
+  --color-text-muted: #5f6670;
+  --color-accent: #29705c;
+  --color-accent-hover: #226150;
+  --color-accent-active: #1b5142;
+  --color-accent-soft: #dcf3eb;
   --color-on-accent: #ffffff;
-  --color-focus: #1f4e9c;
+  --color-focus: #29705c;
 
-  --color-maturity-1-bg: #e9f0fa;
-  --color-maturity-1-text: #16202e;
-  --color-maturity-1-chart: #6a95cf;
-  --color-maturity-1-chart-text: #0c1626;
-  --color-maturity-2-bg: #c8daf1;
-  --color-maturity-2-text: #16202e;
-  --color-maturity-2-chart: #5486c6;
-  --color-maturity-2-chart-text: #0c1626;
-  --color-maturity-3-bg: #8fb2e0;
-  --color-maturity-3-text: #0c1626;
-  --color-maturity-3-chart: #3468b0;
+  --color-primary: #9be07a;
+  --color-primary-hover: #8dd56b;
+  --color-primary-active: #7fc95d;
+  --color-primary-soft: #e8f7df;
+
+  --color-on-primary: #10290f;
+
+  --color-data: #13957a;
+  --color-data-soft: #dcf3eb;
+
+  --color-strength-bg: #dcf3eb;
+  --color-strength-text: #1b5a49;
+  --color-strength-solid: #13957a;
+
+  --color-attention-bg: #fbefd9;
+  --color-attention-text: #7a4a05;
+  --color-attention-solid: #b3700a;
+
+  --color-critical-bg: #fce5e2;
+  --color-critical-text: #a3322a;
+  --color-critical-solid: #d0453a;
+
+  --color-neutral-bg: #f2f3f5;
+  --color-neutral-text: #4a515c;
+  --color-neutral-solid: #7b818b;
+
+  --color-status-proposed-bg: #f2f3f5;
+  --color-status-proposed-text: #4a515c;
+  --color-status-accepted-bg: #e3ecfd;
+  --color-status-accepted-text: #244a96;
+  --color-status-clarified-bg: #ece9fb;
+  --color-status-clarified-text: #4b3f9e;
+  --color-status-rejected-bg: #eceef1;
+  --color-status-rejected-text: #3f4650;
+  --color-status-inprogress-bg: #dcf3eb;
+  --color-status-inprogress-text: #1b5a49;
+  --color-status-done-bg: #e8f7df;
+  --color-status-done-text: #2c6a1c;
+  --color-status-confirmed-bg: #c9ead9;
+  --color-status-confirmed-text: #164a3b;
+  --color-status-notconfirmed-bg: #fbefd9;
+  --color-status-notconfirmed-text: #7a4a05;
+  --color-status-overdue-bg: #fce5e2;
+  --color-status-overdue-text: #a3322a;
+
+  --color-source-wg: #4a7de0;
+  --color-source-os: #b3700a;
+  --color-source-experts: #8a63d2;
+  --color-source-facts: #13957a;
+
+  --color-cat-culture: #13957a;
+  --color-cat-system: #4a7de0;
+  --color-cat-accountability: #b3700a;
+  --color-cat-neutral: #7b818b;
+  --color-cat-culture-soft: #dcf3eb;
+  --color-cat-system-soft: #e3ecfd;
+  --color-cat-accountability-soft: #fbefd9;
+
+  --color-maturity-1-bg: #e6f6ef;
+  --color-maturity-1-text: #06150f;
+  --color-maturity-1-chart: #27a682;
+  --color-maturity-1-chart-text: #06150f;
+  --color-maturity-2-bg: #bfe6d5;
+  --color-maturity-2-text: #06150f;
+  --color-maturity-2-chart: #229273;
+  --color-maturity-2-chart-text: #06150f;
+  --color-maturity-3-bg: #82cdb0;
+  --color-maturity-3-text: #06150f;
+  --color-maturity-3-chart: #1e7f64;
   --color-maturity-3-chart-text: #ffffff;
-  --color-maturity-4-bg: #2f62a8;
+  --color-maturity-4-bg: #1e7f64;
   --color-maturity-4-text: #ffffff;
-  --color-maturity-4-chart: #214c8a;
+  --color-maturity-4-chart: #17624d;
   --color-maturity-4-chart-text: #ffffff;
-  --color-maturity-5-bg: #11305f;
+  --color-maturity-5-bg: #0f4032;
   --color-maturity-5-text: #ffffff;
-  --color-maturity-5-chart: #0d2548;
+  --color-maturity-5-chart: #0f4032;
   --color-maturity-5-chart-text: #ffffff;
 
-  --color-strength-bg: #e1f2e9;
-  --color-strength-text: #134d36;
-  --color-strength-solid: #1b7a56;
-  --color-attention-bg: #fcefd3;
-  --color-attention-text: #6b4100;
-  --color-attention-solid: #a35f00;
-  --color-critical-bg: #fbe4e4;
-  --color-critical-text: #8f1f1f;
-  --color-critical-solid: #b42b2b;
-  --color-neutral-bg: #e8ecf1;
-  --color-neutral-text: #37445a;
-  --color-neutral-solid: #5d6b82;
-
-  --color-status-proposed-bg: #e8ecf1;
-  --color-status-proposed-text: #37445a;
-  --color-status-accepted-bg: #e0eafa;
-  --color-status-accepted-text: #17407f;
-  --color-status-clarified-bg: #ecebfa;
-  --color-status-clarified-text: #38368a;
-  --color-status-rejected-bg: #dfe3ea;
-  --color-status-rejected-text: #2c3646;
-  --color-status-inprogress-bg: #dff1f6;
-  --color-status-inprogress-text: #0b4f61;
-  --color-status-done-bg: #e1f2e9;
-  --color-status-done-text: #134d36;
-  --color-status-confirmed-bg: #d6efe3;
-  --color-status-confirmed-text: #0f4430;
-  --color-status-notconfirmed-bg: #fcefd3;
-  --color-status-notconfirmed-text: #6b4100;
-  --color-status-overdue-bg: #fbe4e4;
-  --color-status-overdue-text: #8f1f1f;
-
-  --color-source-wg: #1f4e9c;
-  --color-source-os: #b0521a;
-  --color-source-experts: #6a3d9e;
-  --color-source-facts: #1b7a56;
-
-  --color-cat-culture: #17806a;
-  --color-cat-system: #2f62a8;
-  --color-cat-accountability: #a35f00;
-  --color-cat-neutral: #7b889c;
-
-  --shadow-sm: 0 1px 2px rgb(22 32 46 / 0.06), 0 1px 1px rgb(22 32 46 / 0.04);
-  --shadow-md: 0 4px 12px rgb(22 32 46 / 0.08), 0 1px 3px rgb(22 32 46 / 0.06);
-  --shadow-lg: 0 12px 32px rgb(22 32 46 / 0.14), 0 2px 6px rgb(22 32 46 / 0.08);
+  --shadow-sm: 0 0 0 rgb(0 0 0 / 0);
+  --shadow-md: 0 1px 2px rgb(17 20 24 / 0.04), 0 8px 24px rgb(17 20 24 / 0.06);
+  --shadow-lg: 0 12px 32px rgb(17 20 24 / 0.14), 0 2px 6px rgb(17 20 24 / 0.08);
 }
 
 /* Друк завжди світлий: ті самі значення, що й у світлій темі */
 @media print {
   :root {
-    --color-bg: #f4f6f9;
+    --color-bg: #f6f7f9;
     --color-surface: #ffffff;
     --color-surface-raised: #ffffff;
-    --color-surface-muted: #ebeff4;
-    --color-border: #d3dae4;
-    --color-border-strong: #7b889c;
-    --color-text: #16202e;
-    --color-text-muted: #455166;
-
-    --color-accent: #1f4e9c;
-    --color-accent-hover: #173f80;
-    --color-accent-active: #11326a;
-    --color-accent-soft: #e4ecf8;
+    --color-surface-muted: #f2f3f5;
+    --color-border: #e8eaee;
+    --color-border-strong: #7b818b;
+    --color-text: #111418;
+    --color-text-muted: #5f6670;
+    --color-accent: #29705c;
+    --color-accent-hover: #226150;
+    --color-accent-active: #1b5142;
+    --color-accent-soft: #dcf3eb;
     --color-on-accent: #ffffff;
-    --color-focus: #1f4e9c;
+    --color-focus: #29705c;
 
-    --color-maturity-1-bg: #e9f0fa;
-    --color-maturity-1-text: #16202e;
-    --color-maturity-1-chart: #6a95cf;
-    --color-maturity-1-chart-text: #0c1626;
-    --color-maturity-2-bg: #c8daf1;
-    --color-maturity-2-text: #16202e;
-    --color-maturity-2-chart: #5486c6;
-    --color-maturity-2-chart-text: #0c1626;
-    --color-maturity-3-bg: #8fb2e0;
-    --color-maturity-3-text: #0c1626;
-    --color-maturity-3-chart: #3468b0;
+    --color-primary: #9be07a;
+    --color-primary-hover: #8dd56b;
+    --color-primary-active: #7fc95d;
+    --color-primary-soft: #e8f7df;
+
+    --color-on-primary: #10290f;
+
+    --color-data: #13957a;
+    --color-data-soft: #dcf3eb;
+
+    --color-strength-bg: #dcf3eb;
+    --color-strength-text: #1b5a49;
+    --color-strength-solid: #13957a;
+
+    --color-attention-bg: #fbefd9;
+    --color-attention-text: #7a4a05;
+    --color-attention-solid: #b3700a;
+
+    --color-critical-bg: #fce5e2;
+    --color-critical-text: #a3322a;
+    --color-critical-solid: #d0453a;
+
+    --color-neutral-bg: #f2f3f5;
+    --color-neutral-text: #4a515c;
+    --color-neutral-solid: #7b818b;
+
+    --color-status-proposed-bg: #f2f3f5;
+    --color-status-proposed-text: #4a515c;
+    --color-status-accepted-bg: #e3ecfd;
+    --color-status-accepted-text: #244a96;
+    --color-status-clarified-bg: #ece9fb;
+    --color-status-clarified-text: #4b3f9e;
+    --color-status-rejected-bg: #eceef1;
+    --color-status-rejected-text: #3f4650;
+    --color-status-inprogress-bg: #dcf3eb;
+    --color-status-inprogress-text: #1b5a49;
+    --color-status-done-bg: #e8f7df;
+    --color-status-done-text: #2c6a1c;
+    --color-status-confirmed-bg: #c9ead9;
+    --color-status-confirmed-text: #164a3b;
+    --color-status-notconfirmed-bg: #fbefd9;
+    --color-status-notconfirmed-text: #7a4a05;
+    --color-status-overdue-bg: #fce5e2;
+    --color-status-overdue-text: #a3322a;
+
+    --color-source-wg: #4a7de0;
+    --color-source-os: #b3700a;
+    --color-source-experts: #8a63d2;
+    --color-source-facts: #13957a;
+
+    --color-cat-culture: #13957a;
+    --color-cat-system: #4a7de0;
+    --color-cat-accountability: #b3700a;
+    --color-cat-neutral: #7b818b;
+    --color-cat-culture-soft: #dcf3eb;
+    --color-cat-system-soft: #e3ecfd;
+    --color-cat-accountability-soft: #fbefd9;
+
+    --color-maturity-1-bg: #e6f6ef;
+    --color-maturity-1-text: #06150f;
+    --color-maturity-1-chart: #27a682;
+    --color-maturity-1-chart-text: #06150f;
+    --color-maturity-2-bg: #bfe6d5;
+    --color-maturity-2-text: #06150f;
+    --color-maturity-2-chart: #229273;
+    --color-maturity-2-chart-text: #06150f;
+    --color-maturity-3-bg: #82cdb0;
+    --color-maturity-3-text: #06150f;
+    --color-maturity-3-chart: #1e7f64;
     --color-maturity-3-chart-text: #ffffff;
-    --color-maturity-4-bg: #2f62a8;
+    --color-maturity-4-bg: #1e7f64;
     --color-maturity-4-text: #ffffff;
-    --color-maturity-4-chart: #214c8a;
+    --color-maturity-4-chart: #17624d;
     --color-maturity-4-chart-text: #ffffff;
-    --color-maturity-5-bg: #11305f;
+    --color-maturity-5-bg: #0f4032;
     --color-maturity-5-text: #ffffff;
-    --color-maturity-5-chart: #0d2548;
+    --color-maturity-5-chart: #0f4032;
     --color-maturity-5-chart-text: #ffffff;
 
-    --color-strength-bg: #e1f2e9;
-    --color-strength-text: #134d36;
-    --color-strength-solid: #1b7a56;
-    --color-attention-bg: #fcefd3;
-    --color-attention-text: #6b4100;
-    --color-attention-solid: #a35f00;
-    --color-critical-bg: #fbe4e4;
-    --color-critical-text: #8f1f1f;
-    --color-critical-solid: #b42b2b;
-    --color-neutral-bg: #e8ecf1;
-    --color-neutral-text: #37445a;
-    --color-neutral-solid: #5d6b82;
-
-    --color-status-proposed-bg: #e8ecf1;
-    --color-status-proposed-text: #37445a;
-    --color-status-accepted-bg: #e0eafa;
-    --color-status-accepted-text: #17407f;
-    --color-status-clarified-bg: #ecebfa;
-    --color-status-clarified-text: #38368a;
-    --color-status-rejected-bg: #dfe3ea;
-    --color-status-rejected-text: #2c3646;
-    --color-status-inprogress-bg: #dff1f6;
-    --color-status-inprogress-text: #0b4f61;
-    --color-status-done-bg: #e1f2e9;
-    --color-status-done-text: #134d36;
-    --color-status-confirmed-bg: #d6efe3;
-    --color-status-confirmed-text: #0f4430;
-    --color-status-notconfirmed-bg: #fcefd3;
-    --color-status-notconfirmed-text: #6b4100;
-    --color-status-overdue-bg: #fbe4e4;
-    --color-status-overdue-text: #8f1f1f;
-
-    --color-source-wg: #1f4e9c;
-    --color-source-os: #b0521a;
-    --color-source-experts: #6a3d9e;
-    --color-source-facts: #1b7a56;
-
-    --color-cat-culture: #17806a;
-    --color-cat-system: #2f62a8;
-    --color-cat-accountability: #a35f00;
-    --color-cat-neutral: #7b889c;
-
-    --shadow-sm: 0 1px 2px rgb(22 32 46 / 0.06), 0 1px 1px rgb(22 32 46 / 0.04);
-    --shadow-md: 0 4px 12px rgb(22 32 46 / 0.08), 0 1px 3px rgb(22 32 46 / 0.06);
-    --shadow-lg: 0 12px 32px rgb(22 32 46 / 0.14), 0 2px 6px rgb(22 32 46 / 0.08);
+    --shadow-sm: 0 0 0 rgb(0 0 0 / 0);
+    --shadow-md: 0 1px 2px rgb(17 20 24 / 0.04), 0 8px 24px rgb(17 20 24 / 0.06);
+    --shadow-lg: 0 12px 32px rgb(17 20 24 / 0.14), 0 2px 6px rgb(17 20 24 / 0.08);
   }
 }
 

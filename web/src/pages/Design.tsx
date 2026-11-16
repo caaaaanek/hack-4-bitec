@@ -122,8 +122,9 @@ const LEVELS: MaturityLevel[] = [1, 2, 3, 4, 5]
 const SOURCES: SourceId[] = ['wg', 'os', 'experts', 'facts']
 
 const TYPE_SCALE: Array<[string, string, string]> = [
-  ['text-display 56/56', 'text-display tabular', '3,8'],
-  ['text-title 32/40', 'text-title', 'Заголовок екрана'],
+  ['text-display 52/52', 'text-display tabular', '3,8'],
+  ['text-numeral 30/33', 'text-numeral tabular', '63,2'],
+  ['text-title 22/28', 'text-title', 'Заголовок екрана'],
   ['text-section 22/30', 'text-section', 'Заголовок секції'],
   ['text-card 18/26', 'text-card', 'Заголовок картки'],
   ['text-body-lg 16/24', 'text-body-lg', 'Основний текст для довгих описів і пояснень.'],

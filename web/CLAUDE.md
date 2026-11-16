@@ -5,7 +5,7 @@
 ## Стек
 
 Vite, React 19, TypeScript strict, Tailwind 4, React Router, TanStack Query, Recharts, MSW (моки),
-Vitest, Playwright (devDependency, перевірка екранів), eslint, prettier. Шрифт Inter (`@fontsource-variable/inter`,
+Vitest, Playwright (devDependency, перевірка екранів), eslint, prettier. Шрифт Onest (`@fontsource-variable/onest`,
 лише cyrillic і latin). Іконки `lucide-react`. Alias `@/` це `src/`. `<html lang="uk">`.
 
 ## Команди

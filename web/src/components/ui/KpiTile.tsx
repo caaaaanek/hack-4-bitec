@@ -45,7 +45,7 @@ export function KpiTile({ label, value, unit, delta, deltaUnit, className }: Kpi
   return (
     <Card className={cn('p-3 md:p-4', className)}>
       <p className="m-0 text-caption text-text-muted">{label}</p>
-      <p className="m-0 mt-1 flex items-baseline gap-1 text-title tabular-nums">
+      <p className="m-0 mt-1 flex items-baseline gap-1 text-numeral tabular-nums">
         {value}
         {unit && <span className="text-body text-text-muted">{unit}</span>}
       </p>

@@ -75,6 +75,10 @@
     flex-shrink: 0;
     color: var(--color-text-muted);
   }
+  .mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
   .touch-target {
     min-height: var(--touch-target);
     min-width: var(--touch-target);

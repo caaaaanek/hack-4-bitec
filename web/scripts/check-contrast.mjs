@@ -46,6 +46,13 @@ for (const bg of ['bg', 'surface', 'surface-raised', 'surface-muted']) {
   add('accent', bg, TEXT, 'текст (посилання)')
 }
 add('on-accent', 'accent', TEXT, 'текст')
+add('on-primary', 'primary', TEXT, 'текст на основній кнопці')
+add('on-primary', 'primary-hover', TEXT, 'текст на основній кнопці')
+add('on-primary', 'primary-active', TEXT, 'текст на основній кнопці')
+add('text', 'primary-soft', TEXT, 'текст')
+add('data', 'surface', LARGE, 'лінія даних')
+add('data', 'surface-raised', LARGE, 'лінія даних')
+add('accent', 'bg', TEXT, 'текст (посилання)')
 add('on-accent', 'accent-hover', TEXT, 'текст')
 add('on-accent', 'accent-active', TEXT, 'текст')
 add('accent', 'accent-soft', TEXT, 'текст')
@@ -99,6 +106,8 @@ for (const s of ['wg', 'os', 'experts', 'facts']) {
 // Лінії категорій і поверхні
 for (const c of ['culture', 'system', 'accountability', 'neutral'])
   add(`cat-${c}`, 'surface', LARGE, 'лінія категорії')
+for (const c of ['culture', 'system', 'accountability'])
+  add(`cat-${c}`, `cat-${c}-soft`, LARGE, 'іконка в тонованому колі')
 add('surface', 'bg', 1.05, 'різниця поверхонь')
 add('surface-raised', 'surface', 1.05, 'різниця поверхонь (лише темна)')
 

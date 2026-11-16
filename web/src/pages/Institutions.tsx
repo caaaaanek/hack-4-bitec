@@ -47,7 +47,7 @@ export function Institutions() {
                   </Link>
                 </h2>
                 <p className="m-0 mt-3 flex items-baseline gap-2">
-                  <span className="text-title tabular">{fmtIndex(i.index)}</span>
+                  <span className="text-numeral tabular">{fmtIndex(i.index)}</span>
                   <span className="text-caption text-text-muted">індекс з 100</span>
                 </p>
                 <div className="mt-2 flex flex-wrap items-center gap-2">

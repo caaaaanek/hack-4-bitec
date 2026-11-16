@@ -36,9 +36,7 @@ function Tile({ label, value, sub, icon, to, onClick, href, actionLabel }: TileP
         {label}
       </span>
       <span className="mt-1 flex items-center gap-x-3">
-        <span className="text-title leading-none tabular short:text-section short:leading-none">
-          {value}
-        </span>
+        <span className="text-numeral tabular short:text-section">{value}</span>
         <span className="flex min-w-0 flex-col gap-0.5 whitespace-nowrap text-caption leading-4 text-text-muted">
           {sub}
         </span>
