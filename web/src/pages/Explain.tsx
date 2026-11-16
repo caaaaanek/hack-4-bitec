@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import {
   Badge,
+  BigNumber,
   Card,
   IconCircle,
   SegmentedControl,
@@ -39,7 +40,23 @@ import {
   type ExplainMode,
   type TreeNode,
 } from '@/lib/scoring/explain'
-import { COMPONENT_IDS, fmt, fmtIndex, type ComponentId } from '@/lib/scoring/methodology'
+import {
+  COMPONENT_IDS,
+  K_MIN_GROUP,
+  LEVEL_UPPER_BOUNDS,
+  LIMITER_MARGIN,
+  fmt,
+  fmtIndex,
+  type ComponentId,
+} from '@/lib/scoring/methodology'
+
+const METHOD_PILLS: [string, string][] = [
+  ['Індекс =', '⅓ Культура + ⅓ Система + ⅓ Підзвітність'],
+  ['Зараховане =', `min(Сприйняття; Факти + ${LIMITER_MARGIN})`],
+  ['Компонент =', 'середнє питань за їхніми вагами (у сумі 100 %)'],
+  ['Рівень =', `1…5 за межами ${LEVEL_UPPER_BOUNDS.map((b) => fmt(b)).join(' · ')}`],
+  ['Мінімальна група', `k = ${K_MIN_GROUP}`],
+]
 
 const MODES: ExplainMode[] = ['perception', 'facts', 'credited']
 const WEIGHT_HINT = 'Яку частку батьківського вузла становить цей вузол, у відсотках.'
@@ -105,7 +122,7 @@ function Row({
         'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus',
         hasKids && 'cursor-pointer hover:bg-surface-muted',
         node.kind === 'index' && 'rounded-[12px] bg-accent-soft font-semibold',
-        node.kind === 'component' && 'rounded-[12px] bg-surface-muted/60 font-semibold',
+        node.kind === 'component' && 'mt-1.5 rounded-[12px] border bg-surface font-semibold',
       )}
     >
       <div className="flex min-w-0 items-start gap-1.5">
@@ -257,50 +274,63 @@ function ExplainInner({ initial, nodeId }: { initial: ComponentId | null; nodeId
   const flat = useMemo(() => visibleNodes(root, new Set(allIds(root))), [root])
   return (
     <div data-ready="true" className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <PageTitle>Розклад індексу</PageTitle>
-          <p className="m-0 text-caption text-text-muted">
-            Звідки взялося кожне число: індекс, компоненти, питання й показники.
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => setWhyOpen(true)}
-            className={cn(buttonBase, buttonVariants.secondary, buttonSizes.md)}
-          >
-            <CircleHelp aria-hidden className="size-4" />
-            Як це рахується
-          </button>
-          <SegmentedControl
-            label="Що показувати"
-            value={mode}
-            onChange={setMode}
-            options={MODES.map((m) => ({ value: m, label: MODE_LABELS[m] }))}
-          />
-          <button
-            type="button"
-            aria-pressed={asTable}
-            onClick={() => setAsTable((v) => !v)}
-            className={cn(buttonBase, buttonVariants.secondary, buttonSizes.md)}
-          >
-            {asTable ? (
-              <BarChart3 aria-hidden className="size-4" />
-            ) : (
-              <Table2 aria-hidden className="size-4" />
-            )}
-            {asTable ? 'Показати як дерево' : 'Показати як таблицю'}
-          </button>
-        </div>
-      </div>
+      <PageTitle>Розклад індексу</PageTitle>
+      <p className="m-0 text-body text-text-muted">
+        Звідки взялося кожне число: індекс, компоненти, питання й показники.
+      </p>
+
+      <Card as="section" aria-labelledby="meth-h" className="flex flex-col gap-3">
+        <h2 id="meth-h" className="card-title">
+          Методика
+        </h2>
+        <ul className="m-0 flex list-none flex-wrap gap-2.5 p-0">
+          {METHOD_PILLS.map(([k, v]) => (
+            <li key={k} className="rounded-[12px] bg-surface-muted px-3.5 py-2 text-body">
+              <strong className="font-semibold">{k}</strong> {v}
+            </li>
+          ))}
+        </ul>
+      </Card>
 
       <WhyPanel open={whyOpen} onClose={() => setWhyOpen(false)} inst={inst} />
       <div className="grid gap-3 xl:grid-cols-12">
-        <Card as="section" aria-labelledby="tree-h" className="p-2 md:p-2 xl:col-span-12">
-          <h2 id="tree-h" className="sr-only">
-            Дерево розкладу, режим «{MODE_LABELS[mode]}»
-          </h2>
+        <Card as="section" aria-labelledby="tree-h" className="xl:col-span-12">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+            <h2 id="tree-h" className="card-title">
+              Розклад
+              <span className="sr-only">: режим «{MODE_LABELS[mode]}»</span>
+            </h2>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setWhyOpen(true)}
+                className={cn(buttonBase, buttonVariants.secondary, buttonSizes.md)}
+              >
+                <CircleHelp aria-hidden className="size-4" />
+                Як це рахується
+              </button>
+              <SegmentedControl
+                label="Що показувати"
+                value={mode}
+                onChange={setMode}
+                options={MODES.map((m) => ({ value: m, label: MODE_LABELS[m] }))}
+              />
+              <button
+                type="button"
+                aria-pressed={asTable}
+                onClick={() => setAsTable((v) => !v)}
+                className={cn(buttonBase, buttonVariants.secondary, buttonSizes.md)}
+              >
+                {asTable ? (
+                  <BarChart3 aria-hidden className="size-4" />
+                ) : (
+                  <Table2 aria-hidden className="size-4" />
+                )}
+                {asTable ? 'Показати як дерево' : 'Показати як таблицю'}
+              </button>
+            </div>
+            <BigNumber value={fmtIndex(total)} />
+          </div>
           <div
             aria-hidden
             className="hidden grid-cols-[minmax(0,1fr)_3.5rem_3.5rem_4rem] gap-x-2 border-b border-border rounded-[10px] bg-surface-muted px-2 py-2 text-fine font-medium text-text-muted sm:grid sm:grid-cols-[minmax(0,1fr)_4.5rem_4.5rem_5rem]"

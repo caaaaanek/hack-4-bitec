@@ -29,6 +29,7 @@ export const ROLE_LABELS: Record<Role, string> = {
 export const KNOWN_ROUTES = [
   '/',
   '/explain',
+  '/compare',
   '/recommendations',
   '/tracker',
   '/trends',
@@ -51,11 +52,20 @@ export const ROLE_ROUTES: Record<Role, readonly string[]> = {
   admin: ['/manage', '/audit'],
   commissioner: ['/surveys'],
   respondent: ['/me', '/s/:token'],
-  leader: ['/', '/explain', '/recommendations', '/tracker', '/trends', '/integrations', '/reports'],
-  observer: ['/institutions', '/', '/explain', '/trends', '/integrations', '/reports'],
+  leader: [
+    '/',
+    '/explain',
+    '/compare',
+    '/recommendations',
+    '/tracker',
+    '/trends',
+    '/integrations',
+    '/reports',
+  ],
+  observer: ['/institutions', '/', '/explain', '/compare', '/trends', '/integrations', '/reports'],
   checklist_editor: ['/checklist'],
   checklist_approver: ['/checklist'],
-  auditor: ['/', '/explain', '/tracker', '/trends', '/integrations', '/audit'],
+  auditor: ['/', '/explain', '/compare', '/tracker', '/trends', '/integrations', '/audit'],
 }
 
 export const DEFAULT_ROUTE: Record<Role, string> = {

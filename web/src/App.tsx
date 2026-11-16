@@ -5,6 +5,7 @@ import { ToastProvider } from '@/components/ui'
 import { AppShell } from '@/components/layout/AppShell'
 import { Home } from '@/pages/Home'
 import { Explain } from '@/pages/Explain'
+import { Compare } from '@/pages/Compare'
 import { Recommendations } from '@/pages/Recommendations'
 import { Tracker } from '@/pages/Tracker'
 import { Trends } from '@/pages/Trends'
@@ -29,6 +30,7 @@ export function App() {
               <Route element={<AppShell />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/explain" element={<Explain />} />
+                <Route path="/compare" element={<Compare />} />
                 <Route path="/recommendations" element={<Recommendations />} />
                 <Route
                   path="/reports"

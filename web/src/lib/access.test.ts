@@ -34,6 +34,7 @@ describe('access', () => {
     expect(canAccess('leader', '/institutions')).toBe(false)
     expect(defaultRoute('observer')).toBe('/institutions')
     for (const r of ['leader', 'observer', 'auditor'] as const) {
+      expect(canAccess(r, '/compare')).toBe(true)
       expect(canAccess(r, '/trends')).toBe(true)
       expect(canAccess(r, '/integrations')).toBe(true)
     }
