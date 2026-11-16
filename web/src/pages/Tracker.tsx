@@ -23,6 +23,7 @@ import {
   type Measure,
   type MeasureStatus,
 } from '@/lib/measures'
+import { cn } from '@/lib/cn'
 import { allMeasures, setMeasureStatus } from '@/lib/decisions'
 import { DEMO_MEASURES, PAST_RECOMMENDATIONS, TODAY } from '@/demo/measures'
 import { getDecisions, setDecisions, useDecisions } from '@/demo/decisionsStore'
@@ -43,6 +44,7 @@ const fmtDate = (iso: string) => iso.split('-').reverse().join('.')
 
 interface Row {
   id: string
+  code: string
   title: string
   position: string
   dueDate: string
@@ -126,8 +128,9 @@ export function Tracker() {
   const [position, setPosition] = useState('all')
 
   const measures = useMemo(() => allMeasures(DEMO_MEASURES, decisions), [decisions])
-  const rows: Row[] = measures.map((m) => ({
+  const rows: Row[] = measures.map((m, i) => ({
     id: m.id,
+    code: `Т-${String(i + 1).padStart(2, '0')}`,
     title: m.title,
     position: m.responsiblePosition,
     dueDate: m.dueDate,
@@ -159,7 +162,27 @@ export function Tracker() {
     })
   }
 
+  const STATS: [string, number, string][] = [
+    ['Усього', rows.length, 'text-text'],
+    [
+      'В роботі',
+      rows.filter((r) => r.measure.status === 'inprogress').length,
+      'text-attention-text',
+    ],
+    ['Прострочено', overdueCount, 'text-critical-text'],
+    [
+      'Виконано',
+      rows.filter((r) => r.measure.status === 'done' || r.measure.status === 'confirmed').length,
+      'text-strength-text',
+    ],
+  ]
+
   const columns: TableColumn<Row>[] = [
+    {
+      key: 'code',
+      header: 'ID',
+      render: (r) => <span className="tabular text-text-muted">{r.code}</span>,
+    },
     {
       key: 'title',
       header: 'Захід',
@@ -201,125 +224,137 @@ export function Tracker() {
 
   return (
     <div data-ready="true" className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <PageTitle>Трекер заходів</PageTitle>
-          <p className="m-0 text-body text-text-muted">
-            {measures.length} заходів
-            {overdueCount > 0
-              ? `, з них ${overdueCount} прострочено`
-              : ', прострочених немає'}.{' '}
-            {canEdit
-              ? 'Статуси змінює керівник.'
-              : 'Режим читання: змінювати статуси може лише керівник.'}
+      <PageTitle>Трекер заходів</PageTitle>
+      <ul aria-label="Підсумок" className="m-0 grid list-none grid-cols-2 gap-5 p-0 xl:grid-cols-4">
+        {STATS.map(([label, value, cls]) => (
+          <li key={label}>
+            <Card className="flex flex-col gap-1">
+              <span className="text-caption text-text-muted">{label}</span>
+              <span className={cn('text-numeral tabular', cls)}>{value}</span>
+            </Card>
+          </li>
+        ))}
+      </ul>
+      <p className="m-0 text-body text-text-muted">
+        {measures.length} заходів
+        {overdueCount > 0 ? `, з них ${overdueCount} прострочено` : ', прострочених немає'}.{' '}
+        {canEdit
+          ? 'Статуси змінює керівник.'
+          : 'Режим читання: змінювати статуси може лише керівник.'}
+      </p>
+
+      <Card as="section" aria-labelledby="meas-h" className="flex flex-col gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 id="meas-h" className="card-title">
+            Заходи
+          </h2>
+          <SegmentedControl
+            label="Вигляд"
+            value={view}
+            onChange={setView}
+            options={[
+              { value: 'table', label: 'Таблиця', icon: <Table2 aria-hidden className="size-4" /> },
+              { value: 'board', label: 'Дошка', icon: <Columns3 aria-hidden className="size-4" /> },
+            ]}
+          />
+        </div>
+
+        <div role="group" aria-label="Фільтри" className="flex flex-wrap items-end gap-3">
+          <label className="flex flex-col gap-1 text-caption text-text-muted">
+            Статус
+            <Select
+              value={status}
+              onChange={(e) => setStatus(e.target.value as typeof status)}
+              wrapperClassName="w-48"
+            >
+              <option value="all">Усі статуси</option>
+              {(
+                [
+                  'accepted',
+                  'inprogress',
+                  'done',
+                  'confirmed',
+                  'notconfirmed',
+                  'overdue',
+                ] as StatusId[]
+              ).map((s) => (
+                <option key={s} value={s}>
+                  {STATUSES[s].label}
+                </option>
+              ))}
+            </Select>
+          </label>
+          <label className="flex flex-col gap-1 text-caption text-text-muted">
+            Відповідальна посада
+            <Select
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+              wrapperClassName="w-72 max-w-full"
+            >
+              <option value="all">Усі посади</option>
+              {positions.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </Select>
+          </label>
+          <p className="m-0 pb-2 text-caption text-text-muted">
+            Показано {shown.length} з {rows.length}
           </p>
         </div>
-        <SegmentedControl
-          label="Вигляд"
-          value={view}
-          onChange={setView}
-          options={[
-            { value: 'table', label: 'Таблиця', icon: <Table2 aria-hidden className="size-4" /> },
-            { value: 'board', label: 'Дошка', icon: <Columns3 aria-hidden className="size-4" /> },
-          ]}
-        />
-      </div>
 
-      <div role="group" aria-label="Фільтри" className="flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1 text-caption text-text-muted">
-          Статус
-          <Select
-            value={status}
-            onChange={(e) => setStatus(e.target.value as typeof status)}
-            wrapperClassName="w-48"
-          >
-            <option value="all">Усі статуси</option>
-            {(
-              [
-                'accepted',
-                'inprogress',
-                'done',
-                'confirmed',
-                'notconfirmed',
-                'overdue',
-              ] as StatusId[]
-            ).map((s) => (
-              <option key={s} value={s}>
-                {STATUSES[s].label}
-              </option>
-            ))}
-          </Select>
-        </label>
-        <label className="flex flex-col gap-1 text-caption text-text-muted">
-          Відповідальна посада
-          <Select
-            value={position}
-            onChange={(e) => setPosition(e.target.value)}
-            wrapperClassName="w-72 max-w-full"
-          >
-            <option value="all">Усі посади</option>
-            {positions.map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </Select>
-        </label>
-        <p className="m-0 pb-2 text-caption text-text-muted">
-          Показано {shown.length} з {rows.length}
-        </p>
-      </div>
-
-      {shown.length === 0 ? (
-        <EmptyState
-          icon={<ListChecks className="size-8" />}
-          title="За цими фільтрами заходів немає"
-          description="Змініть статус або посаду. Нові заходи зʼявляються, коли керівник приймає рекомендацію."
-          action={
-            <Link to="/recommendations" className="text-accent underline underline-offset-4">
-              Перейти до рекомендацій
-            </Link>
-          }
-        />
-      ) : view === 'table' ? (
-        <Table<Row>
-          caption="Заходи, строки й статуси"
-          columns={columns}
-          rows={shown}
-          rowKey={(r) => r.id}
-          defaultSort={{ key: 'dueDate', dir: 'asc' }}
-        />
-      ) : (
-        <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-5">
-          {BOARD_COLUMNS.map((col) => {
-            const items = shown.filter((r) => r.measure.status === col)
-            return (
-              <section
-                key={col}
-                aria-label={`Колонка «${STATUSES[col].label}»`}
-                className="flex min-w-0 flex-col gap-2"
-              >
-                <h2 className="m-0 flex items-center justify-between gap-2 rounded-md bg-surface-muted px-2 py-1.5 text-body font-semibold">
-                  {STATUSES[col].label}
-                  <Badge tone="neutral">{items.length}</Badge>
-                </h2>
-                {items.length === 0 && (
-                  <p className="m-0 px-1 text-caption text-text-muted">Порожньо</p>
-                )}
-                {items.map((r) => (
-                  <Card key={r.id} as="article" className="flex flex-col gap-2 p-3 md:p-3">
-                    <p className="m-0 text-body font-semibold">{r.title}</p>
-                    <p className="m-0 text-caption text-text-muted">{r.position}</p>
-                    <p className="m-0 text-caption tabular">Строк: {fmtDate(r.dueDate)}</p>
-                    <StatusCell row={r} />
-                    {canEdit && <StatusControl row={r} onChange={change} />}
-                  </Card>
-                ))}
-              </section>
-            )
-          })}
-        </div>
-      )}
+        {shown.length === 0 ? (
+          <EmptyState
+            icon={<ListChecks className="size-8" />}
+            title="За цими фільтрами заходів немає"
+            description="Змініть статус або посаду. Нові заходи зʼявляються, коли керівник приймає рекомендацію."
+            action={
+              <Link to="/recommendations" className="text-accent underline underline-offset-4">
+                Перейти до рекомендацій
+              </Link>
+            }
+          />
+        ) : view === 'table' ? (
+          <Table<Row>
+            caption="Заходи, строки й статуси"
+            columns={columns}
+            rows={shown}
+            rowKey={(r) => r.id}
+            defaultSort={{ key: 'dueDate', dir: 'asc' }}
+          />
+        ) : (
+          <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-5">
+            {BOARD_COLUMNS.map((col) => {
+              const items = shown.filter((r) => r.measure.status === col)
+              return (
+                <section
+                  key={col}
+                  aria-label={`Колонка «${STATUSES[col].label}»`}
+                  className="flex min-w-0 flex-col gap-2"
+                >
+                  <h2 className="m-0 flex items-center justify-between gap-2 rounded-md bg-surface-muted px-2 py-1.5 text-body font-semibold">
+                    {STATUSES[col].label}
+                    <Badge tone="neutral">{items.length}</Badge>
+                  </h2>
+                  {items.length === 0 && (
+                    <p className="m-0 px-1 text-caption text-text-muted">Порожньо</p>
+                  )}
+                  {items.map((r) => (
+                    <Card key={r.id} as="article" className="flex flex-col gap-2 p-3 md:p-3">
+                      <p className="m-0 text-body font-semibold">{r.title}</p>
+                      <p className="m-0 text-caption text-text-muted">{r.position}</p>
+                      <p className="m-0 text-caption tabular">Строк: {fmtDate(r.dueDate)}</p>
+                      <StatusCell row={r} />
+                      {canEdit && <StatusControl row={r} onChange={change} />}
+                    </Card>
+                  ))}
+                </section>
+              )
+            })}
+          </div>
+        )}
+      </Card>
 
       <Card as="section" aria-labelledby="verify-h" className="p-4 md:p-4">
         <h2 id="verify-h" className="card-title">

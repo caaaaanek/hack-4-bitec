@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { CheckCircle2, EyeOff, LinkIcon, ShieldCheck, UserRoundX, UsersRound } from 'lucide-react'
-import { Button, ConfirmDialog, EmptyState } from '@/components/ui'
+import { Button, ConfirmDialog, EmptyState, IconCircle } from '@/components/ui'
 import { cn } from '@/lib/cn'
 import { K_MIN_GROUP } from '@/lib/scoring/methodology'
 import { defaultRoute } from '@/lib/access'
@@ -21,13 +21,19 @@ import {
 type Phase = 'guarantees' | 'steps' | 'thanks'
 
 const GUARANTEES = [
-  { icon: UserRoundX, text: 'Ваші відповіді не повʼязані з вами і не містять імен.' },
+  {
+    icon: UserRoundX,
+    title: 'Анонімно',
+    text: 'Ваші відповіді не повʼязані з вами і не містять імен.',
+  },
   {
     icon: EyeOff,
+    title: 'Без доступу до відповідей',
     text: 'Адміністратор бачить лише кількість відповідей, а не те, що ви відповіли.',
   },
   {
     icon: UsersRound,
+    title: `Групи від ${K_MIN_GROUP} осіб`,
     text: `Результати показують лише для груп не менше ${K_MIN_GROUP} осіб.`,
   },
 ]
@@ -50,7 +56,7 @@ function Frame({
   return (
     <div className="flex min-h-dvh flex-col bg-bg" data-ready="true">
       <header className="sticky top-0 z-20 border-b border-border bg-surface pt-[env(safe-area-inset-top)]">
-        <div className="mx-auto flex max-w-xl items-center justify-between gap-3 px-4 py-2">
+        <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-2">
           <div className="min-w-0">
             <p className="m-0 flex items-center gap-2 text-caption font-semibold text-text">
               <ShieldCheck aria-hidden className="size-5 text-accent" />
@@ -96,7 +102,7 @@ function Frame({
           </div>
         )}
       </header>
-      <main id="main" tabIndex={-1} className="mx-auto w-full max-w-xl flex-1 px-4 py-5">
+      <main id="main" tabIndex={-1} className="mx-auto w-full max-w-3xl flex-1 px-4 py-5">
         {children}
       </main>
       {footer}
@@ -205,31 +211,40 @@ export function SurveyFlow({ survey, token }: { survey: SurveyModel; token: stri
   if (phase === 'guarantees') {
     return (
       <Frame>
-        <h1 ref={headingRef} tabIndex={-1} className="text-title outline-none">
-          Перш ніж почати
-        </h1>
-        <p className="mt-2 text-body-lg text-text-muted">
-          {survey.category}. Анкета займе кілька хвилин. Ось що ми гарантуємо.
-        </p>
-        <ul className="m-0 mt-4 flex list-none flex-col gap-3 p-0">
-          {GUARANTEES.map(({ icon: Icon, text }) => (
-            <li
-              key={text}
-              className="flex items-start gap-3 rounded-lg border border-border bg-surface p-4"
-            >
-              <Icon aria-hidden className="mt-0.5 size-6 shrink-0 text-accent" />
-              <span className="text-body-lg">{text}</span>
-            </li>
-          ))}
-        </ul>
-        <Button size="lg" className="mt-6 w-full" onClick={() => setPhase('steps')}>
-          Розумію, почати
-        </Button>
-        {done > 0 && (
-          <p className="mt-3 text-caption text-text-muted">
-            Збережені раніше відповіді на цьому пристрої буде підставлено ({done} з {all}).
+        <div className="rounded-lg border border-border bg-surface p-6">
+          <p className="m-0 flex items-center gap-2 text-caption text-text-muted">
+            <IconCircle tone="accent" size={24}>
+              <ShieldCheck className="size-3.5" />
+            </IconCircle>
+            Анонімне опитування · {survey.category}
           </p>
-        )}
+          <h1 ref={headingRef} tabIndex={-1} className="mt-3 text-title outline-none">
+            Перш ніж почати
+          </h1>
+          <p className="mt-1 text-body-lg text-text-muted">
+            {survey.category}. Анкета займе кілька хвилин. Ось що ми гарантуємо.
+          </p>
+          <ul className="m-0 mt-5 grid list-none gap-3 p-0 md:grid-cols-3">
+            {GUARANTEES.map(({ icon: Icon, title, text }) => (
+              <li key={title} className="flex flex-col gap-1.5 rounded-[14px] bg-surface-muted p-4">
+                <Icon aria-hidden className="size-5 text-accent" />
+                <span className="text-body font-semibold">{title}</span>
+                <span className="text-caption text-text-muted">{text}</span>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+            <p className="m-0 text-caption text-text-muted">{all} питань</p>
+            <Button size="lg" onClick={() => setPhase('steps')} className="w-full md:w-auto">
+              Розумію, почати
+            </Button>
+          </div>
+          {done > 0 && (
+            <p className="mt-3 text-caption text-text-muted">
+              Збережені раніше відповіді на цьому пристрої буде підставлено ({done} з {all}).
+            </p>
+          )}
+        </div>
       </Frame>
     )
   }
@@ -260,7 +275,7 @@ export function SurveyFlow({ survey, token }: { survey: SurveyModel; token: stri
   const closeNow = () => navigate(defaultRoute(role))
   const footer = (
     <div className="sticky bottom-0 z-20 border-t border-border bg-surface pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3">
-      <div className="mx-auto flex max-w-xl gap-3 px-4">
+      <div className="mx-auto flex max-w-3xl gap-3 px-4">
         <Button
           variant="secondary"
           size="lg"

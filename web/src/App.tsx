@@ -6,6 +6,7 @@ import { AppShell } from '@/components/layout/AppShell'
 import { Home } from '@/pages/Home'
 import { Explain } from '@/pages/Explain'
 import { Compare } from '@/pages/Compare'
+import { Report } from '@/pages/Report'
 import { Recommendations } from '@/pages/Recommendations'
 import { Tracker } from '@/pages/Tracker'
 import { Trends } from '@/pages/Trends'
@@ -32,15 +33,7 @@ export function App() {
                 <Route path="/explain" element={<Explain />} />
                 <Route path="/compare" element={<Compare />} />
                 <Route path="/recommendations" element={<Recommendations />} />
-                <Route
-                  path="/reports"
-                  element={
-                    <Placeholder
-                      title="Звіт"
-                      description="Тут можна буде сформувати звіт за циклом оцінювання для друку або збереження."
-                    />
-                  }
-                />
+                <Route path="/reports" element={<Report />} />
                 <Route
                   path="/manage"
                   element={
