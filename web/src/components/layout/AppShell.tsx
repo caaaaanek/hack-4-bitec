@@ -4,6 +4,7 @@ import { Info, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { ForbiddenState, Logo, SkipLink, Tooltip } from '@/components/ui'
 import { useInstitution } from '@/demo/useInstitution'
+import { useNavCounts } from '@/demo/navCounts'
 import { canAccess, defaultRoute, isKnownRoute, type Role } from '@/lib/access'
 import { useDemo } from '@/demo/demoContext'
 import { HeaderActions } from './HeaderActions'
@@ -19,40 +20,64 @@ function NavList({
   onNavigate?: () => void
   expanded?: boolean
 }) {
+  const counts = useNavCounts()
   return (
     <ul className="m-0 flex list-none flex-col gap-1 p-0">
-      {navFor(role).map(({ to, label, icon: Icon, end }) => (
-        <li key={to}>
-          <NavLink
-            to={to}
-            end={end}
-            onClick={onNavigate}
-            aria-label={label}
-            title={label}
-            className={({ isActive }) =>
-              cn(
-                'group touch-h relative flex items-center gap-3 rounded-md px-3 text-body no-underline',
-                !expanded && 'justify-center px-0 2xl:justify-start 2xl:px-3',
-                'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
-                isActive
-                  ? 'bg-accent-soft font-semibold text-accent before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:rounded-full before:bg-accent'
-                  : 'text-text-muted hover:bg-surface-muted hover:text-text',
-              )
-            }
-          >
-            <Icon aria-hidden className="size-5 shrink-0" />
-            <span className={cn(!expanded && 'hidden 2xl:inline')}>{label}</span>
-            {!expanded && (
-              <span
-                aria-hidden
-                className="pointer-events-none absolute left-full z-50 ml-2 whitespace-nowrap rounded-md border border-border bg-surface-raised px-2 py-1 text-caption font-medium text-text opacity-0 shadow-md group-hover:opacity-100 group-focus-visible:opacity-100 2xl:hidden"
-              >
-                {label}
-              </span>
-            )}
-          </NavLink>
-        </li>
-      ))}
+      {navFor(role).map(({ to, label, icon: Icon, end }) => {
+        const count = counts[to]
+        return (
+          <li key={to}>
+            <NavLink
+              to={to}
+              end={end}
+              onClick={onNavigate}
+              aria-label={count ? `${label}. ${count.label}` : label}
+              title={count ? `${label}. ${count.label}` : label}
+              className={({ isActive }) =>
+                cn(
+                  'group touch-h relative flex items-center gap-3 rounded-md px-3 text-body no-underline',
+                  !expanded && 'justify-center px-0 2xl:justify-start 2xl:px-3',
+                  'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
+                  isActive
+                    ? 'bg-accent-soft font-semibold text-accent before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:rounded-full before:bg-accent'
+                    : 'text-text-muted hover:bg-surface-muted hover:text-text',
+                )
+              }
+            >
+              <Icon aria-hidden className="size-5 shrink-0" />
+              <span className={cn(!expanded && 'hidden 2xl:inline')}>{label}</span>
+              {count && (
+                <span
+                  aria-hidden
+                  className={cn(
+                    'rounded-full bg-neutral-bg px-1.5 text-caption font-semibold tabular text-neutral-text',
+                    expanded
+                      ? 'ml-auto'
+                      : 'absolute right-0.5 top-0.5 px-1 text-[10px] leading-4 2xl:static 2xl:ml-auto 2xl:px-1.5 2xl:text-caption',
+                  )}
+                >
+                  {expanded ? (
+                    count.text
+                  ) : (
+                    <>
+                      <span className="2xl:hidden">{count.short}</span>
+                      <span className="hidden 2xl:inline">{count.text}</span>
+                    </>
+                  )}
+                </span>
+              )}
+              {!expanded && (
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute left-full z-50 ml-2 whitespace-nowrap rounded-md border border-border bg-surface-raised px-2 py-1 text-caption font-medium text-text opacity-0 shadow-md group-hover:opacity-100 group-focus-visible:opacity-100 2xl:hidden"
+                >
+                  {label}
+                </span>
+              )}
+            </NavLink>
+          </li>
+        )
+      })}
     </ul>
   )
 }
