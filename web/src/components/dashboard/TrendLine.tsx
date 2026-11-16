@@ -6,9 +6,15 @@ export interface TrendPoint {
 }
 
 /** Динаміка індексу за цикли: лінія з підписаними значеннями. */
-export function TrendLine({ data }: { data: TrendPoint[] }) {
+export function TrendLine({
+  data,
+  className = 'h-[84px]',
+}: {
+  data: TrendPoint[]
+  className?: string
+}) {
   return (
-    <div className="h-[84px]" aria-hidden>
+    <div className={className} aria-hidden>
       <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 300, height: 84 }}>
         <LineChart data={data} margin={{ top: 20, right: 28, bottom: 0, left: 28 }}>
           <XAxis

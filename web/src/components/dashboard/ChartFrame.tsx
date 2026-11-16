@@ -104,3 +104,39 @@ export function DataTable({
     </table>
   )
 }
+
+/** Графік з перемикачем «Показати як таблицю». Текстовий опис лише для скрінрідерів. */
+export function ChartView({
+  chart,
+  table,
+  description,
+}: {
+  chart: ReactNode
+  table: ReactNode
+  description: string
+}) {
+  const [asTable, setAsTable] = useState(false)
+  return (
+    <div className="flex flex-col">
+      <div className="flex justify-end">
+        <button
+          type="button"
+          aria-pressed={asTable}
+          onClick={() => setAsTable((v) => !v)}
+          className={cn(buttonBase, buttonVariants.ghost, buttonSizes.sm, 'shrink-0 !px-2')}
+        >
+          {asTable ? (
+            <BarChart3 aria-hidden className="size-4" />
+          ) : (
+            <Table2 aria-hidden className="size-4" />
+          )}
+          <span>{asTable ? 'Показати як діаграму' : 'Показати як таблицю'}</span>
+        </button>
+      </div>
+      <div className="min-h-0">
+        {asTable ? <div className="overflow-auto">{table}</div> : chart}
+      </div>
+      <p className="sr-only">{description}</p>
+    </div>
+  )
+}

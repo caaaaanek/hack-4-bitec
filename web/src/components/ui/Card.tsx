@@ -35,7 +35,7 @@ export function Card({
     <Tag
       data-print="card"
       className={cn(
-        'card relative bg-surface border border-border rounded-lg shadow-sm p-3 md:p-4',
+        'card relative min-w-0 bg-surface border border-border rounded-lg shadow-sm p-3 md:p-4',
         'before:pointer-events-none before:absolute before:inset-x-0 before:top-0 before:h-0.5 before:rounded-t-lg before:content-[""]',
         CATEGORY_LINE[category],
         interactive &&

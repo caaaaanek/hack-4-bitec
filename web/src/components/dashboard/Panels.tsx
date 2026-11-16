@@ -1,18 +1,20 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
+  ArrowRight,
   Eye,
   Info,
-  ScrollText,
-  ShieldCheck,
+  Layers,
   Scale,
-  TriangleAlert,
-  SearchCheck,
   Sprout,
+  ShieldCheck,
+  SearchCheck,
   TrendingUp,
+  TriangleAlert,
   X,
 } from 'lucide-react'
-import { Card, SourceMarker, TrustBadge } from '@/components/ui'
+import { Badge, Card, MaturityBadge, Tooltip, ChangeChip } from '@/components/ui'
+import type { MaturityLevel } from '@/components/ui'
 import {
   FLAG_WEIGHT_LABEL,
   TRUST_GRADE_TEXT,
@@ -21,7 +23,7 @@ import {
 } from '@/components/ui/messages'
 import type { TrustFlag, TrustGrade } from '@/lib/scoring/trust'
 import { cn } from '@/lib/cn'
-import { LIMITER_MARGIN, fmt, type ComponentId } from '@/lib/scoring/methodology'
+import { COMPONENT_LABELS, fmt, type ComponentId } from '@/lib/scoring/methodology'
 import { Num } from './Num'
 
 export function DevelopmentBanner() {
@@ -62,123 +64,170 @@ export function DevelopmentBanner() {
   )
 }
 
-export function TrustCard({ grade, raised }: { grade: TrustGrade; raised: TrustFlag[] }) {
-  const major = raised.filter((f) => f.weight === 'major').length
-  const minor = raised.length - major
-  const counts = [major > 0 && `серйозних: ${major}`, minor > 0 && `незначних: ${minor}`].filter(
-    Boolean,
-  )
+export interface ComponentRow {
+  id: ComponentId
+  value: number
+  level: MaturityLevel
+  /** Зміна до попереднього циклу, пункти. */
+  delta: number
+  /** Пояснення обмежувача (лише коли спрацював). */
+  limitedHint?: string
+}
+
+const COMPONENT_BAR: Record<ComponentId, string> = {
+  culture: 'bg-cat-culture',
+  system: 'bg-cat-system',
+  accountability: 'bg-cat-accountability',
+}
+
+/** Три компоненти в одній картці: кожен рядок веде на розклад цього компонента. */
+export function ComponentsCard({ rows, className }: { rows: ComponentRow[]; className?: string }) {
   return (
-    <Card as="section" aria-labelledby="trust-h" className="p-4 md:p-4 short:p-3 short:md:p-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 id="trust-h" className="card-title">
-          <ShieldCheck aria-hidden />
-          {TRUST_LABEL}
-        </h2>
-        <Num hint={TRUST_HINT}>
-          <TrustBadge grade={grade} />
-        </Num>
-      </div>
-      <p className="m-0 mt-2 flex items-start gap-2 text-body">
-        <Scale aria-hidden className="mt-0.5 size-5 shrink-0 text-attention-text" />
-        <span>
-          {TRUST_GRADE_TEXT[grade].rule}{' '}
-          <span className="short:hidden">
-            {counts.length > 0 ? ` Спрацювало прапорців (${counts.join(', ')}), деталі нижче.` : ''}
-          </span>
-        </span>
-      </p>
+    <Card
+      as="section"
+      aria-labelledby="comp-h"
+      className={cn('flex flex-col p-4 short:p-3 md:p-4 short:md:p-3', className)}
+    >
+      <h2 id="comp-h" className="card-title mb-2">
+        <Layers aria-hidden />
+        Компоненти індексу
+      </h2>
+      <ul className="m-0 flex flex-1 list-none flex-col divide-y divide-border p-0">
+        {rows.map((r) => (
+          <li
+            key={r.id}
+            className="relative flex flex-1 items-center gap-3 py-2 first:pt-0 last:pb-0 hover:bg-surface-raised"
+          >
+            <span
+              aria-hidden
+              className={cn('w-0.5 self-stretch rounded-full', COMPONENT_BAR[r.id])}
+            />
+            <div className="min-w-0 flex-1">
+              <Link
+                to={`/explain?c=${r.id}`}
+                className="text-body font-semibold text-text no-underline after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+              >
+                {COMPONENT_LABELS[r.id]}
+                <span className="sr-only">: розклад компонента</span>
+              </Link>
+              <div className="mt-1 flex flex-wrap items-center gap-2">
+                <MaturityBadge level={r.level} />
+                {r.limitedHint && (
+                  <span className="relative z-10">
+                    <Tooltip content={r.limitedHint}>
+                      <Badge tone="attention">
+                        <Info aria-hidden className="size-3.5" />
+                        зараховано з обмеженням
+                      </Badge>
+                    </Tooltip>
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-col items-end gap-1">
+              <span className="text-section font-bold leading-none tabular">{fmt(r.value)}</span>
+              <ChangeChip delta={r.delta} />
+            </div>
+          </li>
+        ))}
+      </ul>
     </Card>
   )
 }
 
-export function LimiterBlock({
-  label,
-  perception,
-  facts,
-  credited,
+const GRADE_BOX: Record<TrustGrade, string> = {
+  A: 'bg-strength-bg text-strength-text',
+  B: 'bg-attention-bg text-attention-text',
+  C: 'bg-attention-bg text-attention-text ring-2 ring-attention-solid',
+  insufficient: 'bg-neutral-bg text-neutral-text',
+}
+
+/** Достовірність: велика літера, причина, згорнутий список прапорців. */
+export function TrustPanel({
+  grade,
+  raised,
   reason,
+  className,
 }: {
-  label: string
-  perception: number
-  facts: number
-  credited: number
-  reason?: string
+  grade: TrustGrade
+  raised: TrustFlag[]
+  reason: string
+  className?: string
 }) {
-  const x = (v: number) => `${v}%`
+  const [open, setOpen] = useState(false)
+  const listId = useId()
+  const t = TRUST_GRADE_TEXT[grade]
   return (
     <Card
       as="section"
-      aria-labelledby="lim-h"
-      category="attention"
-      className="p-4 md:p-4 short:p-3 short:md:p-3"
+      aria-labelledby="trust-h"
+      className={cn('flex flex-col p-4 short:p-3 md:p-4 short:md:p-3', className)}
     >
-      <h2 id="lim-h" className="card-title">
-        <Info aria-hidden />
-        Показано з обмеженням
+      <h2 id="trust-h" className="card-title mb-2">
+        <ShieldCheck aria-hidden />
+        {TRUST_LABEL}
       </h2>
-      <p className="m-0 mt-1 text-body">
-        {label}:{' '}
-        <Num hint="Оцінка за анкетами респондентів (робоча група, особовий склад, експерти).">
-          сприйняття {fmt(perception)}
+      <div className="flex items-center gap-3">
+        <Num hint={TRUST_HINT}>
+          <span
+            data-trust={grade}
+            className={cn(
+              'flex size-14 items-center justify-center rounded-md text-display font-bold leading-none short:size-12 short:text-title',
+              GRADE_BOX[grade],
+            )}
+          >
+            <span aria-hidden>{t.letter}</span>
+            <span className="sr-only">
+              {TRUST_LABEL}: {t.letter}
+            </span>
+          </span>
         </Num>
-        ,{' '}
-        <Num hint="Оцінка за чек-листом і метриками, підтвердженими документами.">
-          факти {fmt(facts)}
-        </Num>
-        ,{' '}
-        <Num hint="Значення, що йде в індекс після обмежувача: не вище за факти плюс 25 пунктів.">
-          <strong>зараховано {fmt(credited)}</strong>
-        </Num>
-        .
-      </p>
-      <svg
-        viewBox="0 0 300 34"
-        className="mt-2 h-auto w-full short:hidden"
-        aria-hidden
-        focusable="false"
-      >
-        <rect x="0" y="12" width="300" height="10" rx="5" fill="var(--color-surface-muted)" />
-        <rect
-          x="0"
-          y="12"
-          width={credited * 3}
-          height="10"
-          rx="5"
-          fill="var(--color-attention-solid)"
-        />
-        <circle cx={perception * 3} cy="17" r="7" fill={'var(--color-source-wg)'} />
-        <path
-          d={`M${facts * 3} 8l7 13h-14z`}
-          fill="var(--color-source-facts)"
-          stroke="var(--color-surface)"
-          strokeWidth="1"
-        />
-        <line
-          x1={credited * 3}
-          y1="4"
-          x2={credited * 3}
-          y2="30"
-          stroke="var(--color-text)"
-          strokeWidth="2"
-        />
-        <title>{`Шкала 0-100: факти ${x(facts)}, сприйняття ${x(perception)}, зараховано ${x(credited)}`}</title>
-      </svg>
-      <p className="m-0 mt-1 flex flex-wrap gap-x-4 text-caption text-text-muted short:hidden">
-        <span className="inline-flex items-center gap-1.5">
-          <SourceMarker source="wg" /> Сприйняття
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <SourceMarker source="facts" /> Факти
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <span aria-hidden className="inline-block h-3 w-0.5 bg-text" /> Зараховано
-        </span>
-      </p>
-      <p className="m-0 mt-2 text-caption text-text-muted short:mt-1">
-        Обмежувач не дає сприйняттю піднятися вище за факти більш ніж на {LIMITER_MARGIN} пунктів
-        (це один рівень).<span className="short:hidden"> {reason}</span>
-      </p>
+        <div className="min-w-0">
+          <p className="m-0 flex items-center gap-1.5 text-body font-semibold">
+            <Scale aria-hidden className="size-4 shrink-0 text-attention-text" />
+            {t.word}
+          </p>
+          <p className="m-0 mt-1 text-caption text-text-muted">{reason}</p>
+        </div>
+      </div>
+      {raised.length > 0 && (
+        <div className="mt-3 border-t border-border pt-2">
+          <button
+            type="button"
+            aria-expanded={open}
+            aria-controls={listId}
+            onClick={() => setOpen((v) => !v)}
+            className="touch-h inline-flex items-center gap-1.5 rounded-sm text-body font-semibold text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+          >
+            Прапорці ({raised.length})
+            <ArrowRight
+              aria-hidden
+              className={cn('size-4 transition-transform', open && 'rotate-90')}
+            />
+          </button>
+          <div id={listId} hidden={!open}>
+            <ul className="m-0 mt-2 flex list-none flex-col gap-2 p-0">
+              {raised.map((f) => {
+                const Icon = f.weight === 'major' ? TriangleAlert : SearchCheck
+                return (
+                  <li key={f.id} className="flex items-start gap-2">
+                    <Icon aria-hidden className="mt-0.5 size-4 shrink-0 text-attention-text" />
+                    <div>
+                      <p className="m-0 text-body font-semibold">
+                        {f.title}{' '}
+                        <span className="text-caption font-normal text-text-muted">
+                          ({FLAG_WEIGHT_LABEL[f.weight]})
+                        </span>
+                      </p>
+                      <p className="m-0 text-caption text-text-muted">{f.explanation}</p>
+                    </div>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </div>
+      )}
     </Card>
   )
 }
@@ -191,102 +240,67 @@ export interface Insight {
   component?: ComponentId
 }
 
-export function InsightList({
-  title,
-  kind,
-  items,
+/** «Що потребує уваги»: три напрями рядками з переходом, нижче сильні сторони чипами. */
+export function AttentionPanel({
+  attention,
+  strengths,
+  className,
 }: {
-  title: string
-  kind: 'strength' | 'attention'
-  items: Insight[]
+  attention: Insight[]
+  strengths: Insight[]
+  className?: string
 }) {
-  const strength = kind === 'strength'
-  const Icon = strength ? TrendingUp : Eye
+  const to = (it: Insight) => (it.component ? `/explain?c=${it.component}` : '/explain')
   return (
     <Card
       as="section"
-      aria-label={title}
-      category={strength ? 'strength' : 'attention'}
-      className="p-4 md:p-4 short:p-3 short:md:p-3"
+      aria-labelledby="attn-h"
+      category="attention"
+      className={cn('flex flex-col p-4 short:p-3 md:p-4 short:md:p-3', className)}
     >
-      <h2 className="card-title mb-2 short:mb-1">
-        <Icon aria-hidden />
-        {title}
+      <h2 id="attn-h" className="card-title mb-2">
+        <Eye aria-hidden />
+        Що потребує уваги
       </h2>
-      <ul className="m-0 flex list-none flex-col gap-2 short:gap-1 p-0">
-        {items.map((it) => (
-          <li
-            key={it.id}
-            className={cn(
-              'flex items-start gap-2 rounded-md p-2 short:p-1.5',
-              strength
-                ? 'bg-strength-bg text-strength-text'
-                : 'bg-attention-bg text-attention-text',
-            )}
-          >
-            <Icon aria-hidden className="mt-0.5 size-5 shrink-0" />
+      <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
+        {attention.map((it) => (
+          <li key={it.id}>
             <Link
-              to={it.component ? `/explain?c=${it.component}` : '/explain'}
-              className="flex-1 text-body text-inherit underline-offset-2 hover:underline"
+              to={to(it)}
+              title={it.hint}
+              className="flex items-center gap-2 rounded-md bg-attention-bg px-2 py-1.5 text-attention-text no-underline hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
             >
-              {it.title}
+              <Eye aria-hidden className="size-4 shrink-0" />
+              <span className="min-w-0 flex-1 text-body">
+                {it.component ? it.title.replace(/^[^:]+:\s*/, '') : it.title}
+              </span>
+              {it.component && (
+                <span className="shrink-0 text-caption font-semibold">
+                  {COMPONENT_LABELS[it.component]}
+                </span>
+              )}
+              <ArrowRight aria-hidden className="size-4 shrink-0" />
             </Link>
-            <Num hint={it.hint} className="shrink-0 font-semibold">
-              {fmt(it.value)}
-            </Num>
           </li>
         ))}
       </ul>
-    </Card>
-  )
-}
-
-export function Conclusion({ paragraphs }: { paragraphs: string }) {
-  return (
-    <Card as="section" aria-labelledby="concl-h" className="p-4 md:p-4 short:p-3 short:md:p-3">
-      <h2 id="concl-h" className="card-title mb-2">
-        <ScrollText aria-hidden />
-        Короткий висновок
-      </h2>
-      <p className="m-0 text-body">{paragraphs}</p>
-    </Card>
-  )
-}
-
-export function FlagStrip({ flags }: { flags: TrustFlag[] }) {
-  return (
-    <section aria-labelledby="flags-h">
-      <h2
-        id="flags-h"
-        className="m-0 mb-2 short:mb-1 flex flex-wrap items-baseline gap-x-3 text-card"
-      >
-        Варто перевірити додатково
-        <span className="text-caption font-normal text-text-muted">
-          Напрям для додаткового аналізу. Це не висновок про людей чи підрозділи.
-        </span>
-      </h2>
-      <ul className="m-0 grid list-none gap-3 p-0 md:grid-cols-2">
-        {flags.map((f) => {
-          const Icon = f.weight === 'major' ? TriangleAlert : SearchCheck
-          return (
-            <li
-              key={f.id}
-              className="flex items-start gap-3 rounded-lg border border-border border-l-4 border-l-attention-solid bg-surface p-3 short:p-2"
-            >
-              <Icon aria-hidden className="mt-0.5 size-5 shrink-0 text-attention-text" />
-              <div>
-                <p className="m-0 text-body font-semibold">
-                  {f.title}
-                  <span className="ml-2 whitespace-nowrap text-caption font-normal text-text-muted">
-                    ({FLAG_WEIGHT_LABEL[f.weight]})
-                  </span>
-                </p>
-                <p className="m-0 text-caption text-text-muted">{f.explanation}</p>
-              </div>
+      <div className="mt-3 border-t border-border pt-2">
+        <p className="m-0 mb-1 text-caption font-semibold text-text-muted">Сильні сторони</p>
+        <ul className="m-0 flex list-none flex-wrap gap-1.5 p-0">
+          {strengths.map((it) => (
+            <li key={it.id}>
+              <Link
+                to={to(it)}
+                title={it.hint}
+                className="inline-flex items-center gap-1.5 rounded-sm bg-strength-bg px-2 py-1 text-caption font-medium text-strength-text no-underline hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+              >
+                <TrendingUp aria-hidden className="size-3.5 shrink-0" />
+                {it.title}
+              </Link>
             </li>
-          )
-        })}
-      </ul>
-    </section>
+          ))}
+        </ul>
+      </div>
+    </Card>
   )
 }
