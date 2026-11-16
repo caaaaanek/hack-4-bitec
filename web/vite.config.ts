@@ -12,5 +12,7 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     include: ['src/**/*.test.{ts,tsx}'],
     css: false,
+    // Повільні користувацькі сценарії (userEvent) під навантаженням збірки перевищували 5 с.
+    testTimeout: 20000,
   },
 })
