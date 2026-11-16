@@ -110,6 +110,11 @@ function Row({
         )}
         <div className="min-w-0">
           <span className="text-body">{node.label}</span>
+          {node.count && (
+            <span className="block text-caption text-text-muted">
+              {node.count.numerator} з {node.count.denominator} ({fmt(node.count.percent)}%)
+            </span>
+          )}
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             {node.source && (
               <span className="inline-flex items-center gap-1.5 text-caption font-normal text-text-muted">

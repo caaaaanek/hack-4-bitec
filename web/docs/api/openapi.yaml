@@ -23,7 +23,7 @@ info:
     **Анонімність.** Див. розділ «Інваріанти» нижче.
   x-invariants:
     - Жоден запит не повертає окремі відповіді респондентів.
-    - Групи менші за k ніколи не повертаються (стан hidden_below_k).
+    - Групи менші за k (за замовчуванням 10, налаштовується) ніколи не повертаються (стан hidden_below_k, дані малої групи додаються до батьківського підрозділу).
     - Ролі admin і commissioner не мають доступу до відповідей.
     - Роль commissioner не бачить, хто і скільки пройшов.
     - Немає запитів з іменними рейтингами людей чи підрозділів.
@@ -61,7 +61,7 @@ tags:
     description: |
       Інваріанти (обовʼязкові для всіх запитів):
       1. Жоден запит не повертає окремі відповіді респондентів. Відповіді зберігаються й віддаються лише агрегатами.
-      2. Групи менші за k (за замовчуванням 5) ніколи не повертаються: замість даних приходить `{visibility: "hidden_below_k"}`.
+      2. Групи менші за k ніколи не повертаються (k за замовчуванням 10, налаштовується адміністратором циклу): замість даних приходить `{visibility: "hidden_below_k", fallbackScope}`, де `fallbackScope` це батьківський підрозділ, дані якого можна показати.
       3. admin і commissioner не мають доступу до відповідей, навіть узагальнених за малою групою.
       4. commissioner не бачить прогрес проходження (хто і скільки пройшли). Лічильники «видано/використано» бачить лише admin і без осіб.
       5. Немає запитів з іменними рейтингами людей чи підрозділів.
@@ -555,6 +555,31 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/IncompleteError' }
         '409': { $ref: '#/components/responses/Conflict' }
+  /units:
+    get:
+      tags: [dashboard]
+      operationId: listUnits
+      summary: Дерево підрозділів
+      description: Плоский список вузлів дерева (id, name, parentId), доступних ролі. Кількості відповідей не повертаються.
+      x-roles: [leader, observer, admin, auditor]
+      responses:
+        '200':
+          description: Вузли
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/Unit' }
+              example:
+                items:
+                  - { id: alpha, name: 'Умовний військовий інститут «Альфа»', parentId: null }
+                  - { id: unit-a, name: Підрозділ А, parentId: alpha }
+                  - { id: unit-b, name: Підрозділ Б, parentId: alpha }
+                  - { id: unit-v, name: Підрозділ В, parentId: alpha }
   /dashboard:
     get:
       tags: [dashboard]
@@ -673,9 +698,17 @@ paths:
       tags: [analytics]
       operationId: getTrends
       summary: Динаміка по циклах
+      description: |
+        Цикли в періоді `from`-`to` (включно) з датами й значеннями по компонентах. Режим `compare=periods`
+        порівнює два періоди (`from`-`to` і `compareFrom`-`compareTo`) і повертає обидва набори циклів та різницю.
       x-roles: [leader, observer]
       parameters:
         - $ref: '#/components/parameters/Scope'
+        - { name: from, in: query, description: 'Початок періоду (id циклу або дата YYYY-MM-DD).', schema: { type: string, example: '2025-12' } }
+        - { name: to, in: query, description: 'Кінець періоду (id циклу або дата).', schema: { type: string, example: '2026-11' } }
+        - { name: compare, in: query, description: 'none це один період, periods це порівняння двох періодів.', schema: { type: string, enum: [none, periods], default: none } }
+        - { name: compareFrom, in: query, description: 'Початок другого періоду (лише compare=periods).', schema: { type: string } }
+        - { name: compareTo, in: query, description: 'Кінець другого періоду (лише compare=periods).', schema: { type: string } }
       responses:
         '200':
           description: Динаміка
@@ -683,10 +716,11 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/Trends' }
               example:
+                period: { from: '2025-12', to: '2026-11' }
                 points:
-                  - { cycle: '2025-12', index: 41.0, components: { culture: 44, system: 36, accountability: 43 } }
-                  - { cycle: '2026-06', index: 47.0, components: { culture: 50, system: 41, accountability: 50 } }
-                  - { cycle: '2026-11', index: 54.2, components: { culture: 57.5, system: 45, accountability: 60 } }
+                  - { cycle: '2025-12', date: '2025-12-15', index: 41.0, components: { culture: 44, system: 36, accountability: 43 } }
+                  - { cycle: '2026-06', date: '2026-06-15', index: 47.0, components: { culture: 50, system: 41, accountability: 50 } }
+                  - { cycle: '2026-11', date: '2026-11-16', index: 54.2, components: { culture: 57.5, system: 45, accountability: 60 } }
                 events:
                   - { cycle: '2026-06', title: Виконано захід за рекомендацією, measureId: m1 }
   /facts:
@@ -712,10 +746,10 @@ paths:
                     items: { $ref: '#/components/schemas/FactMetric' }
               example:
                 items:
-                  - { id: ac-f1, component: accountability, label: Подано декларацій вчасно серед зобовʼязаних, kind: percent, value: 45, source: Реєстр декларацій, mode: automatic, asOf: '2026-11-10T00:00:00Z', ageDays: 6 }
-                  - { id: ac-f2, component: accountability, label: 'Конфлікти інтересів, перевірені уповноваженим із висновком у строк', kind: percent, value: 30, source: Журнал уповноваженого, mode: manual, asOf: '2026-11-01T00:00:00Z', ageDays: 15 }
-                  - { id: cu-f1, component: culture, label: 'Прапорці, опрацьовані за 30 днів', kind: percent, value: 55, source: Журнал прапорців, mode: planned, asOf: null, ageDays: null }
-                  - { id: sy-f1, component: system, label: Розглянуто в строк, kind: percent, value: 60, source: Облік звернень, mode: manual, asOf: '2026-11-05T00:00:00Z', ageDays: 11 }
+                  - { id: ac-f1, component: accountability, label: Подано декларацій вчасно серед зобовʼязаних, kind: percent, value: 45, numerator: 45, denominator: 100, percent: 45, source: Реєстр декларацій, mode: automatic, asOf: '2026-11-10T00:00:00Z', ageDays: 6 }
+                  - { id: ac-f2, component: accountability, label: 'Потенційні конфлікти інтересів, за якими уповноважений дав висновок у строк', kind: percent, value: 30, numerator: 6, denominator: 20, percent: 30, source: Журнал уповноваженого, mode: manual, asOf: '2026-11-01T00:00:00Z', ageDays: 15 }
+                  - { id: cu-f1, component: culture, label: 'Прапорці, за якими прийнято рішення або захід протягом 30 днів', kind: percent, value: 55, numerator: 11, denominator: 20, percent: 55, source: Журнал прапорців, mode: planned, asOf: null, ageDays: null }
+                  - { id: sy-f1, component: system, label: 'Скарги й звернення, розглянуті в строк', kind: percent, value: 60, numerator: 36, denominator: 60, percent: 60, source: Облік звернень, mode: manual, asOf: '2026-11-05T00:00:00Z', ageDays: 11 }
   /facts/{factId}/manual:
     parameters:
       - name: factId
@@ -935,7 +969,7 @@ paths:
               example:
                 visibility: hidden_below_k
                 message: Недостатньо відповідей, щоб показати результати цієї групи. Показано дані рівня вище. Це захищає анонімність учасників.
-                fallbackScope: institution
+                fallbackScope: { id: alpha, name: 'Умовний військовий інститут «Альфа»', parentId: null }
   /reports:
     post:
       tags: [reports]
@@ -1107,7 +1141,7 @@ components:
     Scope:
       name: scope
       in: query
-      description: Вузол структури або `institution`. Роль обмежує доступні значення; недоступний scope дає 403.
+      description: Id вузла дерева підрозділів (`GET /units`), за замовчуванням корінь. Роль обмежує доступні значення; недоступний scope дає 403.
       schema: { type: string, default: institution }
   responses:
     Unauthorized:
@@ -1329,13 +1363,21 @@ components:
             properties:
               questionId: { type: string }
               optionId: { type: string }
+    Unit:
+      type: object
+      required: [id, name, parentId]
+      description: Вузол дерева підрозділів. Корінь має parentId null. Назви нейтральні, глибина довільна.
+      properties:
+        id: { type: string, example: unit-a }
+        name: { type: string, example: Підрозділ А }
+        parentId: { type: [string, 'null'], example: alpha }
     HiddenBelowK:
       type: object
       required: [visibility, message, fallbackScope]
       properties:
         visibility: { type: string, enum: [hidden_below_k] }
         message: { type: string }
-        fallbackScope: { type: string, description: 'Рівень вище, дані якого можна показати.' }
+        fallbackScope: { $ref: '#/components/schemas/Unit', description: 'Батьківський підрозділ (рівень вище), дані якого можна показати.' }
     TrustFlag:
       type: object
       required: [id, weight, raised, title, explanation]
@@ -1467,19 +1509,42 @@ components:
                     source: { $ref: '#/components/schemas/Source' }
                     value: { type: [number, 'null'] }
                     visibility: { type: string, enum: [visible, hidden_below_k] }
+    TrendPoint:
+      type: object
+      required: [cycle, date, index]
+      properties:
+        cycle: { type: string }
+        date: { type: string, format: date, description: 'Дата циклу.' }
+        index: { type: number }
+        components: { $ref: '#/components/schemas/ComponentWeights', description: 'Зараховані значення компонентів, 0-100.' }
     Trends:
       type: object
       required: [points]
       properties:
+        period:
+          type: object
+          properties:
+            from: { type: string }
+            to: { type: string }
         points:
           type: array
-          items:
-            type: object
-            required: [cycle, index]
-            properties:
-              cycle: { type: string }
-              index: { type: number }
-              components: { $ref: '#/components/schemas/ComponentWeights' }
+          items: { $ref: '#/components/schemas/TrendPoint' }
+        comparePeriod:
+          type: object
+          description: Лише при compare=periods.
+          properties:
+            from: { type: string }
+            to: { type: string }
+        comparePoints:
+          type: array
+          description: Цикли другого періоду (лише при compare=periods).
+          items: { $ref: '#/components/schemas/TrendPoint' }
+        delta:
+          type: object
+          description: Різниця середніх значень другого періоду й першого, у пунктах (лише при compare=periods).
+          properties:
+            index: { type: number }
+            components: { $ref: '#/components/schemas/ComponentWeights' }
         events:
           type: array
           items:
@@ -1496,7 +1561,10 @@ components:
         component: { $ref: '#/components/schemas/ComponentId' }
         label: { type: string }
         kind: { type: string, enum: [percent, level] }
-        value: { type: [number, 'null'] }
+        value: { type: [number, 'null'], description: 'Значення 0-100 (для percent дорівнює percent).' }
+        numerator: { type: [integer, 'null'], description: 'Скільки відповідає умові (лише percent). Без імен.' }
+        denominator: { type: [integer, 'null'], description: 'З скількох (лише percent).' }
+        percent: { type: [number, 'null'], description: 'Відсоток 0-100: numerator / denominator.' }
         source: { type: string, description: 'Звідки дані (система або реєстр).' }
         mode: { type: string, enum: [automatic, manual, planned], description: 'automatic це автоматично, manual це ручний ввід, planned це планується.' }
         asOf: { type: [string, 'null'], format: date-time }

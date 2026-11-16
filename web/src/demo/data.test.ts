@@ -32,9 +32,9 @@ describe('демо-дані', () => {
     const labels = factItems.map((i) => i.label)
     for (const l of [
       'Подано декларацій вчасно серед зобовʼязаних',
-      'Конфлікти інтересів, перевірені уповноваженим із висновком у строк',
-      'Прапорці, опрацьовані за 30 днів',
-      'Розглянуто в строк',
+      'Потенційні конфлікти інтересів, за якими уповноважений дав висновок у строк',
+      'Прапорці, за якими прийнято рішення або захід протягом 30 днів',
+      'Скарги й звернення, розглянуті в строк',
     ])
       expect(labels).toContain(l)
   })
@@ -42,5 +42,14 @@ describe('демо-дані', () => {
     expect(trustSummary.grade).toBe('C')
     expect(trustSummary.raised.map((f) => f.weight).sort()).toEqual(['major', 'minor'])
     expect(trustFlags.every((f) => f.explanation.length > 0)).toBe(true)
+  })
+})
+
+describe('кількості фактів', () => {
+  it('відсоток дорівнює numerator / denominator, текст «87 з 100 (87%)»', async () => {
+    const { FACT_COUNTS, countText } = await import('./data')
+    for (const c of Object.values(FACT_COUNTS))
+      expect(Math.abs(c.percent - (c.numerator / c.denominator) * 100)).toBeLessThan(0.1)
+    expect(countText({ numerator: 87, denominator: 100, percent: 87 })).toBe('87 з 100 (87%)')
   })
 })

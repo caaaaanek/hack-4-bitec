@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { MIN_GROUP_K, trustGrade, type TrustFlag } from './trust'
+import { K_MIN_GROUP as MIN_GROUP_K } from './methodology'
+import { trustGrade, type TrustFlag } from './trust'
 
 const f = (weight: TrustFlag['weight'], raised: boolean) => ({ weight, raised })
 const minors = (n: number) => Array.from({ length: n }, () => f('minor', true))

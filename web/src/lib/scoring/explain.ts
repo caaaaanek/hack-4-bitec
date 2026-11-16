@@ -25,6 +25,7 @@ export interface ExplainItem {
   value: number
   source: NodeSource
   hint: string
+  count?: { numerator: number; denominator: number; percent: number }
 }
 
 export interface ExplainComponent {
@@ -48,6 +49,8 @@ export interface TreeNode {
   limited?: boolean
   reason?: string
   hint: string
+  /** Факт-відсоток: «87 з 100 (87%)». */
+  count?: { numerator: number; denominator: number; percent: number }
   children?: TreeNode[]
 }
 
@@ -89,6 +92,7 @@ export function buildTree(
           source: i.source,
           limited: limited || undefined,
           hint: i.hint,
+          count: mode === 'facts' ? i.count : undefined,
         }
       })
     return {

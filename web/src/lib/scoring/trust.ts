@@ -7,12 +7,12 @@
  *  - C: хоча б один серйозний або 3 і більше незначних.
  * Прапорець це так/ні з вагою та поясненням простою мовою.
  */
+import { K_MIN_GROUP } from './methodology'
+
 export type TrustGrade = 'A' | 'B' | 'C' | 'insufficient'
 
 export type FlagWeight = 'minor' | 'major'
 
-/** Мінімальний розмір групи за замовчуванням (k). */
-export const MIN_GROUP_K = 5
 
 /** Скільки незначних прапорців дорівнює серйозному. */
 export const MINOR_FLAGS_FOR_C = 3
@@ -30,7 +30,7 @@ export interface TrustFlag {
 export function trustGrade(
   flags: readonly Pick<TrustFlag, 'weight' | 'raised'>[],
   responses: number,
-  k: number = MIN_GROUP_K,
+  k: number = K_MIN_GROUP,
 ): TrustGrade {
   if (responses < k) return 'insufficient'
   const raised = flags.filter((f) => f.raised)

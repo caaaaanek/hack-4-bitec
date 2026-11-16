@@ -14,6 +14,12 @@ export const COMPONENT_LABELS: Record<ComponentId, string> = {
   accountability: 'Підзвітність',
 }
 
+/**
+ * Мінімальний розмір групи (k): менші групи не показуються, їхні дані додаються до батьківського підрозділу.
+ * Налаштовується адміністратором циклу, за замовчуванням 10.
+ */
+export const K_MIN_GROUP = 10
+
 /** Рівні ваг компонентів: рівні, 1/3. */
 export const COMPONENT_WEIGHT = 1 / 3
 

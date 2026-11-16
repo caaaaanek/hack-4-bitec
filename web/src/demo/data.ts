@@ -10,9 +10,10 @@ import {
   COMPONENT_LABELS,
   fmt,
   type ComponentId,
+  K_MIN_GROUP,
   type Credited,
 } from '@/lib/scoring/methodology'
-import { MIN_GROUP_K, trustGrade, type TrustFlag, type TrustGrade } from '@/lib/scoring/trust'
+import { trustGrade, type TrustFlag, type TrustGrade } from '@/lib/scoring/trust'
 
 const COMPONENT_LOCATIVE: Record<ComponentId, string> = {
   culture: 'Культурі',
@@ -38,6 +39,32 @@ export interface IndicatorItem {
   source: ItemSource
   /** Що це таке, простими словами. */
   hint: string
+  /** Для фактів-відсотків: скільки з скількох (без імен). */
+  count?: FactCount
+}
+
+export interface FactCount {
+  numerator: number
+  denominator: number
+  percent: number
+}
+
+/** «87 з 100 (87%)». */
+export const countText = (c: FactCount): string =>
+  `${c.numerator} з ${c.denominator} (${fmt(c.percent)}%)`
+
+const mkCount = (numerator: number, denominator: number): FactCount => ({
+  numerator,
+  denominator,
+  percent: Math.round((numerator / denominator) * 1000) / 10,
+})
+
+/** Кількості для фактів-відсотків (синтетичні). */
+export const FACT_COUNTS: Record<string, FactCount> = {
+  'cu-f1': mkCount(11, 20),
+  'sy-f1': mkCount(36, 60),
+  'ac-f1': mkCount(45, 100),
+  'ac-f2': mkCount(6, 20),
 }
 
 const WG_HINT = 'Середня оцінка відповідей робочої групи, 0-100.'
@@ -79,17 +106,17 @@ const levelHint = (l: number) =>
 
 type F = [string, ComponentId, string, number, 'percent' | number, number?]
 const F_ROWS: F[] = [
-  ['cu-f1', 'culture', 'Прапорці, опрацьовані за 30 днів', 50, 'percent', 55],
+  ['cu-f1', 'culture', 'Прапорці, за якими прийнято рішення або захід протягом 30 днів', 50, 'percent', 55],
   ['cu-f2', 'culture', 'Рівень за анкетою «Етичні практики»', 25, 2],
   ['cu-f3', 'culture', 'Рівень за анкетою «Навчання з доброчесності»', 25, 2],
-  ['sy-f1', 'system', 'Розглянуто в строк', 50, 'percent', 60],
+  ['sy-f1', 'system', 'Скарги й звернення, розглянуті в строк', 50, 'percent', 60],
   ['sy-f2', 'system', 'Рівень за анкетою «Процедури та інструкції»', 25, 3],
   ['sy-f3', 'system', 'Рівень за анкетою «Захист заявників»', 25, 3],
   ['ac-f1', 'accountability', 'Подано декларацій вчасно серед зобовʼязаних', 40, 'percent', 45],
   [
     'ac-f2',
     'accountability',
-    'Конфлікти інтересів, перевірені уповноваженим із висновком у строк',
+    'Потенційні конфлікти інтересів, за якими уповноважений дав висновок у строк',
     40,
     'percent',
     30,
@@ -107,6 +134,7 @@ export const factItems: IndicatorItem[] = F_ROWS.map(
     value: kind === 'percent' ? pct! : levelToScore(kind),
     source: 'facts' as const,
     hint: kind === 'percent' ? PERCENT_HINT : levelHint(kind),
+    count: kind === 'percent' ? FACT_COUNTS[id] : undefined,
   }),
 )
 
@@ -197,7 +225,7 @@ export const trustFlags: TrustFlag[] = [
 ]
 
 export const trustSummary: { grade: TrustGrade; raised: TrustFlag[] } = {
-  grade: trustGrade(trustFlags, RESPONSES, MIN_GROUP_K),
+  grade: trustGrade(trustFlags, RESPONSES, K_MIN_GROUP),
   raised: trustFlags.filter((f) => f.raised),
 }
 

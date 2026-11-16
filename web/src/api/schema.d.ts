@@ -397,6 +397,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/units": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Дерево підрозділів
+         * @description Плоский список вузлів дерева (id, name, parentId), доступних ролі. Кількості відповідей не повертаються.
+         */
+        get: operations["listUnits"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/dashboard": {
         parameters: {
             query?: never;
@@ -465,7 +485,11 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Динаміка по циклах */
+        /**
+         * Динаміка по циклах
+         * @description Цикли в періоді `from`-`to` (включно) з датами й значеннями по компонентах. Режим `compare=periods`
+         *     порівнює два періоди (`from`-`to` і `compareFrom`-`compareTo`) і повертає обидва набори циклів та різницю.
+         */
         get: operations["getTrends"];
         put?: never;
         post?: never;
@@ -921,12 +945,21 @@ export interface components {
                 optionId: string;
             }[];
         };
+        /** @description Вузол дерева підрозділів. Корінь має parentId null. Назви нейтральні, глибина довільна. */
+        Unit: {
+            /** @example unit-a */
+            id: string;
+            /** @example Підрозділ А */
+            name: string;
+            /** @example alpha */
+            parentId: string | null;
+        };
         HiddenBelowK: {
             /** @enum {string} */
             visibility: "hidden_below_k";
             message: string;
-            /** @description Рівень вище, дані якого можна показати. */
-            fallbackScope: string;
+            /** @description Батьківський підрозділ (рівень вище), дані якого можна показати. */
+            fallbackScope: components["schemas"]["Unit"];
         };
         TrustFlag: {
             id: string;
@@ -1033,12 +1066,35 @@ export interface components {
                 }[];
             }[];
         };
+        TrendPoint: {
+            cycle: string;
+            /**
+             * Format: date
+             * @description Дата циклу.
+             */
+            date: string;
+            index: number;
+            /** @description Зараховані значення компонентів, 0-100. */
+            components?: components["schemas"]["ComponentWeights"];
+        };
         Trends: {
-            points: {
-                cycle: string;
-                index: number;
+            period?: {
+                from?: string;
+                to?: string;
+            };
+            points: components["schemas"]["TrendPoint"][];
+            /** @description Лише при compare=periods. */
+            comparePeriod?: {
+                from?: string;
+                to?: string;
+            };
+            /** @description Цикли другого періоду (лише при compare=periods). */
+            comparePoints?: components["schemas"]["TrendPoint"][];
+            /** @description Різниця середніх значень другого періоду й першого, у пунктах (лише при compare=periods). */
+            delta?: {
+                index?: number;
                 components?: components["schemas"]["ComponentWeights"];
-            }[];
+            };
             events?: {
                 cycle?: string;
                 title?: string;
@@ -1051,7 +1107,14 @@ export interface components {
             label: string;
             /** @enum {string} */
             kind: "percent" | "level";
+            /** @description Значення 0-100 (для percent дорівнює percent). */
             value?: number | null;
+            /** @description Скільки відповідає умові (лише percent). Без імен. */
+            numerator?: number | null;
+            /** @description З скількох (лише percent). */
+            denominator?: number | null;
+            /** @description Відсоток 0-100: numerator / denominator. */
+            percent?: number | null;
             /** @description Звідки дані (система або реєстр). */
             source?: string;
             /**
@@ -1246,7 +1309,7 @@ export interface components {
         ReportId: string;
         /** @description Id циклу, за замовчуванням останній опублікований. */
         Cycle: string;
-        /** @description Вузол структури або `institution`. Роль обмежує доступні значення; недоступний scope дає 403. */
+        /** @description Id вузла дерева підрозділів (`GET /units`), за замовчуванням корінь. Роль обмежує доступні значення; недоступний scope дає 403. */
         Scope: string;
     };
     requestBodies: never;
@@ -1919,12 +1982,60 @@ export interface operations {
             };
         };
     };
+    listUnits: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Вузли */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "items": [
+                     *         {
+                     *           "id": "alpha",
+                     *           "name": "Умовний військовий інститут «Альфа»",
+                     *           "parentId": null
+                     *         },
+                     *         {
+                     *           "id": "unit-a",
+                     *           "name": "Підрозділ А",
+                     *           "parentId": "alpha"
+                     *         },
+                     *         {
+                     *           "id": "unit-b",
+                     *           "name": "Підрозділ Б",
+                     *           "parentId": "alpha"
+                     *         },
+                     *         {
+                     *           "id": "unit-v",
+                     *           "name": "Підрозділ В",
+                     *           "parentId": "alpha"
+                     *         }
+                     *       ]
+                     *     }
+                     */
+                    "application/json": {
+                        items: components["schemas"]["Unit"][];
+                    };
+                };
+            };
+        };
+    };
     getDashboard: {
         parameters: {
             query?: {
                 /** @description Id циклу, за замовчуванням останній опублікований. */
                 cycle?: components["parameters"]["Cycle"];
-                /** @description Вузол структури або `institution`. Роль обмежує доступні значення; недоступний scope дає 403. */
+                /** @description Id вузла дерева підрозділів (`GET /units`), за замовчуванням корінь. Роль обмежує доступні значення; недоступний scope дає 403. */
                 scope?: components["parameters"]["Scope"];
             };
             header?: never;
@@ -2070,7 +2181,7 @@ export interface operations {
             query?: {
                 /** @description Id циклу, за замовчуванням останній опублікований. */
                 cycle?: components["parameters"]["Cycle"];
-                /** @description Вузол структури або `institution`. Роль обмежує доступні значення; недоступний scope дає 403. */
+                /** @description Id вузла дерева підрозділів (`GET /units`), за замовчуванням корінь. Роль обмежує доступні значення; недоступний scope дає 403. */
                 scope?: components["parameters"]["Scope"];
                 mode?: "perception" | "facts" | "credited";
             };
@@ -2184,7 +2295,7 @@ export interface operations {
             query?: {
                 /** @description Id циклу, за замовчуванням останній опублікований. */
                 cycle?: components["parameters"]["Cycle"];
-                /** @description Вузол структури або `institution`. Роль обмежує доступні значення; недоступний scope дає 403. */
+                /** @description Id вузла дерева підрозділів (`GET /units`), за замовчуванням корінь. Роль обмежує доступні значення; недоступний scope дає 403. */
                 scope?: components["parameters"]["Scope"];
             };
             header?: never;
@@ -2207,8 +2318,18 @@ export interface operations {
     getTrends: {
         parameters: {
             query?: {
-                /** @description Вузол структури або `institution`. Роль обмежує доступні значення; недоступний scope дає 403. */
+                /** @description Id вузла дерева підрозділів (`GET /units`), за замовчуванням корінь. Роль обмежує доступні значення; недоступний scope дає 403. */
                 scope?: components["parameters"]["Scope"];
+                /** @description Початок періоду (id циклу або дата YYYY-MM-DD). */
+                from?: string;
+                /** @description Кінець періоду (id циклу або дата). */
+                to?: string;
+                /** @description none це один період, periods це порівняння двох періодів. */
+                compare?: "none" | "periods";
+                /** @description Початок другого періоду (лише compare=periods). */
+                compareFrom?: string;
+                /** @description Кінець другого періоду (лише compare=periods). */
+                compareTo?: string;
             };
             header?: never;
             path?: never;
@@ -2224,9 +2345,14 @@ export interface operations {
                 content: {
                     /**
                      * @example {
+                     *       "period": {
+                     *         "from": "2025-12",
+                     *         "to": "2026-11"
+                     *       },
                      *       "points": [
                      *         {
                      *           "cycle": "2025-12",
+                     *           "date": "2025-12-15",
                      *           "index": 41,
                      *           "components": {
                      *             "culture": 44,
@@ -2236,6 +2362,7 @@ export interface operations {
                      *         },
                      *         {
                      *           "cycle": "2026-06",
+                     *           "date": "2026-06-15",
                      *           "index": 47,
                      *           "components": {
                      *             "culture": 50,
@@ -2245,6 +2372,7 @@ export interface operations {
                      *         },
                      *         {
                      *           "cycle": "2026-11",
+                     *           "date": "2026-11-16",
                      *           "index": 54.2,
                      *           "components": {
                      *             "culture": 57.5,
@@ -2294,6 +2422,9 @@ export interface operations {
                      *           "label": "Подано декларацій вчасно серед зобовʼязаних",
                      *           "kind": "percent",
                      *           "value": 45,
+                     *           "numerator": 45,
+                     *           "denominator": 100,
+                     *           "percent": 45,
                      *           "source": "Реєстр декларацій",
                      *           "mode": "automatic",
                      *           "asOf": "2026-11-10T00:00:00Z",
@@ -2302,9 +2433,12 @@ export interface operations {
                      *         {
                      *           "id": "ac-f2",
                      *           "component": "accountability",
-                     *           "label": "Конфлікти інтересів, перевірені уповноваженим із висновком у строк",
+                     *           "label": "Потенційні конфлікти інтересів, за якими уповноважений дав висновок у строк",
                      *           "kind": "percent",
                      *           "value": 30,
+                     *           "numerator": 6,
+                     *           "denominator": 20,
+                     *           "percent": 30,
                      *           "source": "Журнал уповноваженого",
                      *           "mode": "manual",
                      *           "asOf": "2026-11-01T00:00:00Z",
@@ -2313,9 +2447,12 @@ export interface operations {
                      *         {
                      *           "id": "cu-f1",
                      *           "component": "culture",
-                     *           "label": "Прапорці, опрацьовані за 30 днів",
+                     *           "label": "Прапорці, за якими прийнято рішення або захід протягом 30 днів",
                      *           "kind": "percent",
                      *           "value": 55,
+                     *           "numerator": 11,
+                     *           "denominator": 20,
+                     *           "percent": 55,
                      *           "source": "Журнал прапорців",
                      *           "mode": "planned",
                      *           "asOf": null,
@@ -2324,9 +2461,12 @@ export interface operations {
                      *         {
                      *           "id": "sy-f1",
                      *           "component": "system",
-                     *           "label": "Розглянуто в строк",
+                     *           "label": "Скарги й звернення, розглянуті в строк",
                      *           "kind": "percent",
                      *           "value": 60,
+                     *           "numerator": 36,
+                     *           "denominator": 60,
+                     *           "percent": 60,
                      *           "source": "Облік звернень",
                      *           "mode": "manual",
                      *           "asOf": "2026-11-05T00:00:00Z",
@@ -2596,7 +2736,11 @@ export interface operations {
                      * @example {
                      *       "visibility": "hidden_below_k",
                      *       "message": "Недостатньо відповідей, щоб показати результати цієї групи. Показано дані рівня вище. Це захищає анонімність учасників.",
-                     *       "fallbackScope": "institution"
+                     *       "fallbackScope": {
+                     *         "id": "alpha",
+                     *         "name": "Умовний військовий інститут «Альфа»",
+                     *         "parentId": null
+                     *       }
                      *     }
                      */
                     "application/json": components["schemas"]["MyResults"] | components["schemas"]["HiddenBelowK"];
