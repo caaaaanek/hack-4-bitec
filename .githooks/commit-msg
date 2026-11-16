@@ -1,0 +1,6 @@
+#!/bin/sh
+# Reject commit messages that credit an AI agent (see AGENTS.md).
+if grep -qiE '^(co-authored-by:|claude-session:)|generated with \[?claude|noreply@anthropic\.com' "$1"; then
+  echo "commit-msg: прибери Co-Authored-By / Generated with / Claude-Session — див. AGENTS.md" >&2
+  exit 1
+fi
