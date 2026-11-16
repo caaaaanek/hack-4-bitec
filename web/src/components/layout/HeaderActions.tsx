@@ -24,7 +24,7 @@ function Notifications() {
     }
   }, [open])
   return (
-    <div ref={wrap} className="relative">
+    <div ref={wrap} className="relative hidden md:block">
       <IconButton
         label="Сповіщення"
         aria-expanded={open}
@@ -56,7 +56,7 @@ export function HeaderActions({ role }: { role: Role }) {
           to="/explain"
           aria-label="Довідка: як розраховується індекс"
           title="Довідка: як розраховується індекс"
-          className="touch-target inline-flex items-center justify-center rounded-md text-accent hover:bg-accent-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+          className="touch-target hidden items-center justify-center rounded-md text-accent md:inline-flex hover:bg-accent-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
         >
           <CircleHelp aria-hidden className="size-5" />
         </Link>

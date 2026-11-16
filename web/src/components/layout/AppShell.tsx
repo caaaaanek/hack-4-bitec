@@ -130,7 +130,7 @@ export function AppShell() {
               <span className="hidden md:inline">Меню</span>
               <span className="sr-only md:hidden">Меню</span>
             </button>
-            <Logo className="xl:hidden" />
+            <Logo className="hidden md:block xl:hidden" />
             <div className="min-w-0 flex-1">
               <p className="m-0 truncate text-card text-text">{section?.label ?? INSTITUTION}</p>
               <p className="m-0 hidden truncate text-caption text-text-muted md:block">

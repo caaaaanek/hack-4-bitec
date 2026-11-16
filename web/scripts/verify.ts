@@ -15,6 +15,13 @@ const OUT = join(process.cwd(), 'artifacts', 'screens')
 const slug = (p: string) =>
   p === '/' ? 'home' : p.replace(/^\/|\/$/g, '').replace(/[^a-z0-9]+/gi, '-')
 
+/** Темна тема на всіх контрольних ширинах; світла лише на 1280 для ключових екранів. */
+const LIGHT_PATHS = new Set(['/', '/explain', '/me', '/s/demo'])
+const themedWidths = (path: string): [number, 'dark' | 'light'][] => [
+  ...WIDTHS.map((w): [number, 'dark' | 'light'] => [w, 'dark']),
+  ...(LIGHT_PATHS.has(path) ? [[1280, 'light'] as [number, 'dark' | 'light']] : []),
+]
+
 interface Result {
   role: string
   path: string
@@ -29,10 +36,11 @@ async function checkRoute(
 ): Promise<Result> {
   const problems: string[] = []
   const origin = new URL(base).origin
-  for (const width of WIDTHS) {
+  for (const [width, theme] of themedWidths(route.path)) {
     const ctx = await browser.newContext({ viewport: { width, height: 900 }, locale: 'uk-UA' })
     const page = await ctx.newPage()
-    const tag = `${width}px`
+    const tag = `${width}px${theme === 'light' ? ' light' : ''}`
+    await ctx.addInitScript((t) => localStorage.setItem('iap-theme', t), theme)
     const external = new Set<string>()
     page.on('request', (r) => {
       const u = r.url()
@@ -61,7 +69,10 @@ async function checkRoute(
         problems.push(`[${tag}] немає тексту «${route.contains}»`)
       const dir = join(OUT, role.id, slug(route.path))
       mkdirSync(dir, { recursive: true })
-      await page.screenshot({ path: join(dir, `${width}.png`), fullPage: true })
+      await page.screenshot({
+        path: join(dir, `${width}${theme === 'light' ? '-light' : ''}.png`),
+        fullPage: true,
+      })
     } catch (e) {
       problems.push(`[${tag}] не готово: ${(e as Error).message.split('\n')[0]}`)
     }
