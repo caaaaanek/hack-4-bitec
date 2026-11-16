@@ -7,81 +7,87 @@
     'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
     sans-serif;
 
-  /* ---------- База: холодна сіро-синя, світла тема ---------- */
-  --color-bg: #f4f6f9;
-  --color-surface: #ffffff;
-  --color-surface-muted: #ebeff4;
-  --color-border: #d3dae4;
-  --color-border-strong: #7b889c; /* межі полів і контролів, ≥3:1 до поверхні */
-  --color-text: #16202e;
-  --color-text-muted: #455166;
+  /* ---------- Темна тема (за замовчуванням): чорнильно-синя, рівні поверхонь за світлотою ---------- */
+  --color-bg: #0b1220;
+  --color-surface: #111a2c;
+  --color-surface-raised: #182540;
+  --color-surface-muted: #16223a;
+  --color-border: #25334f;
+  --color-border-strong: #6b7f9f; /* межі полів і контролів, >=3:1 до поверхні */
+  --color-text: #d9e1ee;
+  --color-text-muted: #9aa9c1;
 
-  /* ---------- Акцент: глибокий синій ---------- */
-  --color-accent: #1f4e9c;
-  --color-accent-hover: #173f80;
-  --color-accent-active: #11326a;
-  --color-accent-soft: #e4ecf8;
-  --color-on-accent: #ffffff;
-  --color-focus: #1f4e9c;
+  --color-accent: #5eb3d6;
+  --color-accent-hover: #7cc4e2;
+  --color-accent-active: #9ad3ea;
+  --color-accent-soft: #143349;
+  --color-on-accent: #08131f;
+  --color-focus: #7cc4e2;
 
-  /* ---------- Шкала зрілості: 5 рівнів, один відтінок, світлота зростає з рівнем ---------- */
-  --color-maturity-1-bg: #e9f0fa;
-  --color-maturity-1-text: #16202e;
-  --color-maturity-1-chart: #6a95cf;
-  --color-maturity-2-bg: #c8daf1;
-  --color-maturity-2-text: #16202e;
-  --color-maturity-2-chart: #5486c6;
-  --color-maturity-3-bg: #8fb2e0;
-  --color-maturity-3-text: #0c1626;
-  --color-maturity-3-chart: #3468b0;
-  --color-maturity-4-bg: #2f62a8;
-  --color-maturity-4-text: #ffffff;
-  --color-maturity-4-chart: #214c8a;
-  --color-maturity-5-bg: #11305f;
-  --color-maturity-5-text: #ffffff;
-  --color-maturity-5-chart: #0d2548;
+  --color-maturity-1-bg: #1d3556;
+  --color-maturity-1-text: #d9e1ee;
+  --color-maturity-1-chart: #4677b0;
+  --color-maturity-2-bg: #2c5282;
+  --color-maturity-2-text: #f2f6fc;
+  --color-maturity-2-chart: #5a8bc5;
+  --color-maturity-3-bg: #4a7cb8;
+  --color-maturity-3-text: #020812;
+  --color-maturity-3-chart: #74a2d8;
+  --color-maturity-4-bg: #7aa5da;
+  --color-maturity-4-text: #06101c;
+  --color-maturity-4-chart: #93b9e4;
+  --color-maturity-5-bg: #b5d0f0;
+  --color-maturity-5-text: #06101c;
+  --color-maturity-5-chart: #b9d3f1;
 
-  /* ---------- Семантика ---------- */
-  --color-strength-bg: #e1f2e9;
-  --color-strength-text: #134d36;
-  --color-strength-solid: #1b7a56;
-  --color-attention-bg: #fcefd3;
-  --color-attention-text: #6b4100;
-  --color-attention-solid: #a35f00;
-  --color-critical-bg: #fbe4e4;
-  --color-critical-text: #8f1f1f;
-  --color-critical-solid: #b42b2b; /* лише стани системи: помилка, критична зона показника, прострочено */
-  --color-neutral-bg: #e8ecf1;
-  --color-neutral-text: #37445a;
-  --color-neutral-solid: #5d6b82;
+  --color-strength-bg: #12342a;
+  --color-strength-text: #8fdcb8;
+  --color-strength-solid: #3fb985;
+  --color-attention-bg: #3a2a0e;
+  --color-attention-text: #f0c46a;
+  --color-attention-solid: #d9962b;
+  --color-critical-bg: #3d1a1d;
+  --color-critical-text: #f4a3a3;
+  --color-critical-solid: #e5665f; /* лише стани системи */
+  --color-neutral-bg: #1d2940;
+  --color-neutral-text: #b4c1d6;
+  --color-neutral-solid: #8294b0;
 
-  /* ---------- Статуси (кожен має ще й іконку) ---------- */
-  --color-status-proposed-bg: #e8ecf1;
-  --color-status-proposed-text: #37445a;
-  --color-status-accepted-bg: #e0eafa;
-  --color-status-accepted-text: #17407f;
-  --color-status-clarified-bg: #ecebfa;
-  --color-status-clarified-text: #38368a;
-  --color-status-rejected-bg: #dfe3ea;
-  --color-status-rejected-text: #2c3646;
-  --color-status-inprogress-bg: #dff1f6;
-  --color-status-inprogress-text: #0b4f61;
-  --color-status-done-bg: #e1f2e9;
-  --color-status-done-text: #134d36;
-  --color-status-confirmed-bg: #d6efe3;
-  --color-status-confirmed-text: #0f4430;
-  --color-status-notconfirmed-bg: #fcefd3;
-  --color-status-notconfirmed-text: #6b4100;
-  --color-status-overdue-bg: #fbe4e4;
-  --color-status-overdue-text: #8f1f1f;
+  --color-status-proposed-bg: #1d2940;
+  --color-status-proposed-text: #b4c1d6;
+  --color-status-accepted-bg: #17304f;
+  --color-status-accepted-text: #9cc3f2;
+  --color-status-clarified-bg: #2a2650;
+  --color-status-clarified-text: #bfbdf2;
+  --color-status-rejected-bg: #232c3b;
+  --color-status-rejected-text: #a8b3c4;
+  --color-status-inprogress-bg: #12353f;
+  --color-status-inprogress-text: #8fd6e6;
+  --color-status-done-bg: #12342a;
+  --color-status-done-text: #8fdcb8;
+  --color-status-confirmed-bg: #0f3a2a;
+  --color-status-confirmed-text: #7fe0b4;
+  --color-status-notconfirmed-bg: #3a2a0e;
+  --color-status-notconfirmed-text: #f0c46a;
+  --color-status-overdue-bg: #3d1a1d;
+  --color-status-overdue-text: #f4a3a3;
 
-  /* ---------- Джерела даних: колір + форма маркера (коло, квадрат, ромб, трикутник) ---------- */
-  --color-source-wg: #1f4e9c;
-  --color-source-os: #b0521a;
-  --color-source-experts: #6a3d9e;
-  --color-source-facts: #1b7a56;
+  --color-source-wg: #5eb3d6;
+  --color-source-os: #e08a52;
+  --color-source-experts: #b48ae0;
+  --color-source-facts: #4cc28f;
 
-  /* ---------- Типографіка (мінімум 14 px) ---------- */
+  /* Категорії вмісту: верхня лінія картки */
+  --color-cat-culture: #4cc2a8;
+  --color-cat-system: #6f9be0;
+  --color-cat-accountability: #d9a24c;
+  --color-cat-neutral: #6b7f9f;
+
+  --shadow-sm: 0 0 0 rgb(0 0 0 / 0);
+  --shadow-md: 0 2px 8px rgb(0 0 0 / 0.35);
+  --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.5);
+
+  /* ---------- Типографіка (тіло 14 px, підписи 12 px) ---------- */
   --text-display: 3.5rem;
   --text-display--line-height: 1;
   --text-display--font-weight: 700;
@@ -98,23 +104,18 @@
   --text-card--font-weight: 600;
   --text-body-lg: 1rem;
   --text-body-lg--line-height: 1.5rem;
-  --text-body: 0.9375rem;
-  --text-body--line-height: 1.375rem;
-  --text-caption: 0.875rem;
-  --text-caption--line-height: 1.25rem;
-  --text-fine: 0.875rem;
-  --text-fine--line-height: 1.25rem;
+  --text-body: 0.875rem;
+  --text-body--line-height: 1.25rem;
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1rem;
+  --text-fine: 0.75rem;
+  --text-fine--line-height: 1rem;
   --text-fine--font-weight: 500;
 
   /* ---------- Радіуси ---------- */
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
-
-  /* ---------- Тіні (м'які, 3 рівні) ---------- */
-  --shadow-sm: 0 1px 2px rgb(22 32 46 / 0.06), 0 1px 1px rgb(22 32 46 / 0.04);
-  --shadow-md: 0 4px 12px rgb(22 32 46 / 0.08), 0 1px 3px rgb(22 32 46 / 0.06);
-  --shadow-lg: 0 12px 32px rgb(22 32 46 / 0.14), 0 2px 6px rgb(22 32 46 / 0.08);
 
   /* ---------- Рух ---------- */
   --duration-fast: 150ms;
@@ -144,6 +145,170 @@
   --pattern-maturity-3: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M-1 1l2-2M0 8L8 0M7 9l2-2' stroke='%23000' stroke-width='1' opacity='.6'/%3E%3C/svg%3E");
   --pattern-maturity-4: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='5'%3E%3Cpath d='M-1 1l2-2M0 5L5 0M4 6l2-2' stroke='%23fff' stroke-width='1' opacity='.7'/%3E%3C/svg%3E");
   --pattern-maturity-5: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M0 0h4M0 2h4' stroke='%23fff' stroke-width='1' opacity='.75'/%3E%3Cpath d='M2 0v4' stroke='%23fff' stroke-width='1' opacity='.75'/%3E%3C/svg%3E");
+}
+
+/* Світла тема: вмикається перемикачем у шапці (data-theme="light" на html) */
+:root[data-theme='light'] {
+  --color-bg: #f4f6f9;
+  --color-surface: #ffffff;
+  --color-surface-raised: #ffffff;
+  --color-surface-muted: #ebeff4;
+  --color-border: #d3dae4;
+  --color-border-strong: #7b889c;
+  --color-text: #16202e;
+  --color-text-muted: #455166;
+
+  --color-accent: #1f4e9c;
+  --color-accent-hover: #173f80;
+  --color-accent-active: #11326a;
+  --color-accent-soft: #e4ecf8;
+  --color-on-accent: #ffffff;
+  --color-focus: #1f4e9c;
+
+  --color-maturity-1-bg: #e9f0fa;
+  --color-maturity-1-text: #16202e;
+  --color-maturity-1-chart: #6a95cf;
+  --color-maturity-2-bg: #c8daf1;
+  --color-maturity-2-text: #16202e;
+  --color-maturity-2-chart: #5486c6;
+  --color-maturity-3-bg: #8fb2e0;
+  --color-maturity-3-text: #0c1626;
+  --color-maturity-3-chart: #3468b0;
+  --color-maturity-4-bg: #2f62a8;
+  --color-maturity-4-text: #ffffff;
+  --color-maturity-4-chart: #214c8a;
+  --color-maturity-5-bg: #11305f;
+  --color-maturity-5-text: #ffffff;
+  --color-maturity-5-chart: #0d2548;
+
+  --color-strength-bg: #e1f2e9;
+  --color-strength-text: #134d36;
+  --color-strength-solid: #1b7a56;
+  --color-attention-bg: #fcefd3;
+  --color-attention-text: #6b4100;
+  --color-attention-solid: #a35f00;
+  --color-critical-bg: #fbe4e4;
+  --color-critical-text: #8f1f1f;
+  --color-critical-solid: #b42b2b;
+  --color-neutral-bg: #e8ecf1;
+  --color-neutral-text: #37445a;
+  --color-neutral-solid: #5d6b82;
+
+  --color-status-proposed-bg: #e8ecf1;
+  --color-status-proposed-text: #37445a;
+  --color-status-accepted-bg: #e0eafa;
+  --color-status-accepted-text: #17407f;
+  --color-status-clarified-bg: #ecebfa;
+  --color-status-clarified-text: #38368a;
+  --color-status-rejected-bg: #dfe3ea;
+  --color-status-rejected-text: #2c3646;
+  --color-status-inprogress-bg: #dff1f6;
+  --color-status-inprogress-text: #0b4f61;
+  --color-status-done-bg: #e1f2e9;
+  --color-status-done-text: #134d36;
+  --color-status-confirmed-bg: #d6efe3;
+  --color-status-confirmed-text: #0f4430;
+  --color-status-notconfirmed-bg: #fcefd3;
+  --color-status-notconfirmed-text: #6b4100;
+  --color-status-overdue-bg: #fbe4e4;
+  --color-status-overdue-text: #8f1f1f;
+
+  --color-source-wg: #1f4e9c;
+  --color-source-os: #b0521a;
+  --color-source-experts: #6a3d9e;
+  --color-source-facts: #1b7a56;
+
+  --color-cat-culture: #17806a;
+  --color-cat-system: #2f62a8;
+  --color-cat-accountability: #a35f00;
+  --color-cat-neutral: #7b889c;
+
+  --shadow-sm: 0 1px 2px rgb(22 32 46 / 0.06), 0 1px 1px rgb(22 32 46 / 0.04);
+  --shadow-md: 0 4px 12px rgb(22 32 46 / 0.08), 0 1px 3px rgb(22 32 46 / 0.06);
+  --shadow-lg: 0 12px 32px rgb(22 32 46 / 0.14), 0 2px 6px rgb(22 32 46 / 0.08);
+}
+
+/* Друк завжди світлий: ті самі значення, що й у світлій темі */
+@media print {
+  :root {
+    --color-bg: #f4f6f9;
+    --color-surface: #ffffff;
+    --color-surface-raised: #ffffff;
+    --color-surface-muted: #ebeff4;
+    --color-border: #d3dae4;
+    --color-border-strong: #7b889c;
+    --color-text: #16202e;
+    --color-text-muted: #455166;
+
+    --color-accent: #1f4e9c;
+    --color-accent-hover: #173f80;
+    --color-accent-active: #11326a;
+    --color-accent-soft: #e4ecf8;
+    --color-on-accent: #ffffff;
+    --color-focus: #1f4e9c;
+
+    --color-maturity-1-bg: #e9f0fa;
+    --color-maturity-1-text: #16202e;
+    --color-maturity-1-chart: #6a95cf;
+    --color-maturity-2-bg: #c8daf1;
+    --color-maturity-2-text: #16202e;
+    --color-maturity-2-chart: #5486c6;
+    --color-maturity-3-bg: #8fb2e0;
+    --color-maturity-3-text: #0c1626;
+    --color-maturity-3-chart: #3468b0;
+    --color-maturity-4-bg: #2f62a8;
+    --color-maturity-4-text: #ffffff;
+    --color-maturity-4-chart: #214c8a;
+    --color-maturity-5-bg: #11305f;
+    --color-maturity-5-text: #ffffff;
+    --color-maturity-5-chart: #0d2548;
+
+    --color-strength-bg: #e1f2e9;
+    --color-strength-text: #134d36;
+    --color-strength-solid: #1b7a56;
+    --color-attention-bg: #fcefd3;
+    --color-attention-text: #6b4100;
+    --color-attention-solid: #a35f00;
+    --color-critical-bg: #fbe4e4;
+    --color-critical-text: #8f1f1f;
+    --color-critical-solid: #b42b2b;
+    --color-neutral-bg: #e8ecf1;
+    --color-neutral-text: #37445a;
+    --color-neutral-solid: #5d6b82;
+
+    --color-status-proposed-bg: #e8ecf1;
+    --color-status-proposed-text: #37445a;
+    --color-status-accepted-bg: #e0eafa;
+    --color-status-accepted-text: #17407f;
+    --color-status-clarified-bg: #ecebfa;
+    --color-status-clarified-text: #38368a;
+    --color-status-rejected-bg: #dfe3ea;
+    --color-status-rejected-text: #2c3646;
+    --color-status-inprogress-bg: #dff1f6;
+    --color-status-inprogress-text: #0b4f61;
+    --color-status-done-bg: #e1f2e9;
+    --color-status-done-text: #134d36;
+    --color-status-confirmed-bg: #d6efe3;
+    --color-status-confirmed-text: #0f4430;
+    --color-status-notconfirmed-bg: #fcefd3;
+    --color-status-notconfirmed-text: #6b4100;
+    --color-status-overdue-bg: #fbe4e4;
+    --color-status-overdue-text: #8f1f1f;
+
+    --color-source-wg: #1f4e9c;
+    --color-source-os: #b0521a;
+    --color-source-experts: #6a3d9e;
+    --color-source-facts: #1b7a56;
+
+    --color-cat-culture: #17806a;
+    --color-cat-system: #2f62a8;
+    --color-cat-accountability: #a35f00;
+    --color-cat-neutral: #7b889c;
+
+    --shadow-sm: 0 1px 2px rgb(22 32 46 / 0.06), 0 1px 1px rgb(22 32 46 / 0.04);
+    --shadow-md: 0 4px 12px rgb(22 32 46 / 0.08), 0 1px 3px rgb(22 32 46 / 0.06);
+    --shadow-lg: 0 12px 32px rgb(22 32 46 / 0.14), 0 2px 6px rgb(22 32 46 / 0.08);
+  }
 }
 
 @media (min-width: 48rem) {

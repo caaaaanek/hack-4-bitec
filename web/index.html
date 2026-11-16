@@ -3,7 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light" />
+    <meta name="color-scheme" content="dark light" />
+    <script>
+      /* Тема до першого малювання: темна за замовчуванням, вибір у localStorage */
+      try {
+        var t = localStorage.getItem('iap-theme')
+        document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark')
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark')
+      }
+    </script>
     <link rel="icon" href="data:," />
     <title>Платформа оцінювання доброчесності</title>
   </head>

@@ -3,6 +3,10 @@
   @page {
     margin: 14mm;
   }
+  /* Друк завжди світлий: токени світлої теми задані в tokens.css під @media print */
+  html {
+    color-scheme: light !important;
+  }
   html,
   body {
     background: #fff !important;
