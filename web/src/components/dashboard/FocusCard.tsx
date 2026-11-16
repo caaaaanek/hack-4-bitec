@@ -17,7 +17,7 @@ import type { Insight } from '@/demo/institutions'
 const ACTION_ICON = { accountability: SearchCheck, system: FileText, culture: GraduationCap }
 
 const row =
-  'flex items-center gap-3 rounded-[10px] px-1.5 py-2.5 text-text no-underline hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus'
+  'flex items-center gap-3 rounded-[10px] px-1.5 py-1.5 text-text no-underline hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus'
 
 /** «Фокус»: що потребує уваги, сильні сторони, заходи в трекері і переходи до рекомендацій і звіту. */
 export function FocusCard({
@@ -96,7 +96,7 @@ export function FocusCard({
               <ArrowRight aria-hidden className="size-4 shrink-0 text-text-muted" />
             </Link>
           ) : (
-            <p className="m-0 flex items-center gap-3 px-1.5 py-2.5 text-body">
+            <p className="m-0 flex items-center gap-3 px-1.5 py-2 text-body">
               <ListChecks aria-hidden className="size-4 text-text-muted" />
               Заходи в трекері: {measures.total}
               {measures.overdue > 0 && (

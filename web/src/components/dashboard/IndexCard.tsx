@@ -61,11 +61,11 @@ function MiniTrend({ series }: { series: CyclePoint[] }) {
         <span className="text-caption text-text-muted">Динаміка</span>
         <span className="text-caption text-text-muted">{series.length} цикли</span>
       </div>
-      <div aria-hidden className="h-[130px]">
+      <div aria-hidden className="h-[110px]">
         <ResponsiveContainer
           width="100%"
           height="100%"
-          initialDimension={{ width: 300, height: 130 }}
+          initialDimension={{ width: 300, height: 110 }}
         >
           <AreaChart data={data} margin={{ top: 6, right: 22, bottom: 0, left: 22 }}>
             <defs>
@@ -126,7 +126,7 @@ export function IndexCard({
         ? 'bg-neutral-bg text-neutral-text'
         : 'bg-critical-bg text-critical-text'
   return (
-    <Card as="section" aria-labelledby={hid} className={cn('flex flex-col gap-4', className)}>
+    <Card as="section" aria-labelledby={hid} className={cn('flex flex-col gap-3', className)}>
       <div className="grid gap-x-8 gap-y-4 md:grid-cols-2">
         <div className="min-w-0">
           <div className="flex flex-wrap items-start justify-between gap-2">

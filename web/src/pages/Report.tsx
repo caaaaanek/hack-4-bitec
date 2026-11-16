@@ -26,7 +26,7 @@ export function Report() {
         </Button>
       </div>
 
-      <Card as="article" aria-labelledby="rep-h" className="mx-auto w-full max-w-3xl p-8 md:p-10">
+      <Card as="article" aria-labelledby="rep-h" className="mx-auto w-full max-w-3xl p-5 md:p-10">
         <p className="m-0 text-caption text-text-muted">Звіт за результатами оцінювання</p>
         <h2 id="rep-h" className="m-0 mt-1 text-section">
           {inst.name} · цикл {CYCLE}
@@ -50,46 +50,50 @@ export function Report() {
         </p>
 
         <h3 className="m-0 mt-6 text-card">Компоненти індексу</h3>
-        <table className="mt-2 w-full border-collapse text-body">
-          <caption className="sr-only">Сприйняття, факти й зараховане значення компонентів</caption>
-          <thead>
-            <tr className="bg-surface-muted text-left text-fine text-text-muted">
-              <th scope="col" className="rounded-l-[10px] p-2.5 font-medium">
-                Компонент
-              </th>
-              <th scope="col" className="p-2.5 text-right font-medium">
-                Сприйняття
-              </th>
-              <th scope="col" className="p-2.5 text-right font-medium">
-                Факти
-              </th>
-              <th scope="col" className="p-2.5 text-right font-medium">
-                Зараховано
-              </th>
-              <th scope="col" className="rounded-r-[10px] p-2.5 font-medium">
-                Рівень
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {inst.components.map((c) => (
-              <tr key={c.id} className="border-b border-border last:border-b-0">
-                <th scope="row" className="p-2.5 text-left font-normal">
-                  {COMPONENT_LABELS[c.id]}
+        <div className="overflow-x-auto">
+          <table className="mt-2 w-full border-collapse text-body">
+            <caption className="sr-only">
+              Сприйняття, факти й зараховане значення компонентів
+            </caption>
+            <thead>
+              <tr className="bg-surface-muted text-left text-fine text-text-muted">
+                <th scope="col" className="rounded-l-[10px] p-2.5 font-medium">
+                  Компонент
                 </th>
-                <td className="tabular p-2.5 text-right">{fmt(c.perception)}</td>
-                <td className="tabular p-2.5 text-right">{fmt(c.facts)}</td>
-                <td className="tabular p-2.5 text-right font-semibold">
-                  {fmt(c.credited.value)}
-                  {c.credited.limited && ' (з обмеженням)'}
-                </td>
-                <td className="p-2.5">
-                  {levelOf(c.credited.value)} {MATURITY[levelOf(c.credited.value)].name}
-                </td>
+                <th scope="col" className="p-2.5 text-right font-medium">
+                  Сприйняття
+                </th>
+                <th scope="col" className="p-2.5 text-right font-medium">
+                  Факти
+                </th>
+                <th scope="col" className="p-2.5 text-right font-medium">
+                  Зараховано
+                </th>
+                <th scope="col" className="rounded-r-[10px] p-2.5 font-medium">
+                  Рівень
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {inst.components.map((c) => (
+                <tr key={c.id} className="border-b border-border last:border-b-0">
+                  <th scope="row" className="p-2.5 text-left font-normal">
+                    {COMPONENT_LABELS[c.id]}
+                  </th>
+                  <td className="tabular p-2.5 text-right">{fmt(c.perception)}</td>
+                  <td className="tabular p-2.5 text-right">{fmt(c.facts)}</td>
+                  <td className="tabular p-2.5 text-right font-semibold">
+                    {fmt(c.credited.value)}
+                    {c.credited.limited && ' (з обмеженням)'}
+                  </td>
+                  <td className="p-2.5">
+                    {levelOf(c.credited.value)} {MATURITY[levelOf(c.credited.value)].name}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <section aria-labelledby="rep-attn">

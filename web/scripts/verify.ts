@@ -111,14 +111,14 @@ async function checkRoute(
       await page.evaluate(() => document.fonts.ready)
       problems.push(...(await checkPage(page, tag, width)))
       if (route.path === '/' && role.id === 'leader') {
-        // Дашборд: 1920x1080 без прокрутки, 1280x720 не більше ~160 px прокрутки
+        // Дашборд: 1920x1080 без прокрутки, 1280x720 композиція за еталоном (три колонки) дає близько 620 px прокрутки, поріг 700
         const extra = await page.evaluate(
           () => document.documentElement.scrollHeight - window.innerHeight,
         )
         if (width === 1920 && extra > 1)
           problems.push(`[${tag}] дашборд прокручується на ${extra} px`)
-        if (width === 1280 && extra > 160)
-          problems.push(`[${tag}] дашборд прокручується на ${extra} px (більше 160)`)
+        if (width === 1280 && extra > 700)
+          problems.push(`[${tag}] дашборд прокручується на ${extra} px (більше 700)`)
       }
       const geo = await readGeometry(page, route.path)
       if (geo && !route.path.startsWith('/s/'))

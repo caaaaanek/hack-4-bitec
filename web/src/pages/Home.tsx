@@ -62,7 +62,7 @@ export function Home() {
         series={series}
         events={inst.events}
         moreHref="/trends"
-        chartClassName="h-[300px] xl:h-[340px]"
+        chartClassName="h-[220px] xl:h-[220px]"
         className="xl:col-span-2"
       />
       <FocusCard

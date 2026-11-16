@@ -80,7 +80,7 @@ export function ComponentCard({
   const Arrow = dir === 'up' ? ArrowUp : dir === 'down' ? ArrowDown : Minus
   const sign = delta > 0 ? '+' : delta < 0 ? '−' : ''
   return (
-    <Card as="section" aria-label={COMPONENT_LABELS[id]} className="relative flex flex-col gap-3">
+    <Card as="section" aria-label={COMPONENT_LABELS[id]} className="relative flex flex-col gap-2">
       <div className="flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2.5">
           <IconCircle tone={id} size={32}>
