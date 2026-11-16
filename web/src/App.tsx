@@ -4,6 +4,7 @@ import { ToastProvider } from '@/components/ui'
 import { AppShell } from '@/components/layout/AppShell'
 import { Home } from '@/pages/Home'
 import { Explain } from '@/pages/Explain'
+import { Me } from '@/pages/Me'
 import { Survey } from '@/pages/Survey'
 import { Design } from '@/pages/Design'
 import { Placeholder } from '@/pages/Placeholder'
@@ -78,6 +79,7 @@ export function App() {
                     />
                   }
                 />
+                <Route path="/me" element={<Me />} />
                 <Route path="/design" element={<Design />} />
                 <Route
                   path="*"
