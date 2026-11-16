@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/PageTitle'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
@@ -108,7 +109,7 @@ export function Home() {
     <div data-ready="true" className="flex flex-col gap-3 short:gap-2">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <h1 className="m-0 text-title short:text-section">Огляд закладу</h1>
+          <PageTitle>Огляд закладу</PageTitle>
           <p className="sr-only" data-testid="summary">
             {scoreText(inst.index)}, {MATURITY[level].name}, достовірність {t.letter}
           </p>

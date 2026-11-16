@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/PageTitle'
 import { Link } from 'react-router-dom'
 import { ArrowDown, ArrowRight, ArrowUp, Building2, Minus } from 'lucide-react'
 import { Card, MaturityBadge } from '@/components/ui'
@@ -15,7 +16,7 @@ export function Institutions() {
   return (
     <div data-ready="true" className="flex flex-col gap-3">
       <div>
-        <h1 className="m-0 text-section">Заклади</h1>
+        <PageTitle>Заклади</PageTitle>
         <p className="m-0 text-body text-text-muted">
           Показано узагальнені дані. Заклади не порівнюються між собою.
         </p>

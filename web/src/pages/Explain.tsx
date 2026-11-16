@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/PageTitle'
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import {
@@ -231,7 +232,7 @@ function ExplainInner({ initial, nodeId }: { initial: ComponentId | null; nodeId
     <div data-ready="true" className="flex flex-col gap-3">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="m-0 text-section">Розклад індексу</h1>
+          <PageTitle>Розклад індексу</PageTitle>
           <p className="m-0 text-caption text-text-muted">
             Звідки взялося кожне число: індекс, компоненти, питання й показники.
           </p>

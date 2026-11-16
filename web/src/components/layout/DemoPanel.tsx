@@ -1,8 +1,9 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { ChevronDown, FlaskConical, RotateCcw } from 'lucide-react'
+import { RotateCcw } from 'lucide-react'
 import { Button, Radio } from '@/components/ui'
 import { ROLES, ROLE_LABELS } from '@/lib/access'
 import { DEMO_UNITS, useDemo } from '@/demo/demoContext'
+import { roleInitials } from './roleInitials'
 
 /** Компактна кнопка «Демо» з випадною панеллю: роль, підрозділ респондента, скидання. */
 export function DemoPanel() {
@@ -31,13 +32,11 @@ export function DemoPanel() {
         aria-expanded={open}
         aria-controls={panelId}
         aria-label={`Демо. Роль: ${ROLE_LABELS[role]}`}
-        title="Усі дані на екрані синтетичні"
+        title={`Демо. Роль: ${ROLE_LABELS[role]}. Усі дані на екрані синтетичні`}
         onClick={() => setOpen((v) => !v)}
-        className="touch-target inline-flex items-center gap-1.5 rounded-md border border-border-strong bg-surface-muted px-3 text-caption font-semibold text-text focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+        className="inline-flex size-[38px] items-center justify-center rounded-full bg-accent-soft text-caption font-bold text-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
       >
-        <FlaskConical aria-hidden className="size-4" />
-        Демо
-        <ChevronDown aria-hidden className="size-4" />
+        {roleInitials(ROLE_LABELS[role])}
       </button>
       {open && (
         <div

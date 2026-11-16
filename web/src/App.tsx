@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/PageTitle'
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ToastProvider } from '@/components/ui'
@@ -86,7 +87,7 @@ export function App() {
                   path="*"
                   element={
                     <div data-ready="true">
-                      <h1 className="text-title">Сторінку не знайдено</h1>
+                      <PageTitle>Сторінку не знайдено</PageTitle>
                       <p className="mt-2 text-body-lg text-text-muted">
                         Перевірте адресу або поверніться на{' '}
                         <Link className="text-accent underline" to="/">

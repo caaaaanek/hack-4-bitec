@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/PageTitle'
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Inbox, Plus, Trash2 } from 'lucide-react'
@@ -161,7 +162,7 @@ export function Design() {
             На головну
           </Link>
         </p>
-        <h1 className="text-title">Дизайн-система</h1>
+        <PageTitle>Дизайн-система</PageTitle>
         <p className="text-body-lg text-text-muted max-w-(--prose-max)">
           Токени й базові компоненти. Наведення, фокус і натискання перевіряйте взаємодією з
           елементами нижче: фокус видно на кожному з них.

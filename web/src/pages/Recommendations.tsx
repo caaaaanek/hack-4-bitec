@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/PageTitle'
 import { useMemo, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, CircleCheck, Lightbulb, MessageSquareText, X } from 'lucide-react'
@@ -322,7 +323,7 @@ export function Recommendations() {
   return (
     <div data-ready="true" className="flex flex-col gap-3">
       <div>
-        <h1 className="m-0 text-section">Рекомендації</h1>
+        <PageTitle>Рекомендації</PageTitle>
         <p className="m-0 text-body text-text-muted">
           Рекомендація це пропозиція системи, рішення приймає керівник.
         </p>

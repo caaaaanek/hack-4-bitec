@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/PageTitle'
 import { Link2, Workflow } from 'lucide-react'
 import { Badge, Card, Table, type BadgeTone, type TableColumn } from '@/components/ui'
 import {
@@ -32,7 +33,7 @@ export function Integrations() {
   return (
     <div data-ready="true" className="flex flex-col gap-3">
       <div>
-        <h1 className="m-0 text-section">Звідки беруться дані</h1>
+        <PageTitle>Звідки беруться дані</PageTitle>
         <p className="m-0 text-body text-text-muted">
           Чесні статуси: що працює вже, що вносять вручну, а що лише планується.
         </p>

@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/PageTitle'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { AlarmClock, Columns3, ListChecks, ShieldCheck, Table2 } from 'lucide-react'
@@ -221,7 +222,7 @@ export function Tracker() {
     <div data-ready="true" className="flex flex-col gap-3">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="m-0 text-section">Трекер заходів</h1>
+          <PageTitle>Трекер заходів</PageTitle>
           <p className="m-0 text-body text-text-muted">
             {measures.length} заходів
             {overdueCount > 0

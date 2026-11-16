@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/PageTitle'
 import { CheckCheck, Compass, HeartHandshake } from 'lucide-react'
 import { Card, HiddenGroupState, MaturityBadge, MATURITY } from '@/components/ui'
 import { fmt, fmtIndex, K_MIN_GROUP } from '@/lib/scoring/methodology'
@@ -46,7 +47,7 @@ export function Me() {
   return (
     <div data-ready="true" className="max-w-3xl space-y-4 xl:max-w-none">
       <div>
-        <h1 className="text-title">Мої результати</h1>
+        <PageTitle>Мої результати</PageTitle>
         <p className="mt-1 flex items-center gap-2 text-body-lg text-text-muted">
           <HeartHandshake aria-hidden className="size-5 shrink-0 text-accent" />
           Дякуємо, ось що ви допомогли побачити.

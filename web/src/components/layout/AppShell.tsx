@@ -2,15 +2,62 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import { cn } from '@/lib/cn'
-import { ForbiddenState, Logo, SkipLink } from '@/components/ui'
+import { ForbiddenState, Logo, Select, SkipLink } from '@/components/ui'
 import { useInstitution } from '@/demo/useInstitution'
 import { useNavCounts } from '@/demo/navCounts'
-import { canAccess, defaultRoute, isKnownRoute, type Role } from '@/lib/access'
+import {
+  ROLES,
+  ROLE_LABELS,
+  canAccess,
+  defaultRoute,
+  isKnownRoute,
+  isRole,
+  type Role,
+} from '@/lib/access'
 import { useDemo } from '@/demo/demoContext'
 import { HeaderActions } from './HeaderActions'
+import { PAGE_TITLE_SLOT, PageTitle } from './PageTitle'
 import { navFor } from './nav'
 
-/** compact: на ширинах 1280-1535 меню згорнуте в іконки (розгортається кнопкою). */
+/** Назва продукту: «Integrity» жирним, «Index» приглушено. */
+function Brand({ showText }: { showText: boolean }) {
+  return (
+    <div className="flex items-center gap-2.5 px-1.5">
+      <Logo />
+      {showText && (
+        <span className="text-section leading-none tracking-tight text-text">
+          <span className="font-bold">Integrity</span>{' '}
+          <span className="font-medium text-text-muted">Index</span>
+        </span>
+      )}
+    </div>
+  )
+}
+
+/** Картка «Роль» унизу бічної панелі: вибір ролі демо (зміна ролі веде на її головний екран). */
+function RoleCard() {
+  const { role, setRole } = useDemo()
+  return (
+    <div className="rounded-[14px] bg-surface-muted p-3">
+      <label className="flex flex-col gap-2 text-fine text-text-muted">
+        Роль
+        <Select
+          aria-label="Роль для демо"
+          value={role}
+          onChange={(e) => isRole(e.target.value) && setRole(e.target.value)}
+          className="!h-9 !rounded-[10px] !py-0 !text-body !text-text"
+        >
+          {ROLES.map((r) => (
+            <option key={r} value={r}>
+              {ROLE_LABELS[r]}
+            </option>
+          ))}
+        </Select>
+      </label>
+    </div>
+  )
+}
+
 function NavList({
   role,
   onNavigate,
@@ -35,25 +82,25 @@ function NavList({
               title={count ? `${label}. ${count.label}` : label}
               className={({ isActive }) =>
                 cn(
-                  'group touch-h relative flex items-center gap-3 rounded-md px-3 text-body no-underline',
+                  'group relative flex min-h-10 items-center gap-3 rounded-[12px] px-3 py-2.5 text-body font-medium no-underline',
                   !expanded && 'justify-center px-0 2xl:justify-start 2xl:px-3',
                   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
                   isActive
-                    ? 'bg-accent-soft font-semibold text-accent before:absolute before:inset-y-1.5 before:left-0 before:w-0.5 before:rounded-full before:bg-accent'
+                    ? 'bg-surface-muted text-text'
                     : 'text-text-muted hover:bg-surface-muted hover:text-text',
                 )
               }
             >
-              <Icon aria-hidden className="size-5 shrink-0" />
-              <span className={cn(!expanded && 'hidden 2xl:inline')}>{label}</span>
+              <Icon aria-hidden className="size-[18px] shrink-0" />
+              <span className={cn('min-w-0 flex-1', !expanded && 'hidden 2xl:inline')}>
+                {label}
+              </span>
               {count && (
                 <span
                   aria-hidden
                   className={cn(
-                    'rounded-full bg-neutral-bg px-1.5 text-caption font-semibold tabular text-neutral-text',
-                    expanded
-                      ? 'ml-auto'
-                      : 'absolute right-0.5 top-0.5 px-1 text-[10px] leading-4 2xl:static 2xl:ml-auto 2xl:px-1.5 2xl:text-caption',
+                    'rounded-full bg-attention-bg px-[7px] py-px text-[11px] font-semibold tabular-nums text-attention-text',
+                    !expanded && 'absolute right-0.5 top-0 px-1 leading-4 2xl:static 2xl:px-[7px]',
                   )}
                 >
                   {expanded ? (
@@ -64,14 +111,6 @@ function NavList({
                       <span className="hidden 2xl:inline">{count.text}</span>
                     </>
                   )}
-                </span>
-              )}
-              {!expanded && (
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute left-full z-50 ml-2 whitespace-nowrap rounded-md border border-border bg-surface-raised px-2 py-1 text-caption font-medium text-text opacity-0 shadow-md group-hover:opacity-100 group-focus-visible:opacity-100 2xl:hidden"
-                >
-                  {label}
                 </span>
               )}
             </NavLink>
@@ -89,6 +128,8 @@ export function AppShell() {
   const { role } = useDemo()
   const institution = useInstitution()
   const allowed = !isKnownRoute(pathname) || canAccess(role, pathname)
+  // «Широке» меню (текст і картка ролі): за кнопкою або на 1920 і ширше (2xl).
+  const textShown = (cls: string) => (wide ? '' : cls)
 
   useEffect(() => {
     if (!open) return
@@ -104,60 +145,79 @@ export function AppShell() {
         aria-label="Основна навігація"
         data-print="hide"
         className={cn(
-          'sticky top-0 hidden h-dvh shrink-0 overflow-y-auto overflow-x-hidden border-r border-border bg-surface p-2 xl:flex xl:flex-col xl:gap-2',
-          wide ? 'w-[232px]' : 'w-14 2xl:w-[232px]',
+          'sticky top-0 hidden h-dvh shrink-0 flex-col gap-[18px] overflow-y-auto overflow-x-hidden border-r border-border bg-surface px-4 pb-4 pt-[22px] xl:flex',
+          wide ? 'w-[260px]' : 'w-[76px] 2xl:w-[260px]',
         )}
       >
-        <div className="flex h-10 items-center gap-2 px-0 2xl:px-1">
-          <Logo className={cn('mx-auto', wide && 'mx-0', '2xl:mx-0')} />
+        <div className={cn(wide ? '' : 'flex justify-center 2xl:block')}>
+          <div className="hidden 2xl:block">
+            <Brand showText />
+          </div>
+          <div className="2xl:hidden">
+            <Brand showText={wide} />
+          </div>
         </div>
-        <NavList role={role} expanded={wide} />
-        <button
-          type="button"
-          aria-expanded={wide}
-          aria-label={wide ? 'Згорнути меню' : 'Розгорнути меню'}
-          title={wide ? 'Згорнути меню' : 'Розгорнути меню'}
-          onClick={() => setWide((v) => !v)}
-          className="touch-h mt-auto inline-flex items-center justify-center gap-2 rounded-md border border-border text-caption text-text-muted hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus 2xl:hidden"
-        >
-          {wide ? (
-            <PanelLeftClose aria-hidden className="size-5" />
-          ) : (
-            <PanelLeftOpen aria-hidden className="size-5" />
-          )}
-          {wide && <span>Згорнути</span>}
-        </button>
+        <div className="flex flex-col gap-1.5">
+          <p
+            className={cn(
+              'm-0 px-2.5 text-[11px] uppercase text-text-muted',
+              textShown('hidden 2xl:block'),
+            )}
+          >
+            Меню
+          </p>
+          <NavList role={role} expanded={wide} />
+        </div>
+        <div className="mt-auto flex flex-col gap-2">
+          <div className={textShown('hidden 2xl:block')}>
+            <RoleCard />
+          </div>
+          <button
+            type="button"
+            aria-expanded={wide}
+            aria-label={wide ? 'Згорнути меню' : 'Розгорнути меню'}
+            title={wide ? 'Згорнути меню' : 'Розгорнути меню'}
+            onClick={() => setWide((v) => !v)}
+            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-[12px] text-caption text-text-muted hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus 2xl:hidden"
+          >
+            {wide ? (
+              <PanelLeftClose aria-hidden className="size-5" />
+            ) : (
+              <PanelLeftOpen aria-hidden className="size-5" />
+            )}
+            {wide && <span>Згорнути</span>}
+          </button>
+        </div>
       </nav>
 
       <div className="min-w-0 flex-1">
-        <header data-print="hide" className="sticky top-0 z-30 border-b border-border bg-surface">
-          <div className="mx-auto flex max-w-(--content-max) items-center gap-3 px-(--gutter) py-1.5 short:py-1">
+        <header data-print="hide" className="sticky top-0 z-30 bg-bg/90 backdrop-blur">
+          <div className="flex items-center gap-3 px-4 py-3 md:px-7 md:py-[18px] short:py-2.5">
             <button
               type="button"
               aria-expanded={open}
               aria-controls="mobile-nav"
               onClick={() => setOpen((v) => !v)}
-              className="touch-target inline-flex items-center justify-center gap-2 rounded-md border border-border-strong px-3 text-caption xl:hidden"
+              className="inline-flex size-[38px] items-center justify-center rounded-[12px] border border-border bg-surface xl:hidden"
             >
               {open ? (
                 <X aria-hidden className="size-5" />
               ) : (
                 <Menu aria-hidden className="size-5" />
               )}
-              <span className="hidden md:inline">Меню</span>
-              <span className="sr-only md:hidden">Меню</span>
+              <span className="sr-only">Меню</span>
             </button>
-            <Logo className="hidden md:block xl:hidden" />
-            <div className="min-w-0 flex-1" />
+            <div id={PAGE_TITLE_SLOT} className="flex min-w-0 flex-1 items-center" />
             <HeaderActions role={role} />
           </div>
           {open && (
             <nav
               id="mobile-nav"
               aria-label="Основна навігація"
-              className="border-t border-border bg-surface px-(--gutter) py-3 xl:hidden"
+              className="flex flex-col gap-3 border-y border-border bg-surface px-4 py-3 xl:hidden"
             >
               <NavList role={role} onNavigate={() => setOpen(false)} />
+              <RoleCard />
             </nav>
           )}
         </header>
@@ -166,7 +226,7 @@ export function AppShell() {
           id="main"
           tabIndex={-1}
           key={pathname}
-          className="mx-auto min-w-0 max-w-(--content-max) px-(--gutter) py-3 md:py-4"
+          className="min-w-0 px-4 pb-7 pt-1 md:px-7 short:pb-4"
         >
           {allowed && role === 'observer' && pathname !== '/institutions' && (
             <nav aria-label="Хлібні крихти" className="mb-2 text-caption text-text-muted">
@@ -181,7 +241,7 @@ export function AppShell() {
             <Outlet />
           ) : (
             <div data-ready="true" className="space-y-4">
-              <h1 className="text-title">Сторінка недоступна</h1>
+              <PageTitle>Сторінка недоступна</PageTitle>
               <ForbiddenState homeHref={defaultRoute(role)} />
             </div>
           )}

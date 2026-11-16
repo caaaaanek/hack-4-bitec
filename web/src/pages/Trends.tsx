@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/PageTitle'
 import { useState } from 'react'
 import { ArrowDown, ArrowUp, GitCompareArrows, Minus, TextQuote } from 'lucide-react'
 import { Card, Select } from '@/components/ui'
@@ -50,7 +51,7 @@ export function Trends() {
   return (
     <div data-ready="true" className="flex flex-col gap-3">
       <div>
-        <h1 className="m-0 text-section">Динаміка</h1>
+        <PageTitle>Динаміка</PageTitle>
         <p className="m-0 text-body text-text-muted">
           Як змінювався індекс доброчесності від циклу до циклу. Показано лише цей заклад, без
           порівняння із іншими.

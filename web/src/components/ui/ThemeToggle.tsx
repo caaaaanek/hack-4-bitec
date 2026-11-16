@@ -9,10 +9,12 @@ export function ThemeToggle() {
   return (
     <IconButton
       data-print="hide"
+      variant="secondary"
+      className="!size-[38px] !min-h-0 !min-w-0 !rounded-[12px] !p-0"
       label={dark ? 'Увімкнути світлу тему' : 'Увімкнути темну тему'}
       aria-pressed={!dark}
       onClick={toggle}
-      icon={dark ? <Sun className="size-5" /> : <Moon className="size-5" />}
+      icon={dark ? <Sun className="size-[18px]" /> : <Moon className="size-[18px]" />}
     />
   )
 }

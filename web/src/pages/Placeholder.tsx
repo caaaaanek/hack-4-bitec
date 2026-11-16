@@ -1,3 +1,4 @@
+import { PageTitle } from '@/components/layout/PageTitle'
 import { Link } from 'react-router-dom'
 import type { ReactNode } from 'react'
 import { EmptyState, buttonBase, buttonSizes, buttonVariants } from '@/components/ui'
@@ -17,7 +18,7 @@ export function Placeholder({ title, description, note }: PlaceholderProps) {
   const { role } = useDemo()
   return (
     <div data-ready="true" className="space-y-4">
-      <h1 className="text-title">{title}</h1>
+      <PageTitle>{title}</PageTitle>
       <EmptyState
         title="Розділ готується"
         description={description}

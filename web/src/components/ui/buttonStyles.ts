@@ -8,11 +8,12 @@ export const buttonBase =
   'disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50'
 
 export const buttonVariants: Record<ButtonVariant, string> = {
-  primary: 'bg-accent text-on-accent hover:bg-accent-hover active:bg-accent-active',
+  primary: 'bg-primary text-on-primary hover:bg-primary-hover active:bg-primary-active',
   secondary:
-    'bg-surface-raised text-text border border-border-strong hover:bg-surface-muted active:bg-border',
+    'bg-surface text-text border border-border hover:bg-surface-muted active:bg-surface-muted',
   ghost: 'bg-transparent text-accent hover:bg-accent-soft active:bg-accent-soft',
-  danger: 'bg-critical-solid text-on-accent hover:brightness-90 active:brightness-75',
+  danger:
+    'bg-critical-bg text-critical-text border border-critical-solid/40 hover:brightness-95 active:brightness-90',
 }
 
 export const buttonSizes: Record<ButtonSize, string> = {
