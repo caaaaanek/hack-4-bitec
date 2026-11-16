@@ -7,16 +7,14 @@ import {
   Card,
   EmptyState,
   Select,
+  SegmentedControl,
   StatusBadge,
   Table,
-  buttonBase,
-  buttonSizes,
   useToast,
   STATUSES,
   type StatusId,
   type TableColumn,
 } from '@/components/ui'
-import { cn } from '@/lib/cn'
 import {
   MEASURE_TRANSITIONS,
   daysOverdue,
@@ -201,23 +199,6 @@ export function Tracker() {
       : []),
   ]
 
-  const toggleBtn = (v: View, label: string, icon: React.ReactNode) => (
-    <button
-      type="button"
-      aria-pressed={view === v}
-      onClick={() => setView(v)}
-      className={cn(
-        buttonBase,
-        buttonSizes.md,
-        'rounded-none border-0 first:rounded-l-md last:rounded-r-md',
-        view === v ? 'bg-accent text-on-accent' : 'bg-surface text-text hover:bg-surface-muted',
-      )}
-    >
-      {icon}
-      {label}
-    </button>
-  )
-
   return (
     <div data-ready="true" className="flex flex-col gap-3">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -233,14 +214,15 @@ export function Tracker() {
               : 'Режим читання: змінювати статуси може лише керівник.'}
           </p>
         </div>
-        <div
-          role="group"
-          aria-label="Вигляд"
-          className="inline-flex rounded-md border border-border-strong"
-        >
-          {toggleBtn('table', 'Таблиця', <Table2 aria-hidden className="size-4" />)}
-          {toggleBtn('board', 'Дошка', <Columns3 aria-hidden className="size-4" />)}
-        </div>
+        <SegmentedControl
+          label="Вигляд"
+          value={view}
+          onChange={setView}
+          options={[
+            { value: 'table', label: 'Таблиця', icon: <Table2 aria-hidden className="size-4" /> },
+            { value: 'board', label: 'Дошка', icon: <Columns3 aria-hidden className="size-4" /> },
+          ]}
+        />
       </div>
 
       <div role="group" aria-label="Фільтри" className="flex flex-wrap items-end gap-3">

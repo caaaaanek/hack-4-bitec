@@ -11,7 +11,15 @@ import {
   Table2,
   TriangleAlert,
 } from 'lucide-react'
-import { Badge, Card, SourceMarker, buttonBase, buttonSizes, buttonVariants } from '@/components/ui'
+import {
+  Badge,
+  Card,
+  SegmentedControl,
+  SourceMarker,
+  buttonBase,
+  buttonSizes,
+  buttonVariants,
+} from '@/components/ui'
 import { SOURCES } from '@/components/ui/config'
 import { cn } from '@/lib/cn'
 import { Num } from '@/components/dashboard/Num'
@@ -246,30 +254,12 @@ function ExplainInner({ initial, nodeId }: { initial: ComponentId | null; nodeId
             <CircleHelp aria-hidden className="size-4" />
             Як це рахується
           </button>
-          <div
-            role="group"
-            aria-label="Що показувати"
-            className="inline-flex rounded-md border border-border-strong"
-          >
-            {MODES.map((m) => (
-              <button
-                key={m}
-                type="button"
-                aria-pressed={mode === m}
-                onClick={() => setMode(m)}
-                className={cn(
-                  buttonBase,
-                  buttonSizes.md,
-                  'rounded-none first:rounded-l-md last:rounded-r-md border-0',
-                  mode === m
-                    ? 'bg-accent text-white'
-                    : 'bg-surface text-text hover:bg-surface-muted',
-                )}
-              >
-                {MODE_LABELS[m]}
-              </button>
-            ))}
-          </div>
+          <SegmentedControl
+            label="Що показувати"
+            value={mode}
+            onChange={setMode}
+            options={MODES.map((m) => ({ value: m, label: MODE_LABELS[m] }))}
+          />
           <button
             type="button"
             aria-pressed={asTable}

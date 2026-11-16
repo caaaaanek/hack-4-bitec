@@ -10,7 +10,7 @@ import {
   ShieldCheck,
   Gauge,
 } from 'lucide-react'
-import { Card } from '@/components/ui'
+import { BigNumber, Card, IconCircle } from '@/components/ui'
 import { cn } from '@/lib/cn'
 
 interface TileProps {
@@ -30,9 +30,9 @@ function Tile({ label, value, sub, icon, to, onClick, href, actionLabel }: TileP
   const body = (
     <>
       <span className="flex items-center gap-1.5 text-caption font-semibold text-text-muted">
-        <span aria-hidden className="inline-flex size-4 items-center justify-center">
+        <IconCircle tone="accent" size={24}>
           {icon}
-        </span>
+        </IconCircle>
         {label}
       </span>
       <span className="mt-1 flex items-center gap-x-3">
@@ -44,7 +44,7 @@ function Tile({ label, value, sub, icon, to, onClick, href, actionLabel }: TileP
     </>
   )
   const cls =
-    'block h-full rounded-lg p-3 text-text no-underline short:px-3 short:py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus'
+    'block h-full rounded-lg px-4 py-3 text-text no-underline short:py-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus'
   let el: ReactNode
   if (to) {
     el = (
@@ -113,7 +113,7 @@ export function KpiRow(p: KpiRowProps) {
       <Tile
         label="Індекс доброчесності"
         icon={<Gauge className="size-4" />}
-        value={p.index}
+        value={<BigNumber value={p.index} />}
         sub={
           <>
             <span>{p.level}</span>

@@ -1,9 +1,10 @@
 import { useId, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import {
+  Area,
   CartesianGrid,
+  ComposedChart,
   Line,
-  LineChart,
   ReferenceArea,
   ReferenceDot,
   ReferenceLine,
@@ -31,7 +32,7 @@ type Shape = 'circle' | 'square' | 'triangle' | 'diamond'
 
 /** Лінії розрізняються кольором, штрихом і формою маркера: колір не єдиний носій. */
 const LINE_STYLE: Record<LineId, { color: string; dash?: string; shape: Shape; label: string }> = {
-  index: { color: 'var(--color-accent)', shape: 'circle', label: 'Індекс доброчесності' },
+  index: { color: 'var(--color-data)', shape: 'circle', label: 'Індекс доброчесності' },
   culture: {
     color: 'var(--color-cat-culture)',
     dash: '7 4',
@@ -102,19 +103,34 @@ export function TrendsChart({ series, events, fullSeries, lines, className }: Tr
         height="100%"
         initialDimension={{ width: 600, height: 300 }}
       >
-        <LineChart data={data} margin={{ top: 8, right: 4, bottom: 4, left: 4 }}>
+        <ComposedChart data={data} margin={{ top: 8, right: 4, bottom: 4, left: 4 }}>
           {BOUNDS.slice(0, -1).map((b, i) => (
             <ReferenceArea
               key={`band-${i}`}
               y1={b}
               y2={BOUNDS[i + 1]!}
               fill={`var(--color-maturity-${i + 1}-chart)`}
-              fillOpacity={0.1}
+              fillOpacity={0.06}
               stroke="none"
               ifOverflow="visible"
             />
           ))}
+          <defs>
+            <linearGradient id="dyn-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="var(--color-data)" stopOpacity={0.28} />
+              <stop offset="100%" stopColor="var(--color-data)" stopOpacity={0} />
+            </linearGradient>
+          </defs>
           <CartesianGrid vertical={false} stroke="none" />
+          <Area
+            dataKey="index"
+            stroke="none"
+            fill="url(#dyn-grad)"
+            dot={false}
+            activeDot={false}
+            isAnimationActive={false}
+            legendType="none"
+          />
           {LEVEL_UPPER_BOUNDS.map((b) => (
             <ReferenceLine
               key={b}
@@ -200,7 +216,7 @@ export function TrendsChart({ series, events, fullSeries, lines, className }: Tr
           <Line
             dataKey="index"
             stroke={LINE_STYLE.index.color}
-            strokeWidth={3}
+            strokeWidth={2.5}
             isAnimationActive={false}
             dot={({ cx = 0, cy = 0, index }) => (
               <g key={`i-${index}`}>{marker('circle', cx, cy, 5, LINE_STYLE.index.color)}</g>
@@ -237,7 +253,7 @@ export function TrendsChart({ series, events, fullSeries, lines, className }: Tr
               />
             )
           })}
-        </LineChart>
+        </ComposedChart>
       </ResponsiveContainer>
     </div>
   )

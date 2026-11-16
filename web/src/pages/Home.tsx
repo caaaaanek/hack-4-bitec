@@ -211,7 +211,7 @@ export function Home() {
           series={series}
           events={inst.events}
           moreHref="/trends"
-          chartClassName="h-[250px] short:h-[210px] xl:h-[270px]"
+          chartClassName="h-[250px] short:h-[200px] xl:h-[250px]"
           className="xl:col-span-7"
         />
       </div>

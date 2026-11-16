@@ -22,7 +22,7 @@ export interface RadarRow {
   previous: number
 }
 
-const CUR = 'var(--color-accent)'
+const CUR = 'var(--color-data)'
 const PREV = 'var(--color-neutral-solid)'
 
 /** Радар по трьох компонентах: поточний цикл суцільний з колом, попередній пунктирний з квадратом. */

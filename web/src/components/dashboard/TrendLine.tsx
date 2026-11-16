@@ -26,12 +26,12 @@ export function TrendLine({
           <YAxis hide domain={[30, 60]} />
           <Line
             dataKey="index"
-            stroke="var(--color-accent)"
+            stroke="var(--color-data)"
             strokeWidth={3}
             isAnimationActive={false}
             dot={{
               r: 5,
-              fill: 'var(--color-accent)',
+              fill: 'var(--color-data)',
               stroke: 'var(--color-surface)',
               strokeWidth: 2,
             }}

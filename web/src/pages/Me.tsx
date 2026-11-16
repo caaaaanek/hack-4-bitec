@@ -1,6 +1,6 @@
 import { PageTitle } from '@/components/layout/PageTitle'
 import { CheckCheck, Compass, HeartHandshake } from 'lucide-react'
-import { Card, HiddenGroupState, MaturityBadge, MATURITY } from '@/components/ui'
+import { Card, HiddenGroupState, MaturityBadge, MATURITY, SegmentedBar } from '@/components/ui'
 import { fmt, fmtIndex, K_MIN_GROUP } from '@/lib/scoring/methodology'
 import { useDemo } from '@/demo/demoContext'
 import { getMyResults, type MyComponent } from '@/demo/me'
@@ -17,20 +17,11 @@ function Meter({ c }: { c: MyComponent }) {
           <MaturityBadge level={c.level} />
         </span>
       </div>
-      <div
-        role="meter"
-        aria-label={`${c.label}: ${fmt(c.value)} з 100, рівень ${c.level} ${MATURITY[c.level].name}`}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-valuenow={c.value}
-        className="h-3 overflow-hidden rounded-full bg-surface-muted"
-      >
-        <div
-          data-maturity={c.level}
-          className={`h-full rounded-full border-r-2 ${MATURITY[c.level].classes}`}
-          style={{ width: `${c.value}%` }}
-        />
-      </div>
+      <SegmentedBar
+        meter
+        value={c.value}
+        label={`${c.label}: ${fmt(c.value)} з 100, рівень ${c.level} ${MATURITY[c.level].name}`}
+      />
     </li>
   )
 }

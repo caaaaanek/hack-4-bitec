@@ -6,11 +6,21 @@ import {
   GraduationCap,
   Info,
   Layers,
+  Scale,
   SearchCheck,
+  Users,
   TrendingUp,
   type LucideIcon,
 } from 'lucide-react'
-import { Badge, Card, MaturityBadge, Tooltip, ChangeChip } from '@/components/ui'
+import {
+  Badge,
+  BigNumber,
+  Card,
+  IconCircle,
+  MaturityBadge,
+  Tooltip,
+  ChangeChip,
+} from '@/components/ui'
 import type { MaturityLevel } from '@/components/ui'
 import { cn } from '@/lib/cn'
 import { COMPONENT_LABELS, fmt, type ComponentId } from '@/lib/scoring/methodology'
@@ -25,10 +35,10 @@ export interface ComponentRow {
   limitedHint?: string
 }
 
-const COMPONENT_BAR: Record<ComponentId, string> = {
-  culture: 'bg-cat-culture',
-  system: 'bg-cat-system',
-  accountability: 'bg-cat-accountability',
+const COMPONENT_ICON: Record<ComponentId, LucideIcon> = {
+  culture: Users,
+  system: Layers,
+  accountability: Scale,
 }
 
 /** Три компоненти в одній картці: кожен рядок веде на розклад цього компонента. */
@@ -44,43 +54,45 @@ export function ComponentsCard({ rows, className }: { rows: ComponentRow[]; clas
         Компоненти індексу
       </h2>
       <ul className="m-0 flex flex-1 list-none flex-col divide-y divide-border p-0">
-        {rows.map((r) => (
-          <li
-            key={r.id}
-            className="relative flex flex-1 items-center gap-3 py-2 first:pt-0 last:pb-0 hover:bg-surface-raised"
-          >
-            <span
-              aria-hidden
-              className={cn('w-0.5 self-stretch rounded-full', COMPONENT_BAR[r.id])}
-            />
-            <div className="min-w-0 flex-1">
-              <Link
-                to={`/explain?c=${r.id}`}
-                className="text-body font-semibold text-text no-underline after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
-              >
-                {COMPONENT_LABELS[r.id]}
-                <span className="sr-only">: розклад компонента</span>
-              </Link>
-              <div className="mt-1 flex flex-wrap items-center gap-2">
-                <MaturityBadge level={r.level} />
-                {r.limitedHint && (
-                  <span className="relative z-10">
-                    <Tooltip content={r.limitedHint}>
-                      <Badge tone="attention">
-                        <Info aria-hidden className="size-3.5" />
-                        Зараховано з обмеженням
-                      </Badge>
-                    </Tooltip>
-                  </span>
-                )}
+        {rows.map((r) => {
+          const Icon = COMPONENT_ICON[r.id]
+          return (
+            <li
+              key={r.id}
+              className="relative flex flex-1 items-center gap-3 py-2.5 first:pt-0 last:pb-0 hover:bg-surface-muted/50"
+            >
+              <IconCircle tone={r.id} size={32}>
+                <Icon className="size-4" />
+              </IconCircle>
+              <div className="min-w-0 flex-1">
+                <Link
+                  to={`/explain?c=${r.id}`}
+                  className="text-body font-semibold text-text no-underline after:absolute after:inset-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+                >
+                  {COMPONENT_LABELS[r.id]}
+                  <span className="sr-only">: розклад компонента</span>
+                </Link>
+                <div className="mt-1 flex flex-wrap items-center gap-2">
+                  <MaturityBadge level={r.level} />
+                  {r.limitedHint && (
+                    <span className="relative z-10">
+                      <Tooltip content={r.limitedHint}>
+                        <Badge tone="attention">
+                          <Info aria-hidden className="size-3.5" />
+                          Зараховано з обмеженням
+                        </Badge>
+                      </Tooltip>
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col items-end gap-1">
-              <span className="text-section font-bold leading-none tabular">{fmt(r.value)}</span>
-              <ChangeChip delta={r.delta} />
-            </div>
-          </li>
-        ))}
+              <div className="flex flex-col items-end gap-1">
+                <BigNumber value={fmt(r.value)} />
+                <ChangeChip delta={r.delta} />
+              </div>
+            </li>
+          )
+        })}
       </ul>
     </Card>
   )
@@ -112,7 +124,7 @@ export function AttentionPanel({
 }) {
   const to = (it: Insight) => (it.component ? `/explain?c=${it.component}` : '/explain')
   const row =
-    'relative flex items-center gap-2 rounded-md border border-border bg-surface py-1.5 pl-3 pr-2 text-text no-underline short:py-1 hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus before:absolute before:inset-y-1.5 before:left-0 before:w-1 before:rounded-full before:content-[""]'
+    'flex items-center gap-3 rounded-[10px] px-1.5 py-2 text-text no-underline short:py-1.5 hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus'
   return (
     <Card
       as="section"
@@ -124,16 +136,17 @@ export function AttentionPanel({
         <Eye aria-hidden />
         Що потребує уваги
       </h2>
-      <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
+      <ul className="m-0 flex list-none flex-col divide-y divide-border p-0">
         {attention.map((it) => {
           const Icon = it.component ? ACTION_ICON[it.component] : Eye
           return (
             <li key={it.id}>
-              <Link to={to(it)} title={it.hint} className={cn(row, 'before:bg-attention-solid')}>
+              <Link to={to(it)} title={it.hint} className={row}>
+                <span aria-hidden className="size-2 shrink-0 rounded-full bg-attention-solid" />
                 <Icon aria-hidden className="size-4 shrink-0 text-text-muted" />
                 <span className="min-w-0 flex-1 text-body">{it.title}</span>
                 {it.component && (
-                  <span className="shrink-0 rounded-sm bg-neutral-bg px-1.5 text-caption text-neutral-text">
+                  <span className="shrink-0 rounded-full bg-neutral-bg px-2 py-0.5 text-fine text-neutral-text">
                     {COMPONENT_LABELS[it.component]}
                   </span>
                 )}
@@ -151,10 +164,11 @@ export function AttentionPanel({
           <TrendingUp aria-hidden className="size-4" />
           Сильні сторони
         </p>
-        <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
+        <ul className="m-0 flex list-none flex-col divide-y divide-border p-0">
           {strengths.map((it) => (
             <li key={it.id}>
-              <Link to={to(it)} title={it.hint} className={cn(row, 'before:bg-strength-solid')}>
+              <Link to={to(it)} title={it.hint} className={row}>
+                <span aria-hidden className="size-2 shrink-0 rounded-full bg-strength-solid" />
                 <span className="min-w-0 flex-1 text-body">{it.title}</span>
                 <ArrowRight aria-hidden className="size-4 shrink-0 text-text-muted" />
               </Link>

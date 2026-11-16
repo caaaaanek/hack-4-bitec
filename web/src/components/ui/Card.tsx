@@ -14,7 +14,9 @@ export function Card({ as, interactive = false, className, children, ...rest }: 
     <Tag
       data-print="card"
       className={cn(
-        'card relative min-w-0 rounded-lg border border-border bg-surface p-4 md:p-5',
+        'card relative min-w-0 rounded-lg border border-border bg-surface',
+        // Власні відступи в className мають перевагу над типовими.
+        !/(^|\s)(md:|short:)*p-/.test(className ?? '') && 'p-4 md:p-5',
         interactive &&
           'transition-shadow duration-150 ease-standard hover:bg-surface-raised hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
         className,
