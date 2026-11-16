@@ -27,8 +27,12 @@ export function ChartFrame({
   const [asTable, setAsTable] = useState(false)
   const id = useId()
   return (
-    <Card as="section" aria-labelledby={id} className={cn('flex flex-col p-4 md:p-4', className)}>
-      <div className="mb-2 flex flex-wrap items-start justify-between gap-x-2 gap-y-1">
+    <Card
+      as="section"
+      aria-labelledby={id}
+      className={cn('flex flex-col p-4 md:p-4 short:p-3 short:md:p-3', className)}
+    >
+      <div className="mb-2 short:mb-1 flex flex-wrap items-start justify-between gap-x-2 gap-y-1">
         <div>
           <h2 id={id} className="m-0 text-card">
             {title}
@@ -52,7 +56,7 @@ export function ChartFrame({
       <div className={cn('min-h-0 flex-1', chartClassName)}>
         {asTable ? <div className="overflow-auto">{table}</div> : chart}
       </div>
-      <p className="m-0 mt-2 text-caption text-text-muted">{description}</p>
+      <p className="m-0 mt-2 text-caption text-text-muted short:sr-only">{description}</p>
     </Card>
   )
 }

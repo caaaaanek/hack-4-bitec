@@ -62,9 +62,9 @@ export function Home() {
   const radarDescription = `Цикл ${CYCLE}: ${components.map((c) => `${COMPONENT_LABELS[c.id]} ${fmt(c.credited.value)}`).join(', ')}. Цикл ${prevCycle}: ${components.map((c) => `${COMPONENT_LABELS[c.id]} ${fmt(previous.credited[c.id])}`).join(', ')}.`
 
   return (
-    <div data-ready="true" className="flex flex-col gap-3">
+    <div data-ready="true" className="flex flex-col gap-3 short:gap-2">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="m-0 text-section">Огляд результатів</h1>
+        <h1 className="m-0 text-section short:text-card">Огляд результатів</h1>
         <nav aria-label="Швидкі переходи" className="flex flex-wrap gap-2">
           <Link to="/explain" className={linkBtn('primary')}>
             <ListTree aria-hidden className="size-4" />
@@ -82,14 +82,14 @@ export function Home() {
       </div>
       <DevelopmentBanner />
 
-      <div className="grid gap-3 xl:grid-cols-12">
+      <div className="grid gap-3 short:gap-2 xl:grid-cols-12">
         <ChartFrame
           className="xl:col-span-4"
           title="Індекс доброчесності"
           subtitle="Integrity Index, 0-100"
           description={gaugeDescription}
           chart={
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1 short:gap-0.5">
               <Gauge value={currentIndex} level={currentLevel} />
               <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
                 <MaturityBadge level={currentLevel} />
@@ -126,7 +126,9 @@ export function Home() {
                   (цикл {prevCycle}: {fmtIndex(previousIndex)})
                 </span>
               </p>
-              <TrendLine data={trend} />
+              <div className="short:hidden">
+                <TrendLine data={trend} />
+              </div>
             </div>
           }
           table={
@@ -148,7 +150,7 @@ export function Home() {
           chartClassName="flex flex-col"
           chart={
             <>
-              <div className="min-h-[240px] flex-1">
+              <div className="min-h-[240px] flex-1 short:min-h-[160px]">
                 <ComponentsRadar data={radarData} />
               </div>
               <RadarLegend current={CYCLE} previous={prevCycle} />
@@ -182,7 +184,7 @@ export function Home() {
         </div>
       </div>
 
-      <div className="grid gap-3 xl:grid-cols-12">
+      <div className="grid gap-3 short:gap-2 xl:grid-cols-12">
         <div className="flex flex-col *:flex-1 xl:col-span-3">
           <InsightList title="Сильні сторони" kind="strength" items={strengths} />
         </div>

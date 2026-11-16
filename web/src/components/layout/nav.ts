@@ -1,4 +1,4 @@
-import { FileText, Gauge, Lightbulb, ListTree, Palette, type LucideIcon } from 'lucide-react'
+import { FileText, Gauge, Lightbulb, ListTree, type LucideIcon } from 'lucide-react'
 
 export interface NavItem {
   to: string
@@ -12,5 +12,4 @@ export const NAV_ITEMS: NavItem[] = [
   { to: '/explain', label: 'Розклад індексу', icon: ListTree },
   { to: '/recommendations', label: 'Рекомендації', icon: Lightbulb },
   { to: '/reports', label: 'Звіт', icon: FileText },
-  { to: '/design', label: 'Дизайн-система', icon: Palette },
 ]

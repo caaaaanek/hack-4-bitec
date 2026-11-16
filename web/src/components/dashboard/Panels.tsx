@@ -19,7 +19,7 @@ export function DevelopmentBanner() {
     <div
       role="note"
       data-print="hide"
-      className="flex items-center gap-3 rounded-md border border-border bg-accent-soft px-3 py-1.5"
+      className="flex items-center gap-3 rounded-md border border-border bg-accent-soft px-3 py-0.5 short:py-0"
     >
       <Sprout aria-hidden className="size-5 shrink-0 text-accent" />
       <p className="m-0 flex-1 text-caption text-text">
@@ -46,7 +46,7 @@ export function DevelopmentBanner() {
 
 export function TrustCard({ level, reasons }: { level: TrustLevel; reasons: string[] }) {
   return (
-    <Card as="section" aria-labelledby="trust-h" className="p-4 md:p-4">
+    <Card as="section" aria-labelledby="trust-h" className="p-4 md:p-4 short:p-3 short:md:p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 id="trust-h" className="m-0 text-card">
           Довіра до оцінки
@@ -55,7 +55,7 @@ export function TrustCard({ level, reasons }: { level: TrustLevel; reasons: stri
           <TrustBadge level={level} />
         </Num>
       </div>
-      <p className="m-0 mt-1 text-caption text-text-muted">
+      <p className="m-0 mt-1 text-caption text-text-muted short:sr-only">
         Чи можна вірити цьому результату. Причини:
       </p>
       <ul className="m-0 mt-2 flex list-none flex-col gap-2 p-0">
@@ -91,7 +91,7 @@ export function LimiterBlock({
     <Card
       as="section"
       aria-labelledby="lim-h"
-      className="border-l-4 border-l-attention-solid p-4 md:p-4"
+      className="border-l-4 border-l-attention-solid p-4 md:p-4 short:p-3 short:md:p-3"
     >
       <h2 id="lim-h" className="m-0 flex items-center gap-2 text-card">
         <Info aria-hidden className="size-5 shrink-0 text-attention-text" />
@@ -112,7 +112,12 @@ export function LimiterBlock({
         </Num>
         .
       </p>
-      <svg viewBox="0 0 300 34" className="mt-2 h-auto w-full" aria-hidden focusable="false">
+      <svg
+        viewBox="0 0 300 34"
+        className="mt-2 h-auto w-full short:hidden"
+        aria-hidden
+        focusable="false"
+      >
         <rect x="0" y="12" width="300" height="10" rx="5" fill="var(--color-surface-muted)" />
         <rect
           x="0"
@@ -139,7 +144,7 @@ export function LimiterBlock({
         />
         <title>{`Шкала 0-100: факти ${x(facts)}, сприйняття ${x(perception)}, зараховано ${x(credited)}`}</title>
       </svg>
-      <p className="m-0 mt-1 flex flex-wrap gap-x-4 text-caption text-text-muted">
+      <p className="m-0 mt-1 flex flex-wrap gap-x-4 text-caption text-text-muted short:hidden">
         <span className="inline-flex items-center gap-1.5">
           <SourceMarker source="wg" /> Сприйняття
         </span>
@@ -150,9 +155,9 @@ export function LimiterBlock({
           <span aria-hidden className="inline-block h-3 w-0.5 bg-text" /> Зараховано
         </span>
       </p>
-      <p className="m-0 mt-2 text-caption text-text-muted">
+      <p className="m-0 mt-2 text-caption text-text-muted short:mt-1">
         Обмежувач не дає сприйняттю піднятися вище за факти більш ніж на {LIMITER_MARGIN} пунктів
-        (це один рівень). {reason}
+        (це один рівень).<span className="short:hidden"> {reason}</span>
       </p>
     </Card>
   )
@@ -181,17 +186,17 @@ export function InsightList({
       as="section"
       aria-label={title}
       className={cn(
-        'border-t-4 p-4 md:p-4',
+        'border-t-4 p-4 md:p-4 short:p-3 short:md:p-3',
         strength ? 'border-t-strength-solid' : 'border-t-attention-solid',
       )}
     >
-      <h2 className="m-0 mb-2 text-card">{title}</h2>
-      <ul className="m-0 flex list-none flex-col gap-2 p-0">
+      <h2 className="m-0 mb-2 short:mb-1 text-card">{title}</h2>
+      <ul className="m-0 flex list-none flex-col gap-2 short:gap-1 p-0">
         {items.map((it) => (
           <li
             key={it.id}
             className={cn(
-              'flex items-start gap-2 rounded-md p-2',
+              'flex items-start gap-2 rounded-md p-2 short:p-1.5',
               strength
                 ? 'bg-strength-bg text-strength-text'
                 : 'bg-attention-bg text-attention-text',
@@ -216,7 +221,7 @@ export function InsightList({
 
 export function Conclusion({ paragraphs }: { paragraphs: string }) {
   return (
-    <Card as="section" aria-labelledby="concl-h" className="p-4 md:p-4">
+    <Card as="section" aria-labelledby="concl-h" className="p-4 md:p-4 short:p-3 short:md:p-3">
       <h2 id="concl-h" className="m-0 mb-2 text-card">
         Короткий висновок
       </h2>
@@ -228,7 +233,10 @@ export function Conclusion({ paragraphs }: { paragraphs: string }) {
 export function FlagStrip({ flags }: { flags: { id: string; title: string; text: string }[] }) {
   return (
     <section aria-labelledby="flags-h">
-      <h2 id="flags-h" className="m-0 mb-2 flex flex-wrap items-baseline gap-x-3 text-card">
+      <h2
+        id="flags-h"
+        className="m-0 mb-2 short:mb-1 flex flex-wrap items-baseline gap-x-3 text-card"
+      >
         Варто перевірити додатково
         <span className="text-caption font-normal text-text-muted">
           Напрям для додаткового аналізу. Це не висновок про людей чи підрозділи.
@@ -238,7 +246,7 @@ export function FlagStrip({ flags }: { flags: { id: string; title: string; text:
         {flags.map((f) => (
           <li
             key={f.id}
-            className="flex items-start gap-3 rounded-lg border border-border border-l-4 border-l-attention-solid bg-surface p-3"
+            className="flex items-start gap-3 rounded-lg border border-border border-l-4 border-l-attention-solid bg-surface p-3 short:p-2"
           >
             <SearchCheck aria-hidden className="mt-0.5 size-5 shrink-0 text-attention-text" />
             <div>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { LEVEL_UPPER_BOUNDS, fmt } from '@/lib/scoring/methodology'
 import { MATURITY, type MaturityLevel } from '@/components/ui/config'
 
@@ -11,20 +12,47 @@ const pt = (v: number, r: number) => {
   const a = Math.PI * (1 - v / 100)
   return [CX + r * Math.cos(a), CY - r * Math.sin(a)] as const
 }
-const arc = (v0: number, v1: number) => {
-  const [x0, y0] = pt(v0, R)
-  const [x1, y1] = pt(v1, R)
-  return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${R} ${R} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`
+const arcAt = (v0: number, v1: number, r: number) => {
+  const [x0, y0] = pt(v0, r)
+  const [x1, y1] = pt(v1, r)
+  return `M${x0.toFixed(2)} ${y0.toFixed(2)}A${r} ${r} 0 0 1 ${x1.toFixed(2)} ${y1.toFixed(2)}`
+}
+const arc = (v0: number, v1: number) => arcAt(v0, v1, R)
+
+const SWEEP_MS = 800
+
+/** Прогрес 0..1 за SWEEP_MS (ease-out). Без анімації при prefers-reduced-motion або без rAF. */
+function useSweep(): number {
+  const [t, setT] = useState(() => {
+    if (typeof window === 'undefined' || typeof window.requestAnimationFrame !== 'function')
+      return 1
+    return window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === false ? 0 : 1
+  })
+  useEffect(() => {
+    if (t === 1) return
+    let raf = 0
+    const start = performance.now()
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - start) / SWEEP_MS)
+      setT(1 - Math.pow(1 - p, 3))
+      if (p < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  return t
 }
 
 /** Gauge 0-100: п'ять рівнів зрілості, межі підписано, маркер значення. */
 export function Gauge({ value, level }: { value: number; level: MaturityLevel }) {
-  const [nx0, ny0] = pt(value, R - W / 2 - 5)
-  const [nx1, ny1] = pt(value, R + W / 2 + 5)
+  const shown = value * useSweep()
+  const [nx0, ny0] = pt(shown, R - W / 2 - 5)
+  const [nx1, ny1] = pt(shown, R + W / 2 + 5)
   return (
     <svg
       viewBox="0 0 320 188"
-      className="mx-auto block h-auto w-full max-w-[340px]"
+      className="mx-auto block h-auto w-full max-w-[340px] short:max-w-[200px]"
       aria-hidden
       focusable="false"
     >
@@ -80,6 +108,16 @@ export function Gauge({ value, level }: { value: number; level: MaturityLevel })
       <text x={CX + R} y={CY + 24} textAnchor="middle" fontSize="14" fill="var(--color-text-muted)">
         100
       </text>
+      {/* Заповнення: внутрішня дуга від 0 до значення, росте разом зі стрілкою */}
+      {shown > 0.2 && (
+        <path
+          d={arcAt(0, shown, R - W / 2 - 9)}
+          fill="none"
+          stroke="var(--color-text)"
+          strokeWidth="4"
+          strokeLinecap="round"
+        />
+      )}
       <line
         x1={nx0}
         y1={ny0}

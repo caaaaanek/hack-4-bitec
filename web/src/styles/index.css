@@ -3,6 +3,9 @@
 @import './tokens.css';
 @import './print.css';
 
+/* Невисокі екрани (1280x720 і нижче): щільніший дашборд */
+@custom-variant short (@media (max-height: 800px));
+
 @layer base {
   html {
     font-family: var(--font-sans);
