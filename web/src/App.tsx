@@ -4,6 +4,7 @@ import { ToastProvider } from '@/components/ui'
 import { AppShell } from '@/components/layout/AppShell'
 import { Home } from '@/pages/Home'
 import { Explain } from '@/pages/Explain'
+import { Recommendations } from '@/pages/Recommendations'
 import { Me } from '@/pages/Me'
 import { Survey } from '@/pages/Survey'
 import { Design } from '@/pages/Design'
@@ -23,15 +24,7 @@ export function App() {
               <Route element={<AppShell />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/explain" element={<Explain />} />
-                <Route
-                  path="/recommendations"
-                  element={
-                    <Placeholder
-                      title="Рекомендації"
-                      description="Тут зʼявляться рекомендації за результатами оцінювання. Прийняту рекомендацію можна буде перетворити на захід з виконавцем і строком."
-                    />
-                  }
-                />
+                <Route path="/recommendations" element={<Recommendations />} />
                 <Route
                   path="/reports"
                   element={
