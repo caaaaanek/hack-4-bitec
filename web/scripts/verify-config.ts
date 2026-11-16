@@ -19,6 +19,11 @@ export const WIDTHS = [360, 768, 1280, 1920] as const
 export const ROLES: VerifyRole[] = [
   {
     id: 'default',
-    routes: [{ path: '/' }, { path: '/design' }],
+    routes: [
+      { path: '/' },
+      { path: '/explain' },
+      { path: '/explain?c=accountability' },
+      { path: '/design' },
+    ],
   },
 ]

@@ -93,9 +93,9 @@ function Row({
       tabIndex={focused ? 0 : -1}
       onFocus={onFocus}
       onClick={hasKids ? onToggle : undefined}
-      style={{ paddingLeft: `${(level - 1) * 1.25 + 0.5}rem` }}
+      style={{ paddingLeft: `${(level - 1) * 1 + 0.5}rem` }}
       className={cn(
-        'grid grid-cols-[minmax(0,1fr)_3.5rem_3.5rem_4rem] items-start gap-x-2 border-b border-border py-2 pr-2 sm:grid-cols-[minmax(0,1fr)_4.5rem_4.5rem_5rem]',
+        'grid grid-cols-1 items-start gap-x-2 gap-y-1 border-b border-border py-2 pr-2 sm:grid-cols-[minmax(0,1fr)_4.5rem_4.5rem_5rem]',
         'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus',
         hasKids && 'cursor-pointer hover:bg-surface-muted',
         node.kind === 'index' && 'bg-accent-soft font-semibold',
@@ -134,15 +134,20 @@ function Row({
           )}
         </div>
       </div>
-      <span className="text-right text-body tabular">
-        <Num hint={WEIGHT_HINT}>{pct(node.weight)}</Num>
-      </span>
-      <span className="text-right text-body tabular">
-        <Num hint={node.hint}>{fmt(node.value)}</Num>
-      </span>
-      <span className="text-right text-body tabular">
-        <Num hint={CONTRIB_HINT}>{pts(node.contribution)}</Num>
-      </span>
+      <div className="flex flex-wrap gap-x-4 pl-6 font-normal sm:contents sm:pl-0">
+        <span className="text-body tabular sm:text-right">
+          <span className="text-caption text-text-muted sm:hidden">Вага </span>
+          <Num hint={WEIGHT_HINT}>{pct(node.weight)}</Num>
+        </span>
+        <span className="text-body tabular sm:text-right">
+          <span className="text-caption text-text-muted sm:hidden">Значення </span>
+          <Num hint={node.hint}>{fmt(node.value)}</Num>
+        </span>
+        <span className="text-body tabular sm:text-right">
+          <span className="text-caption text-text-muted sm:hidden">Внесок </span>
+          <Num hint={CONTRIB_HINT}>{pts(node.contribution)}</Num>
+        </span>
+      </div>
     </div>
   )
 }
@@ -285,7 +290,7 @@ function ExplainInner({ initial }: { initial: ComponentId | null }) {
           </h2>
           <div
             aria-hidden
-            className="grid grid-cols-[minmax(0,1fr)_3.5rem_3.5rem_4rem] gap-x-2 border-b border-border bg-surface-muted px-2 py-1.5 text-caption font-semibold sm:grid-cols-[minmax(0,1fr)_4.5rem_4.5rem_5rem]"
+            className="hidden grid-cols-[minmax(0,1fr)_3.5rem_3.5rem_4rem] gap-x-2 border-b border-border bg-surface-muted px-2 py-1.5 text-caption font-semibold sm:grid sm:grid-cols-[minmax(0,1fr)_4.5rem_4.5rem_5rem]"
           >
             <span>Вузол</span>
             <span className="text-right">Вага</span>
