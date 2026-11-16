@@ -1,0 +1,162 @@
+/* Дизайн-токени платформи. Єдине джерело кольору, типографіки, відступів, руху.
+   Жодних зовнішніх залежностей. Контраст пар перевіряє scripts/check-contrast.mjs. */
+
+@theme {
+  /* ---------- Шрифт ---------- */
+  --font-sans:
+    'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+
+  /* ---------- База: холодна сіро-синя, світла тема ---------- */
+  --color-bg: #f4f6f9;
+  --color-surface: #ffffff;
+  --color-surface-muted: #ebeff4;
+  --color-border: #d3dae4;
+  --color-border-strong: #7b889c; /* межі полів і контролів, ≥3:1 до поверхні */
+  --color-text: #16202e;
+  --color-text-muted: #455166;
+
+  /* ---------- Акцент: глибокий синій ---------- */
+  --color-accent: #1f4e9c;
+  --color-accent-hover: #173f80;
+  --color-accent-active: #11326a;
+  --color-accent-soft: #e4ecf8;
+  --color-on-accent: #ffffff;
+  --color-focus: #1f4e9c;
+
+  /* ---------- Шкала зрілості: 5 рівнів, один відтінок, світлота зростає з рівнем ---------- */
+  --color-maturity-1-bg: #e9f0fa;
+  --color-maturity-1-text: #16202e;
+  --color-maturity-1-chart: #6a95cf;
+  --color-maturity-2-bg: #c8daf1;
+  --color-maturity-2-text: #16202e;
+  --color-maturity-2-chart: #5486c6;
+  --color-maturity-3-bg: #8fb2e0;
+  --color-maturity-3-text: #0c1626;
+  --color-maturity-3-chart: #3468b0;
+  --color-maturity-4-bg: #2f62a8;
+  --color-maturity-4-text: #ffffff;
+  --color-maturity-4-chart: #214c8a;
+  --color-maturity-5-bg: #11305f;
+  --color-maturity-5-text: #ffffff;
+  --color-maturity-5-chart: #0d2548;
+
+  /* ---------- Семантика ---------- */
+  --color-strength-bg: #e1f2e9;
+  --color-strength-text: #134d36;
+  --color-strength-solid: #1b7a56;
+  --color-attention-bg: #fcefd3;
+  --color-attention-text: #6b4100;
+  --color-attention-solid: #a35f00;
+  --color-critical-bg: #fbe4e4;
+  --color-critical-text: #8f1f1f;
+  --color-critical-solid: #b42b2b; /* лише стани системи: помилка, критична зона показника, прострочено */
+  --color-neutral-bg: #e8ecf1;
+  --color-neutral-text: #37445a;
+  --color-neutral-solid: #5d6b82;
+
+  /* ---------- Статуси (кожен має ще й іконку) ---------- */
+  --color-status-proposed-bg: #e8ecf1;
+  --color-status-proposed-text: #37445a;
+  --color-status-accepted-bg: #e0eafa;
+  --color-status-accepted-text: #17407f;
+  --color-status-clarified-bg: #ecebfa;
+  --color-status-clarified-text: #38368a;
+  --color-status-rejected-bg: #dfe3ea;
+  --color-status-rejected-text: #2c3646;
+  --color-status-inprogress-bg: #dff1f6;
+  --color-status-inprogress-text: #0b4f61;
+  --color-status-done-bg: #e1f2e9;
+  --color-status-done-text: #134d36;
+  --color-status-confirmed-bg: #d6efe3;
+  --color-status-confirmed-text: #0f4430;
+  --color-status-notconfirmed-bg: #fcefd3;
+  --color-status-notconfirmed-text: #6b4100;
+  --color-status-overdue-bg: #fbe4e4;
+  --color-status-overdue-text: #8f1f1f;
+
+  /* ---------- Джерела даних: колір + форма маркера (коло, квадрат, ромб, трикутник) ---------- */
+  --color-source-wg: #1f4e9c;
+  --color-source-os: #b0521a;
+  --color-source-experts: #6a3d9e;
+  --color-source-facts: #1b7a56;
+
+  /* ---------- Типографіка (мінімум 14 px) ---------- */
+  --text-display: 3.5rem;
+  --text-display--line-height: 1;
+  --text-display--font-weight: 700;
+  --text-display--letter-spacing: -0.02em;
+  --text-title: 2rem;
+  --text-title--line-height: 2.5rem;
+  --text-title--font-weight: 700;
+  --text-title--letter-spacing: -0.01em;
+  --text-section: 1.375rem;
+  --text-section--line-height: 1.875rem;
+  --text-section--font-weight: 600;
+  --text-card: 1.125rem;
+  --text-card--line-height: 1.625rem;
+  --text-card--font-weight: 600;
+  --text-body-lg: 1rem;
+  --text-body-lg--line-height: 1.5rem;
+  --text-body: 0.9375rem;
+  --text-body--line-height: 1.375rem;
+  --text-caption: 0.875rem;
+  --text-caption--line-height: 1.25rem;
+  --text-fine: 0.875rem;
+  --text-fine--line-height: 1.25rem;
+  --text-fine--font-weight: 500;
+
+  /* ---------- Радіуси ---------- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* ---------- Тіні (м'які, 3 рівні) ---------- */
+  --shadow-sm: 0 1px 2px rgb(22 32 46 / 0.06), 0 1px 1px rgb(22 32 46 / 0.04);
+  --shadow-md: 0 4px 12px rgb(22 32 46 / 0.08), 0 1px 3px rgb(22 32 46 / 0.06);
+  --shadow-lg: 0 12px 32px rgb(22 32 46 / 0.14), 0 2px 6px rgb(22 32 46 / 0.08);
+
+  /* ---------- Рух ---------- */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ---------- Адаптивна сітка: контрольні ширини 360, 768, 1280, 1920 ---------- */
+  --breakpoint-*: initial;
+  --breakpoint-md: 48rem; /* 768 */
+  --breakpoint-lg: 64rem; /* 1024 */
+  --breakpoint-xl: 80rem; /* 1280 */
+  --breakpoint-2xl: 120rem; /* 1920 */
+}
+
+/* Токени поза генерацією утиліт Tailwind */
+:root {
+  --content-max: 90rem; /* 1440: на 1920 контент не розтягується */
+  --prose-max: 68ch;
+  --gutter: 1rem; /* 360 */
+  --touch-target: 2.75rem; /* 44 px */
+
+  /* Візерунки для чорно-білого друку: штрихування зростає з рівнем зрілості.
+     Вбудовані SVG (data URI), зовнішніх запитів немає. */
+  --pattern-maturity-1: none;
+  --pattern-maturity-2: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12'%3E%3Cpath d='M-1 1l2-2M0 12L12 0M11 13l2-2' stroke='%23000' stroke-width='1' opacity='.55'/%3E%3C/svg%3E");
+  --pattern-maturity-3: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M-1 1l2-2M0 8L8 0M7 9l2-2' stroke='%23000' stroke-width='1' opacity='.6'/%3E%3C/svg%3E");
+  --pattern-maturity-4: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='5' height='5'%3E%3Cpath d='M-1 1l2-2M0 5L5 0M4 6l2-2' stroke='%23fff' stroke-width='1' opacity='.7'/%3E%3C/svg%3E");
+  --pattern-maturity-5: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Cpath d='M0 0h4M0 2h4' stroke='%23fff' stroke-width='1' opacity='.75'/%3E%3Cpath d='M2 0v4' stroke='%23fff' stroke-width='1' opacity='.75'/%3E%3C/svg%3E");
+}
+
+@media (min-width: 48rem) {
+  :root {
+    --gutter: 1.5rem;
+  }
+}
+@media (min-width: 80rem) {
+  :root {
+    --gutter: 2rem;
+  }
+}
+@media (pointer: fine) {
+  :root {
+    --touch-target: 2.25rem; /* 36 px, 44 px лише на сенсорних ширинах */
+  }
+}
