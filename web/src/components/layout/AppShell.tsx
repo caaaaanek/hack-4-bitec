@@ -160,7 +160,11 @@ export function AppShell() {
                   </span>
                 </Tooltip>
               </p>
-              <p className="m-0 min-w-0 truncate text-card text-text">{institution.name}</p>
+              <p className="m-0 min-w-0 truncate text-card text-text">
+                {role === 'observer' && pathname === '/institutions'
+                  ? 'Усі заклади'
+                  : institution.name}
+              </p>
             </div>
             <HeaderActions role={role} />
           </div>

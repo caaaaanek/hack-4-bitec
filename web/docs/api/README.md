@@ -13,30 +13,32 @@
 
 ## Запити (скорочено)
 
-Усього 46 операцій. Повний перелік у `openapi.yaml`.
+Усього 48 операцій. Повний перелік у `openapi.yaml`.
 
-| Запит                                                      | Навіщо                                                           | Роль                             |
-| ---------------------------------------------------------- | ---------------------------------------------------------------- | -------------------------------- |
-| `GET/POST/DELETE /session`, `PUT /demo/role`               | вхід, вихід, перемикання ролей у демо                            | усі, лише демо                   |
-| `GET/POST /questionnaires`, `PATCH`, `PUT .../questions`   | чернетки анкет і питання                                         | commissioner                     |
-| `POST .../publish`, `.../versions`, `.../archive`          | публікація, нова версія, архів                                   | commissioner                     |
-| `GET/POST/PATCH /cycles`, `PUT .../assignments`            | цикл, k, категорії, ваги, призначення                            | admin                            |
-| `POST .../open`, `.../close`, `.../publish`                | життєвий цикл оцінювання                                         | admin                            |
-| `GET .../counters`                                         | «видано/використано» без осіб                                    | admin                            |
-| `GET /my/surveys`, `GET /my/surveys/{id}`                  | мої анкети                                                       | respondent                       |
-| `PUT .../draft`, `POST .../submit`                         | проміжне збереження, відправлення                                | respondent                       |
-| `GET /dashboard`                                           | Executive Dashboard                                              | leader, observer, admin          |
-| `GET /index/breakdown`                                     | розклад індексу з перевіркою суми                                | leader, observer, admin          |
-| `GET /compare`, `GET /trends`                              | порівняння категорій, динаміка (`from`, `to`, `compare=periods`) | leader, observer                 |
-| `GET /units`                                               | дерево підрозділів (id, name, parentId)                          | leader, observer, admin, auditor |
-| `GET /facts`, `PUT /facts/{id}/manual`                     | метрики фактів, ручний ввід                                      | leader, admin, вносить           |
-| `GET /checklist`, `PUT .../entry`, `POST .../confirmation` | чек-лист, «вніс», «підтвердив»                                   | вносить, підтверджує             |
-| `GET /recommendations`, `POST .../decision`                | рекомендації, прийняти/уточнити/відхилити                        | leader                           |
-| `GET /measures`, `PATCH /measures/{id}`                    | заходи, строки, статуси                                          | leader                           |
-| `GET /me`                                                  | результати підрозділу учасника                                   | respondent                       |
-| `POST /reports`, `GET /reports/{id}`, `.../export`         | звіти, експорт PDF/CSV/JSON                                      | leader, admin, observer          |
-| `GET /audit`, `POST /audit/verify`                         | журнал, перевірка цілісності                                     | admin, auditor                   |
-| `GET/PATCH /methodology`                                   | версія, хеш, ваги, пороги                                        | читання всі, зміна admin         |
+| Запит                                                      | Навіщо                                                           | Роль                              |
+| ---------------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------- |
+| `GET/POST/DELETE /session`, `PUT /demo/role`               | вхід, вихід, перемикання ролей у демо                            | усі, лише демо                    |
+| `GET/POST /questionnaires`, `PATCH`, `PUT .../questions`   | чернетки анкет і питання                                         | commissioner                      |
+| `POST .../publish`, `.../versions`, `.../archive`          | публікація, нова версія, архів                                   | commissioner                      |
+| `GET/POST/PATCH /cycles`, `PUT .../assignments`            | цикл, k, категорії, ваги, призначення                            | admin                             |
+| `POST .../open`, `.../close`, `.../publish`                | життєвий цикл оцінювання                                         | admin                             |
+| `GET .../counters`                                         | «видано/використано» без осіб                                    | admin                             |
+| `GET /my/surveys`, `GET /my/surveys/{id}`                  | мої анкети                                                       | respondent                        |
+| `PUT .../draft`, `POST .../submit`                         | проміжне збереження, відправлення                                | respondent                        |
+| `GET /dashboard`                                           | Executive Dashboard                                              | leader, observer, admin, auditor  |
+| `GET /index/breakdown`                                     | розклад індексу з перевіркою суми                                | leader, observer, admin           |
+| `GET /compare`, `GET /trends`                              | порівняння категорій, динаміка (`from`, `to`, `compare=periods`) | leader, observer, auditor         |
+| `GET /units`                                               | дерево підрозділів (id, name, parentId)                          | leader, observer, admin, auditor  |
+| `GET /facts`, `PUT /facts/{id}/manual`                     | метрики фактів, ручний ввід                                      | leader, admin, вносить            |
+| `GET /checklist`, `PUT .../entry`, `POST .../confirmation` | чек-лист, «вніс», «підтвердив»                                   | вносить, підтверджує              |
+| `GET /recommendations`, `POST .../decision`                | рекомендації, прийняти/уточнити/відхилити                        | leader                            |
+| `GET /measures`, `PATCH /measures/{id}`                    | заходи, строки, статуси; `overdueDays` і `verification`          | leader (зміна), auditor (читання) |
+| `GET /institutions`                                        | картки закладів за назвою, без сортування за індексом і рангів   | observer                          |
+| `GET /data-sources`                                        | звідки беруться дані: метрики, режими, карта інтеграцій          | leader, observer, auditor         |
+| `GET /me`                                                  | результати підрозділу учасника                                   | respondent                        |
+| `POST /reports`, `GET /reports/{id}`, `.../export`         | звіти, експорт PDF/CSV/JSON                                      | leader, admin, observer           |
+| `GET /audit`, `POST /audit/verify`                         | журнал, перевірка цілісності                                     | admin, auditor                    |
+| `GET/PATCH /methodology`                                   | версія, хеш, ваги, пороги                                        | читання всі, зміна admin          |
 
 ## Інваріанти (не обговорюються)
 

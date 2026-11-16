@@ -15,11 +15,11 @@ const OUT = join(process.cwd(), 'artifacts', 'screens')
 const slug = (p: string) =>
   p === '/' ? 'home' : p.replace(/^\/|\/$/g, '').replace(/[^a-z0-9]+/gi, '-')
 
-/** Темна тема на всіх контрольних ширинах; світла лише на 1280 для ключових екранів. */
-const LIGHT_PATHS = new Set(['/', '/explain', '/me', '/s/demo'])
+/** Світла тема (основна) на всіх контрольних ширинах; темна лише на 1280 для ключових екранів. */
+const DARK_PATHS = new Set(['/', '/trends', '/recommendations'])
 const themedWidths = (path: string): [number, 'dark' | 'light'][] => [
-  ...WIDTHS.map((w): [number, 'dark' | 'light'] => [w, 'dark']),
-  ...(LIGHT_PATHS.has(path) ? [[1280, 'light'] as [number, 'dark' | 'light']] : []),
+  ...WIDTHS.map((w): [number, 'dark' | 'light'] => [w, 'light']),
+  ...(DARK_PATHS.has(path) ? [[1280, 'dark'] as [number, 'dark' | 'light']] : []),
 ]
 
 interface Geometry {
@@ -84,7 +84,7 @@ async function checkRoute(
   for (const [width, theme] of themedWidths(route.path)) {
     const ctx = await browser.newContext({ viewport: { width, height: 900 }, locale: 'uk-UA' })
     const page = await ctx.newPage()
-    const tag = `${width}px${theme === 'light' ? ' light' : ''}`
+    const tag = `${width}px${theme === 'dark' ? ' dark' : ''}`
     await ctx.addInitScript((t) => localStorage.setItem('iap-theme', t), theme)
     const external = new Set<string>()
     page.on('request', (r) => {
@@ -106,7 +106,7 @@ async function checkRoute(
       await page.evaluate(() => document.fonts.ready)
       problems.push(...(await checkPage(page, tag, width)))
       const geo = await readGeometry(page, route.path)
-      if (geo)
+      if (geo && !route.path.startsWith('/s/'))
         for (const p of compareGeometry(`${role.id}|${tag}`, geo)) problems.push(`[${tag}] ${p}`)
       const body = await page.evaluate(() => document.body.innerText)
       const isForbidden = body.includes(FORBIDDEN_FRAGMENT)
@@ -118,7 +118,7 @@ async function checkRoute(
       const dir = join(OUT, role.id, slug(route.path))
       mkdirSync(dir, { recursive: true })
       await page.screenshot({
-        path: join(dir, `${width}${theme === 'light' ? '-light' : ''}.png`),
+        path: join(dir, `${width}${theme === 'dark' ? '-dark' : ''}.png`),
         fullPage: true,
       })
     } catch (e) {

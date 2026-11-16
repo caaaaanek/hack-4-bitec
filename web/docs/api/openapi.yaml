@@ -580,6 +580,61 @@ paths:
                   - { id: unit-a, name: Підрозділ А, parentId: alpha }
                   - { id: unit-b, name: Підрозділ Б, parentId: alpha }
                   - { id: unit-v, name: Підрозділ В, parentId: alpha }
+  /institutions:
+    get:
+      tags: [dashboard]
+      operationId: listInstitutions
+      summary: Заклади для спостерігача
+      description: |
+        Узагальнені дані закладів. Єдине сортування це за назвою (алфавітний порядок). Параметрів сортування за
+        індексом чи іншими показниками немає, позицій і місць у відповіді немає: заклади не порівнюються й не
+        ранжуються. Після вибору закладу решта запитів приймає його id у параметрі `scope`.
+      x-roles: [observer]
+      responses:
+        '200':
+          description: Заклади за назвою
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/InstitutionSummary' }
+              example:
+                items:
+                  - {
+                      id: gamma,
+                      name: 'Умовна академія «Гамма»',
+                      cycle: '2026-11',
+                      index: 68.5,
+                      level: 4,
+                      trustGrade: A,
+                      delta: 5.2,
+                    }
+  /data-sources:
+    get:
+      tags: [reports]
+      operationId: listDataSources
+      summary: Звідки беруться дані
+      description: Метрики, джерела, режим отримання й вік даних. Статуси чесні, без обіцянок наперед.
+      x-roles: [leader, observer, auditor]
+      responses:
+        '200':
+          description: Джерела за метриками й карта інтеграцій
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [sources, integrations]
+                properties:
+                  sources:
+                    type: array
+                    items: { $ref: '#/components/schemas/DataSource' }
+                  integrations:
+                    type: array
+                    items: { $ref: '#/components/schemas/Integration' }
   /dashboard:
     get:
       tags: [dashboard]
@@ -825,7 +880,7 @@ paths:
       description: |
         Цикли в періоді `from`-`to` (включно) з датами й значеннями по компонентах. Режим `compare=periods`
         порівнює два періоди (`from`-`to` і `compareFrom`-`compareTo`) і повертає обидва набори циклів та різницю.
-      x-roles: [leader, observer]
+      x-roles: [leader, observer, auditor]
       parameters:
         - $ref: '#/components/parameters/Scope'
         - {
@@ -1063,7 +1118,7 @@ paths:
       tags: [recommendations]
       operationId: listRecommendations
       summary: Рекомендації
-      x-roles: [leader, admin, observer]
+      x-roles: [leader]
       parameters:
         - $ref: '#/components/parameters/Cycle'
         - name: status
@@ -1121,7 +1176,8 @@ paths:
       tags: [recommendations]
       operationId: listMeasures
       summary: Заходи (трекер)
-      x-roles: [leader, admin, observer]
+      description: Leader змінює статуси, auditor лише читає. «Прострочено» обчислюється від dueDate і дати запиту, окремо не зберігається.
+      x-roles: [leader, auditor]
       parameters:
         - name: status
           in: query
@@ -1611,6 +1667,37 @@ components:
             properties:
               questionId: { type: string }
               optionId: { type: string }
+    InstitutionSummary:
+      type: object
+      required: [id, name, cycle, index, level, trustGrade, delta]
+      description: Узагальнена картка закладу. Без позиції, місця чи рангу.
+      properties:
+        id: { type: string }
+        name: { type: string }
+        cycle: { type: string }
+        index: { type: number }
+        level: { type: integer, minimum: 1, maximum: 5 }
+        trustGrade: { type: string, enum: [A, B, C, insufficient] }
+        delta: { type: number, description: 'Зміна індексу до попереднього циклу, пункти.' }
+    DataSource:
+      type: object
+      required: [id, metric, source, mode, age, explanation]
+      properties:
+        id: { type: string }
+        metric: { type: string }
+        source: { type: string }
+        mode: { type: string, enum: [auto, manual, planned, approval] }
+        age: { type: string, description: 'Вік даних простою мовою.' }
+        explanation: { type: string }
+    Integration:
+      type: object
+      required: [id, system, purpose, method, mode]
+      properties:
+        id: { type: string }
+        system: { type: string }
+        purpose: { type: string }
+        method: { type: string }
+        mode: { type: string, enum: [auto, manual, planned, approval] }
     Unit:
       type: object
       required: [id, name, parentId]
@@ -1897,7 +1984,7 @@ components:
         rejectionReason: { type: [string, 'null'] }
     MeasureStatus:
       type: string
-      enum: [inprogress, done, confirmed, notconfirmed, overdue]
+      enum: [accepted, inprogress, done, confirmed, notconfirmed, overdue]
     Measure:
       type: object
       required: [id, title, assignee, dueDate, status]
@@ -1910,6 +1997,16 @@ components:
         status: { $ref: '#/components/schemas/MeasureStatus' }
         verifiedInCycle:
           { type: [string, 'null'], description: 'Цикл, у якому захід верифіковано.' }
+        verification:
+          type: [string, 'null']
+          enum: ['Підтверджено наступним оцінюванням', 'Не підтверджено, потрібен перегляд', null]
+          description: Результат верифікації наступним циклом. Для відкритого заходу null.
+        overdueDays:
+          {
+            type: integer,
+            minimum: 0,
+            description: 'Скільки днів прострочено на дату запиту, 0 якщо ні.',
+          }
     MyResults:
       type: object
       required: [scope, cycle, index, components]

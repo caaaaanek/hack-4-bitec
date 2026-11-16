@@ -417,6 +417,48 @@ export interface paths {
     patch?: never
     trace?: never
   }
+  '/institutions': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Заклади для спостерігача
+     * @description Узагальнені дані закладів. Єдине сортування це за назвою (алфавітний порядок). Параметрів сортування за
+     *     індексом чи іншими показниками немає, позицій і місць у відповіді немає: заклади не порівнюються й не
+     *     ранжуються. Після вибору закладу решта запитів приймає його id у параметрі `scope`.
+     */
+    get: operations['listInstitutions']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+  '/data-sources': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    /**
+     * Звідки беруться дані
+     * @description Метрики, джерела, режим отримання й вік даних. Статуси чесні, без обіцянок наперед.
+     */
+    get: operations['listDataSources']
+    put?: never
+    post?: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
   '/dashboard': {
     parameters: {
       query?: never
@@ -642,7 +684,10 @@ export interface paths {
       path?: never
       cookie?: never
     }
-    /** Заходи (трекер) */
+    /**
+     * Заходи (трекер)
+     * @description Leader змінює статуси, auditor лише читає. «Прострочено» обчислюється від dueDate і дати запиту, окремо не зберігається.
+     */
     get: operations['listMeasures']
     put?: never
     post?: never
@@ -953,6 +998,36 @@ export interface components {
         optionId: string
       }[]
     }
+    /** @description Узагальнена картка закладу. Без позиції, місця чи рангу. */
+    InstitutionSummary: {
+      id: string
+      name: string
+      cycle: string
+      index: number
+      level: number
+      /** @enum {string} */
+      trustGrade: 'A' | 'B' | 'C' | 'insufficient'
+      /** @description Зміна індексу до попереднього циклу, пункти. */
+      delta: number
+    }
+    DataSource: {
+      id: string
+      metric: string
+      source: string
+      /** @enum {string} */
+      mode: 'auto' | 'manual' | 'planned' | 'approval'
+      /** @description Вік даних простою мовою. */
+      age: string
+      explanation: string
+    }
+    Integration: {
+      id: string
+      system: string
+      purpose: string
+      method: string
+      /** @enum {string} */
+      mode: 'auto' | 'manual' | 'planned' | 'approval'
+    }
     /** @description Вузол дерева підрозділів. Корінь має parentId null. Назви нейтральні, глибина довільна. */
     Unit: {
       /** @example unit-a */
@@ -1170,7 +1245,7 @@ export interface components {
       rejectionReason?: string | null
     }
     /** @enum {string} */
-    MeasureStatus: 'inprogress' | 'done' | 'confirmed' | 'notconfirmed' | 'overdue'
+    MeasureStatus: 'accepted' | 'inprogress' | 'done' | 'confirmed' | 'notconfirmed' | 'overdue'
     Measure: {
       id: string
       recommendationId?: string
@@ -1182,6 +1257,14 @@ export interface components {
       status: components['schemas']['MeasureStatus']
       /** @description Цикл, у якому захід верифіковано. */
       verifiedInCycle?: string | null
+      /**
+       * @description Результат верифікації наступним циклом. Для відкритого заходу null.
+       * @enum {string|null}
+       */
+      verification?:
+        'Підтверджено наступним оцінюванням' | 'Не підтверджено, потрібен перегляд' | null
+      /** @description Скільки днів прострочено на дату запиту, 0 якщо ні. */
+      overdueDays?: number
     }
     MyResults: {
       scope: string
@@ -2033,6 +2116,66 @@ export interface operations {
            */
           'application/json': {
             items: components['schemas']['Unit'][]
+          }
+        }
+      }
+    }
+  }
+  listInstitutions: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Заклади за назвою */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          /**
+           * @example {
+           *       "items": [
+           *         {
+           *           "id": "gamma",
+           *           "name": "Умовна академія «Гамма»",
+           *           "cycle": "2026-11",
+           *           "index": 68.5,
+           *           "level": 4,
+           *           "trustGrade": "A",
+           *           "delta": 5.2
+           *         }
+           *       ]
+           *     }
+           */
+          'application/json': {
+            items: components['schemas']['InstitutionSummary'][]
+          }
+        }
+      }
+    }
+  }
+  listDataSources: {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      /** @description Джерела за метриками й карта інтеграцій */
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            sources: components['schemas']['DataSource'][]
+            integrations: components['schemas']['Integration'][]
           }
         }
       }
