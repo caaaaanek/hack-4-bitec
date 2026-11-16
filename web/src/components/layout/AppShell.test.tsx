@@ -84,3 +84,15 @@ describe('AppShell і демо-панель', () => {
     expect(screen.getByRole('link', { name: 'На головну' })).toHaveAttribute('href', '/me')
   })
 })
+
+describe('перемикач теми', () => {
+  it('перемикає тему з aria-label і запамʼятовує вибір', async () => {
+    const user = userEvent.setup()
+    document.documentElement.removeAttribute('data-theme')
+    setup('/')
+    await user.click(screen.getByRole('button', { name: 'Увімкнути світлу тему' }))
+    expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+    expect(localStorage.getItem('iap-theme')).toBe('light')
+    expect(screen.getByRole('button', { name: 'Увімкнути темну тему' })).toBeInTheDocument()
+  })
+})

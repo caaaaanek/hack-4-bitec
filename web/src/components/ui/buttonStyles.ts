@@ -10,7 +10,7 @@ export const buttonBase =
 export const buttonVariants: Record<ButtonVariant, string> = {
   primary: 'bg-accent text-on-accent hover:bg-accent-hover active:bg-accent-active',
   secondary:
-    'bg-surface text-text border border-border-strong hover:bg-surface-muted active:bg-border',
+    'bg-surface-raised text-text border border-border-strong hover:bg-surface-muted active:bg-border',
   ghost: 'bg-transparent text-accent hover:bg-accent-soft active:bg-accent-soft',
   danger: 'bg-critical-solid text-on-accent hover:brightness-90 active:brightness-75',
 }

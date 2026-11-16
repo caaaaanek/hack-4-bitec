@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Table, type TableColumn } from './Table'
+import { ChangeChip } from './KpiTile'
 import { Tabs } from './Tabs'
 import { ErrorState } from './ErrorState'
 import { HiddenGroupState } from './HiddenGroupState'
@@ -163,5 +164,16 @@ describe('states', () => {
     expect(alert).toHaveTextContent('Що зробити:')
     await userEvent.click(screen.getByRole('button', { name: /Спробувати/ }))
     expect(onRetry).toHaveBeenCalledOnce()
+  })
+})
+
+describe('KpiTile і ChangeChip', () => {
+  it('чип зміни називає напрям словом, не лише кольором', () => {
+    const { rerender } = render(<ChangeChip delta={2.5} />)
+    expect(screen.getByText('зросло')).toBeInTheDocument()
+    rerender(<ChangeChip delta={-1} />)
+    expect(screen.getByText('знизилось')).toBeInTheDocument()
+    rerender(<ChangeChip delta={0} />)
+    expect(screen.getByText('без змін')).toBeInTheDocument()
   })
 })

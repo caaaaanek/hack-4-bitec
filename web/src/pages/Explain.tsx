@@ -367,7 +367,7 @@ function ExplainInner({ initial }: { initial: ComponentId | null }) {
         </Card>
 
         <Card as="aside" aria-labelledby="how-h" className="p-4 md:p-4 xl:col-span-4">
-          <h2 id="how-h" className="m-0 mb-2 text-card">
+          <h2 id="how-h" className="card-title mb-2">
             Як це рахується
           </h2>
           <ol className="m-0 flex list-decimal flex-col gap-2 pl-5 text-body">

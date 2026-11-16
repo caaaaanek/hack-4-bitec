@@ -2,6 +2,7 @@ import { useMemo, useState, type ReactNode } from 'react'
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { Card } from './Card'
+import { Input } from './Input'
 import { nextSortDir, sortRows, type SortDir, type SortValue } from './tableSort'
 
 export interface TableColumn<T> {
@@ -11,6 +12,8 @@ export interface TableColumn<T> {
   render?: (row: T) => ReactNode
   align?: 'left' | 'right' | 'center'
   numeric?: boolean
+  /** Рядок фільтрів у шапці: текстовий фільтр за значенням колонки. */
+  filterable?: boolean
 }
 
 export interface TableProps<T> {
@@ -21,6 +24,8 @@ export interface TableProps<T> {
   captionVisible?: boolean
   defaultSort?: { key: string; dir: SortDir }
   className?: string
+  /** Закріплені заголовки: висота області прокрутки на широких екранах. */
+  stickyMaxHeight?: string
 }
 
 const ariaSortOf = (dir: SortDir) =>
@@ -40,20 +45,34 @@ export function Table<T>({
   captionVisible = false,
   defaultSort,
   className,
+  stickyMaxHeight,
 }: TableProps<T>) {
+  const [filters, setFilters] = useState<Record<string, string>>({})
   const [sort, setSort] = useState<{ key: string; dir: SortDir }>(
     defaultSort ?? { key: '', dir: 'none' },
   )
 
+  const filtered = useMemo(() => {
+    const active = Object.entries(filters).filter(([, v]) => v.trim() !== '')
+    if (active.length === 0) return rows
+    return rows.filter((row) =>
+      active.every(([k, v]) =>
+        String((row as Record<string, unknown>)[k] ?? '')
+          .toLowerCase()
+          .includes(v.trim().toLowerCase()),
+      ),
+    )
+  }, [rows, filters])
+
   const sorted = useMemo(
     () =>
       sort.dir === 'none'
-        ? rows
-        : sortRows(rows, sort.key, sort.dir, (row, k) => {
+        ? filtered
+        : sortRows(filtered, sort.key, sort.dir, (row, k) => {
             const v = (row as Record<string, unknown>)[k]
             return (typeof v === 'number' || typeof v === 'string' ? v : null) as SortValue
           }),
-    [rows, sort],
+    [filtered, sort],
   )
 
   const toggle = (key: string) => {
@@ -72,6 +91,7 @@ export function Table<T>({
         : 'text-left'
 
   const sortableCols = columns.filter((c) => c.sortable)
+  const filterCols = columns.filter((c) => c.filterable)
 
   return (
     <div className={className}>
@@ -106,6 +126,21 @@ export function Table<T>({
         </div>
       )}
 
+      {filterCols.length > 0 && (
+        <div role="group" aria-label={`Фільтри: ${caption}`} className="mb-3 grid gap-2 md:hidden">
+          {filterCols.map((col) => (
+            <Input
+              key={col.key}
+              type="search"
+              aria-label={`Фільтр: ${col.header}`}
+              placeholder={col.header}
+              value={filters[col.key] ?? ''}
+              onChange={(e) => setFilters((f) => ({ ...f, [col.key]: e.target.value }))}
+            />
+          ))}
+        </div>
+      )}
+
       <ul className="m-0 flex list-none flex-col gap-3 p-0 md:hidden" aria-label={caption}>
         {sorted.map((row) => (
           <li key={rowKey(row)}>
@@ -130,12 +165,15 @@ export function Table<T>({
         ))}
       </ul>
 
-      <div className="hidden overflow-x-auto rounded-lg border border-border bg-surface md:block">
+      <div
+        className="hidden overflow-auto rounded-lg border border-border bg-surface md:block"
+        style={stickyMaxHeight ? { maxHeight: stickyMaxHeight } : undefined}
+      >
         <table className="hidden w-full border-collapse text-body md:table">
           <caption className={captionVisible ? 'p-3 text-left text-card text-text' : 'sr-only'}>
             {caption}
           </caption>
-          <thead className="bg-surface-muted">
+          <thead className="sticky top-0 z-10 bg-surface-muted">
             <tr>
               {columns.map((col) => {
                 const dir = dirOf(col.key)
@@ -170,6 +208,25 @@ export function Table<T>({
                 )
               })}
             </tr>
+            {filterCols.length > 0 && (
+              <tr>
+                {columns.map((col) => (
+                  <th key={col.key} scope="col" className="border-b border-border px-4 py-1.5">
+                    {col.filterable ? (
+                      <Input
+                        type="search"
+                        aria-label={`Фільтр: ${col.header}`}
+                        placeholder="Фільтр"
+                        value={filters[col.key] ?? ''}
+                        onChange={(e) => setFilters((f) => ({ ...f, [col.key]: e.target.value }))}
+                      />
+                    ) : (
+                      <span className="sr-only">Без фільтра</span>
+                    )}
+                  </th>
+                ))}
+              </tr>
+            )}
           </thead>
           <tbody>
             {sorted.map((row) => (

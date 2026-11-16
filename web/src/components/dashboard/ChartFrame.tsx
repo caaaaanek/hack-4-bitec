@@ -8,6 +8,7 @@ export interface ChartFrameProps {
   subtitle?: string
   /** Короткий текстовий опис графіка (завжди видимий). */
   description: string
+  icon?: ReactNode
   chart: ReactNode
   table: ReactNode
   className?: string
@@ -19,6 +20,7 @@ export function ChartFrame({
   title,
   subtitle,
   description,
+  icon,
   chart,
   table,
   className,
@@ -34,7 +36,8 @@ export function ChartFrame({
     >
       <div className="mb-2 short:mb-1 flex flex-wrap items-start justify-between gap-x-2 gap-y-1">
         <div>
-          <h2 id={id} className="m-0 text-card">
+          <h2 id={id} className="card-title">
+            {icon}
             {title}
           </h2>
           {subtitle && <p className="m-0 text-caption text-text-muted">{subtitle}</p>}

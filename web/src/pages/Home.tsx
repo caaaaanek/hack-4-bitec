@@ -1,5 +1,12 @@
 import { Link } from 'react-router-dom'
-import { ArrowUp, FileText, Lightbulb, ListTree } from 'lucide-react'
+import {
+  ArrowUp,
+  FileText,
+  Gauge as GaugeIcon,
+  Lightbulb,
+  ListTree,
+  Radar as RadarIcon,
+} from 'lucide-react'
 import { MATURITY, MaturityBadge, buttonBase, buttonSizes, buttonVariants } from '@/components/ui'
 import type { MaturityLevel } from '@/components/ui'
 import { cn } from '@/lib/cn'
@@ -99,6 +106,7 @@ export function Home() {
         <ChartFrame
           className="xl:col-span-4"
           title="Індекс доброчесності"
+          icon={<GaugeIcon aria-hidden />}
           subtitle="Integrity Index, 0-100"
           description={gaugeDescription}
           chart={
@@ -158,6 +166,7 @@ export function Home() {
         <ChartFrame
           className="xl:col-span-4"
           title="Компоненти індексу"
+          icon={<RadarIcon aria-hidden />}
           subtitle="Зараховані значення, 0-100"
           description={radarDescription}
           chartClassName="flex flex-col"

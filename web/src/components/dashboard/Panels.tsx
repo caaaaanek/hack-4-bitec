@@ -1,6 +1,17 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Eye, Info, Scale, TriangleAlert, SearchCheck, Sprout, TrendingUp, X } from 'lucide-react'
+import {
+  Eye,
+  Info,
+  ScrollText,
+  ShieldCheck,
+  Scale,
+  TriangleAlert,
+  SearchCheck,
+  Sprout,
+  TrendingUp,
+  X,
+} from 'lucide-react'
 import { Card, SourceMarker, TrustBadge } from '@/components/ui'
 import {
   FLAG_WEIGHT_LABEL,
@@ -60,7 +71,8 @@ export function TrustCard({ grade, raised }: { grade: TrustGrade; raised: TrustF
   return (
     <Card as="section" aria-labelledby="trust-h" className="p-4 md:p-4 short:p-3 short:md:p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 id="trust-h" className="m-0 text-card">
+        <h2 id="trust-h" className="card-title">
+          <ShieldCheck aria-hidden />
           {TRUST_LABEL}
         </h2>
         <Num hint={TRUST_HINT}>
@@ -98,10 +110,11 @@ export function LimiterBlock({
     <Card
       as="section"
       aria-labelledby="lim-h"
-      className="border-l-4 border-l-attention-solid p-4 md:p-4 short:p-3 short:md:p-3"
+      category="attention"
+      className="p-4 md:p-4 short:p-3 short:md:p-3"
     >
-      <h2 id="lim-h" className="m-0 flex items-center gap-2 text-card">
-        <Info aria-hidden className="size-5 shrink-0 text-attention-text" />
+      <h2 id="lim-h" className="card-title">
+        <Info aria-hidden />
         Показано з обмеженням
       </h2>
       <p className="m-0 mt-1 text-body">
@@ -193,12 +206,13 @@ export function InsightList({
     <Card
       as="section"
       aria-label={title}
-      className={cn(
-        'border-t-4 p-4 md:p-4 short:p-3 short:md:p-3',
-        strength ? 'border-t-strength-solid' : 'border-t-attention-solid',
-      )}
+      category={strength ? 'strength' : 'attention'}
+      className="p-4 md:p-4 short:p-3 short:md:p-3"
     >
-      <h2 className="m-0 mb-2 short:mb-1 text-card">{title}</h2>
+      <h2 className="card-title mb-2 short:mb-1">
+        <Icon aria-hidden />
+        {title}
+      </h2>
       <ul className="m-0 flex list-none flex-col gap-2 short:gap-1 p-0">
         {items.map((it) => (
           <li
@@ -230,7 +244,8 @@ export function InsightList({
 export function Conclusion({ paragraphs }: { paragraphs: string }) {
   return (
     <Card as="section" aria-labelledby="concl-h" className="p-4 md:p-4 short:p-3 short:md:p-3">
-      <h2 id="concl-h" className="m-0 mb-2 text-card">
+      <h2 id="concl-h" className="card-title mb-2">
+        <ScrollText aria-hidden />
         Короткий висновок
       </h2>
       <p className="m-0 text-body">{paragraphs}</p>

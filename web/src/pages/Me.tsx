@@ -1,4 +1,4 @@
-import { HeartHandshake } from 'lucide-react'
+import { CheckCheck, Compass, HeartHandshake } from 'lucide-react'
 import { Card, HiddenGroupState, MaturityBadge, MATURITY } from '@/components/ui'
 import { fmt, fmtIndex, K_MIN_GROUP } from '@/lib/scoring/methodology'
 import { useDemo } from '@/demo/demoContext'
@@ -133,7 +133,8 @@ export function Me() {
 
       <div className="grid gap-4 md:grid-cols-2">
         <Card as="section" aria-labelledby="done-h">
-          <h2 id="done-h" className="text-card">
+          <h2 id="done-h" className="card-title">
+            <CheckCheck aria-hidden />
             Що зроблено з минулого циклу
           </h2>
           <ul className="mt-2 mb-0 list-disc space-y-2 pl-5 text-body">
@@ -143,7 +144,8 @@ export function Me() {
           </ul>
         </Card>
         <Card as="section" aria-labelledby="next-h">
-          <h2 id="next-h" className="text-card">
+          <h2 id="next-h" className="card-title">
+            <Compass aria-hidden />
             Що буде далі
           </h2>
           <ul className="mt-2 mb-0 list-disc space-y-2 pl-5 text-body">

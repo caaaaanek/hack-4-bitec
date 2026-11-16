@@ -18,6 +18,7 @@ import {
   HiddenGroupState,
   IconButton,
   Input,
+  KpiTile,
   MATURITY,
   MaturityBadge,
   Radio,
@@ -424,8 +425,14 @@ export function Design() {
           </Card>
           <Card interactive tabIndex={0}>
             <CardTitle>Інтерактивна картка</CardTitle>
-            <p className="text-text-muted mt-2">Тінь змінюється при наведенні, фокус видно.</p>
+            <p className="text-text-muted mt-2">Поверхня піднімається при наведенні, фокус видно.</p>
           </Card>
+        </div>
+        <div className="grid gap-4 md:grid-cols-4">
+          <KpiTile label="Індекс доброчесності" value="62" unit="з 100" delta={4.5} />
+          <KpiTile label="Культура" value="58" delta={-2} category="culture" />
+          <KpiTile label="Система" value="64" delta={0} category="system" />
+          <KpiTile label="Підзвітність" value="66" delta={3} category="accountability" />
         </div>
       </Section>
 
