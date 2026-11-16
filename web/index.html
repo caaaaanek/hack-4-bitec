@@ -3,14 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark light" />
+    <meta name="color-scheme" content="light dark" />
     <script>
-      /* Тема до першого малювання: темна за замовчуванням, вибір у localStorage */
+      /* Тема до першого малювання: світла за замовчуванням, вибір у localStorage */
       try {
         var t = localStorage.getItem('iap-theme')
-        document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark')
+        document.documentElement.setAttribute('data-theme', t === 'dark' ? 'dark' : 'light')
       } catch (e) {
-        document.documentElement.setAttribute('data-theme', 'dark')
+        document.documentElement.setAttribute('data-theme', 'light')
       }
     </script>
     <link rel="icon" href="data:," />

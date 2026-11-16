@@ -4,17 +4,18 @@ import {
   ArrowUp,
   FileText,
   Gauge as GaugeIcon,
+  Info,
   Lightbulb,
   ListTree,
   Radar as RadarIcon,
   TrendingUp,
 } from 'lucide-react'
 import {
-  Badge,
   Card,
   MATURITY,
   MaturityBadge,
   Tabs,
+  Tooltip,
   buttonBase,
   buttonSizes,
   buttonVariants,
@@ -35,6 +36,7 @@ import {
   currentIndex,
   currentLevel,
   CYCLE,
+  CYCLE_DATE,
   indexDelta,
   previous,
   previousIndex,
@@ -52,7 +54,6 @@ import { Num } from '@/components/dashboard/Num'
 import {
   AttentionPanel,
   ComponentsCard,
-  DevelopmentBanner,
   TrustPanel,
   type ComponentRow,
 } from '@/components/dashboard/Panels'
@@ -71,8 +72,8 @@ function buildConclusion(): string {
   const t = TRUST_GRADE_TEXT[trustSummary.grade]
   parts.push(
     trustSummary.grade === 'A'
-      ? `Достовірність ${t.letter}: ${t.word}.`
-      : `Достовірність ${t.letter}: ${t.word}, тож спершу варто підтвердити факти документами.`,
+      ? `Достовірність ${t.letter}: ${t.word.toLowerCase()}.`
+      : `Достовірність ${t.letter}: ${t.word.toLowerCase()}, тож спершу варто підтвердити факти документами.`,
   )
   return parts.join(' ')
 }
@@ -127,7 +128,6 @@ export function Home() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3">
           <h1 className="m-0 text-title short:text-section">Огляд закладу</h1>
-          <Badge tone="accent">Цикл {CYCLE}</Badge>
           <p className="sr-only" data-testid="summary">
             {scoreText(currentIndex)}, {MATURITY[currentLevel].name}, достовірність{' '}
             {TRUST_GRADE_TEXT[trustSummary.grade].letter}
@@ -148,7 +148,6 @@ export function Home() {
           </Link>
         </nav>
       </div>
-      <DevelopmentBanner />
 
       <div className="grid gap-4 short:gap-3 xl:grid-cols-12">
         <Card
@@ -180,6 +179,14 @@ export function Home() {
                 </span>
               </p>
               <ConclusionText text={buildConclusion()} />
+              <p className="m-0 flex items-center gap-1.5 text-caption text-text-muted">
+                Дані станом на {CYCLE_DATE} · цикл {CYCLE}
+                <Tooltip content="Цикл оцінювання: один повний раунд опитування й збору фактів. Індекс порівнюється з попереднім циклом.">
+                  <span role="img" aria-label="Що таке цикл оцінювання" className="inline-flex">
+                    <Info aria-hidden className="size-4" />
+                  </span>
+                </Tooltip>
+              </p>
             </div>
           </div>
         </Card>

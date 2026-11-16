@@ -4,9 +4,9 @@ export type Theme = 'dark' | 'light'
 
 const KEY = 'iap-theme'
 
-/** Поточна тема з атрибута на html (його ставить вбудований скрипт в index.html). Типова: темна. */
+/** Поточна тема з атрибута на html (його ставить вбудований скрипт в index.html). Типова: світла. */
 export function readTheme(): Theme {
-  return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark'
+  return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light'
 }
 
 export function applyTheme(theme: Theme): void {

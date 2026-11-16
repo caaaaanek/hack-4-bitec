@@ -6,12 +6,10 @@ import {
   Info,
   Layers,
   Scale,
-  Sprout,
   ShieldCheck,
   SearchCheck,
   TrendingUp,
   TriangleAlert,
-  X,
 } from 'lucide-react'
 import { Badge, Card, MaturityBadge, Tooltip, ChangeChip } from '@/components/ui'
 import type { MaturityLevel } from '@/components/ui'
@@ -25,44 +23,6 @@ import type { TrustFlag, TrustGrade } from '@/lib/scoring/trust'
 import { cn } from '@/lib/cn'
 import { COMPONENT_LABELS, fmt, type ComponentId } from '@/lib/scoring/methodology'
 import { Num } from './Num'
-
-export function DevelopmentBanner() {
-  const [shown, setShown] = useState(() => {
-    try {
-      return localStorage.getItem('banner-dev-closed') !== '1'
-    } catch {
-      return true
-    }
-  })
-  if (!shown) return null
-  return (
-    <div
-      role="note"
-      data-print="hide"
-      className="flex items-center gap-3 rounded-md border border-border bg-accent-soft px-3 py-0.5 short:py-0"
-    >
-      <Sprout aria-hidden className="size-5 shrink-0 text-accent" />
-      <p className="m-0 flex-1 text-caption text-text">
-        Оцінювання це інструмент розвитку, а не контролю. Результати показують, куди рухатися далі.
-      </p>
-      <button
-        type="button"
-        aria-label="Закрити повідомлення"
-        className="touch-target inline-flex items-center justify-center rounded-md text-text hover:bg-surface"
-        onClick={() => {
-          setShown(false)
-          try {
-            localStorage.setItem('banner-dev-closed', '1')
-          } catch {
-            /* без збереження */
-          }
-        }}
-      >
-        <X aria-hidden className="size-5" />
-      </button>
-    </div>
-  )
-}
 
 export interface ComponentRow {
   id: ComponentId
@@ -117,7 +77,7 @@ export function ComponentsCard({ rows, className }: { rows: ComponentRow[]; clas
                     <Tooltip content={r.limitedHint}>
                       <Badge tone="attention">
                         <Info aria-hidden className="size-3.5" />
-                        зараховано з обмеженням
+                        Зараховано з обмеженням
                       </Badge>
                     </Tooltip>
                   </span>
@@ -215,8 +175,8 @@ export function TrustPanel({
                     <div>
                       <p className="m-0 text-body font-semibold">
                         {f.title}{' '}
-                        <span className="text-caption font-normal text-text-muted">
-                          ({FLAG_WEIGHT_LABEL[f.weight]})
+                        <span className="rounded-sm border border-border px-1.5 text-caption font-normal text-text-muted">
+                          {FLAG_WEIGHT_LABEL[f.weight]}
                         </span>
                       </p>
                       <p className="m-0 text-caption text-text-muted">{f.explanation}</p>
@@ -255,7 +215,6 @@ export function AttentionPanel({
     <Card
       as="section"
       aria-labelledby="attn-h"
-      category="attention"
       className={cn('flex flex-col p-4 short:p-3 md:p-4 short:md:p-3', className)}
     >
       <h2 id="attn-h" className="card-title mb-2">
@@ -271,9 +230,7 @@ export function AttentionPanel({
               className="flex items-center gap-2 rounded-md bg-attention-bg px-2 py-1.5 text-attention-text no-underline hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
             >
               <Eye aria-hidden className="size-4 shrink-0" />
-              <span className="min-w-0 flex-1 text-body">
-                {it.component ? it.title.replace(/^[^:]+:\s*/, '') : it.title}
-              </span>
+              <span className="min-w-0 flex-1 text-body">{it.title}</span>
               {it.component && (
                 <span className="shrink-0 text-caption font-semibold">
                   {COMPONENT_LABELS[it.component]}

@@ -22,6 +22,51 @@ const themedWidths = (path: string): [number, 'dark' | 'light'][] => [
   ...(LIGHT_PATHS.has(path) ? [[1280, 'light'] as [number, 'dark' | 'light']] : []),
 ]
 
+interface Geometry {
+  route: string
+  sidebarLeft: number | null
+  sidebarWidth: number | null
+  mainLeft: number
+  mainWidth: number
+}
+/** Геометрія каркаса за ключем «роль, ширина, тема»: має збігатися на всіх маршрутах ролі (допуск 1 px). */
+const geometry = new Map<string, Geometry>()
+
+async function readGeometry(page: Page, route: string): Promise<Geometry | null> {
+  return page.evaluate((r) => {
+    const main = document.querySelector('#main')
+    if (!main) return null
+    const nav = [...document.querySelectorAll('nav[aria-label="Основна навігація"]')].find(
+      (n) => n.getBoundingClientRect().width > 0 && getComputedStyle(n).position === 'sticky',
+    )
+    const m = main.getBoundingClientRect()
+    const n = nav?.getBoundingClientRect()
+    return {
+      route: r,
+      sidebarLeft: n ? n.left : null,
+      sidebarWidth: n ? n.width : null,
+      mainLeft: m.left,
+      mainWidth: m.width,
+    }
+  }, route)
+}
+
+function compareGeometry(key: string, g: Geometry): string[] {
+  const first = geometry.get(key)
+  if (!first) {
+    geometry.set(key, g)
+    return []
+  }
+  const out: string[] = []
+  const diff = (a: number | null, b: number | null) =>
+    a === null || b === null ? a !== b : Math.abs(a - b) > 1
+  if (diff(first.sidebarLeft, g.sidebarLeft) || diff(first.sidebarWidth, g.sidebarWidth))
+    out.push(`бічна панель відрізняється від ${first.route}`)
+  if (diff(first.mainLeft, g.mainLeft) || diff(first.mainWidth, g.mainWidth))
+    out.push(`колонка контенту відрізняється від ${first.route}`)
+  return out
+}
+
 interface Result {
   role: string
   path: string
@@ -60,6 +105,9 @@ async function checkRoute(
       await page.waitForSelector(route.ready ?? '[data-ready="true"]', { timeout: 10_000 })
       await page.evaluate(() => document.fonts.ready)
       problems.push(...(await checkPage(page, tag, width)))
+      const geo = await readGeometry(page, route.path)
+      if (geo)
+        for (const p of compareGeometry(`${role.id}|${tag}`, geo)) problems.push(`[${tag}] ${p}`)
       const body = await page.evaluate(() => document.body.innerText)
       const isForbidden = body.includes(FORBIDDEN_FRAGMENT)
       if (route.forbidden && !isForbidden) problems.push(`[${tag}] очікувався ForbiddenState`)

@@ -125,12 +125,12 @@ function Row({
             {node.limited && node.kind === 'component' && (
               <Badge tone="attention">
                 <Info aria-hidden className="size-4" />
-                обмежувач
+                Обмежувач
               </Badge>
             )}
             {node.limited && node.kind === 'item' && (
               <span className="text-caption font-normal text-attention-text">
-                частка обмеження компонента
+                Частка обмеження компонента
               </span>
             )}
           </div>
@@ -313,7 +313,7 @@ function ExplainInner({ initial }: { initial: ComponentId | null }) {
                   fmt(node.weight),
                   fmt(node.value),
                   pts(node.contribution),
-                  node.source ? SOURCES[node.source].label : node.limited ? 'обмежувач' : '',
+                  node.source ? SOURCES[node.source].label : node.limited ? 'Обмежувач' : '',
                 ])}
               />
             </div>

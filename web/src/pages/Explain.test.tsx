@@ -25,7 +25,7 @@ describe('Розклад індексу', () => {
   it('компонент з адреси розкрито, обмежувач позначено', () => {
     setup('/explain?c=accountability')
     expect(screen.getByText('Прозорість рішень керівництва')).toBeInTheDocument()
-    expect(screen.getAllByText('обмежувач').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Обмежувач').length).toBeGreaterThan(0)
   })
   it('керується клавіатурою', async () => {
     setup('/explain?c=culture')

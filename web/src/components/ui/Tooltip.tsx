@@ -8,9 +8,11 @@ import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 export interface TooltipProps {
   content: ReactNode
   children: ReactNode
+  /** Куди розкривається підказка; «bottom» для елементів біля верху екрана. */
+  placement?: 'top' | 'bottom'
 }
 
-export function Tooltip({ content, children }: TooltipProps) {
+export function Tooltip({ content, children, placement = 'top' }: TooltipProps) {
   const id = useId()
   const [open, setOpen] = useState(false)
   const [pinned, setPinned] = useState(false)
@@ -63,7 +65,7 @@ export function Tooltip({ content, children }: TooltipProps) {
         <span
           id={id}
           role="tooltip"
-          className="absolute bottom-full left-1/2 z-40 mb-2 w-max max-w-64 -translate-x-1/2 rounded-md bg-text px-3 py-2 text-caption text-surface shadow-md"
+          className={`absolute left-1/2 z-40 w-max max-w-64 -translate-x-1/2 rounded-md bg-text px-3 py-2 text-caption text-surface shadow-md ${placement === 'top' ? 'bottom-full mb-2' : 'top-full mt-2'}`}
         >
           {content}
         </span>

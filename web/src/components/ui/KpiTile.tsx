@@ -8,7 +8,7 @@ export function ChangeChip({ delta, unit = '' }: { delta: number; unit?: string 
   const up = delta > 0
   const down = delta < 0
   const Icon = up ? ArrowUp : down ? ArrowDown : Minus
-  const word = up ? 'зросло' : down ? 'знизилось' : 'без змін'
+  const word = up ? 'Зросло' : down ? 'Знизилось' : 'Без змін'
   const abs = Math.abs(delta).toLocaleString('uk-UA', { maximumFractionDigits: 1 })
   return (
     <span
@@ -37,22 +37,13 @@ export interface KpiTileProps {
   unit?: string
   delta?: number
   deltaUnit?: string
-  category?: 'culture' | 'system' | 'accountability'
   className?: string
 }
 
 /** KPI-плитка: велике число, підпис, чип зміни. */
-export function KpiTile({
-  label,
-  value,
-  unit,
-  delta,
-  deltaUnit,
-  category,
-  className,
-}: KpiTileProps) {
+export function KpiTile({ label, value, unit, delta, deltaUnit, className }: KpiTileProps) {
   return (
-    <Card category={category} className={cn('p-3 md:p-4', className)}>
+    <Card className={cn('p-3 md:p-4', className)}>
       <p className="m-0 text-caption text-text-muted">{label}</p>
       <p className="m-0 mt-1 flex items-baseline gap-1 text-title tabular-nums">
         {value}

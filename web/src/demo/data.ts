@@ -244,7 +244,7 @@ export const summaryReason = limitedComponent
 export const strengths = [
   {
     id: 's1',
-    title: 'Культура: відкритість до етичних питань',
+    title: 'Відкритість до етичних питань',
     component: 'culture' as ComponentId,
     value: 57.5,
     hint: 'Зараховане значення компонента Культура, 0-100.',
@@ -260,21 +260,21 @@ export const strengths = [
 export const attention = [
   {
     id: 'a1',
-    title: 'Підзвітність: підтвердити факти',
+    title: 'Підтвердити факти документами',
     component: 'accountability' as ComponentId,
     value: 35,
     hint: 'Факти за компонентом Підзвітність, 0-100.',
   },
   {
     id: 'a2',
-    title: 'Система: зробити процедури помітнішими',
+    title: 'Зробити процедури помітнішими',
     component: 'system' as ComponentId,
     value: 45,
     hint: 'Зараховане значення компонента Система, 0-100.',
   },
   {
     id: 'a3',
-    title: 'Культура: більше практичних прикладів',
+    title: 'Додати більше практичних прикладів',
     component: 'culture' as ComponentId,
     value: 40,
     hint: 'Факти за компонентом Культура, 0-100.',

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
+import { Info, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import { cn } from '@/lib/cn'
-import { ForbiddenState, Logo, SkipLink } from '@/components/ui'
-import { CYCLE, CYCLE_DATE, INSTITUTION } from '@/demo/data'
+import { ForbiddenState, Logo, SkipLink, Tooltip } from '@/components/ui'
+import { INSTITUTION } from '@/demo/data'
 import { canAccess, defaultRoute, isKnownRoute, type Role } from '@/lib/access'
 import { useDemo } from '@/demo/demoContext'
 import { HeaderActions } from './HeaderActions'
-import { NAV_ITEMS, navFor } from './nav'
+import { navFor } from './nav'
 
 /** compact: на ширинах 1280-1535 меню згорнуте в іконки (розгортається кнопкою). */
 function NavList({
@@ -63,7 +63,6 @@ export function AppShell() {
   const { pathname } = useLocation()
   const { role } = useDemo()
   const allowed = !isKnownRoute(pathname) || canAccess(role, pathname)
-  const section = NAV_ITEMS.find((i) => (i.end ? pathname === i.to : pathname.startsWith(i.to)))
 
   useEffect(() => {
     if (!open) return
@@ -79,20 +78,12 @@ export function AppShell() {
         aria-label="Основна навігація"
         data-print="hide"
         className={cn(
-          'sticky top-0 hidden h-screen shrink-0 border-r border-border bg-surface p-2 xl:flex xl:flex-col xl:gap-2',
-          wide ? 'w-[14.5rem]' : 'w-14 2xl:w-[14.5rem]',
+          'sticky top-0 hidden h-dvh shrink-0 overflow-y-auto overflow-x-hidden border-r border-border bg-surface p-2 xl:flex xl:flex-col xl:gap-2',
+          wide ? 'w-[232px]' : 'w-14 2xl:w-[232px]',
         )}
       >
         <div className="flex h-10 items-center gap-2 px-0 2xl:px-1">
           <Logo className={cn('mx-auto', wide && 'mx-0', '2xl:mx-0')} />
-          <span
-            className={cn(
-              'min-w-0 text-caption font-semibold leading-4 text-text',
-              !wide && 'hidden 2xl:inline',
-            )}
-          >
-            Integrity Assessment Platform
-          </span>
         </div>
         <NavList role={role} expanded={wide} />
         <button
@@ -131,11 +122,19 @@ export function AppShell() {
               <span className="sr-only md:hidden">Меню</span>
             </button>
             <Logo className="hidden md:block xl:hidden" />
-            <div className="min-w-0 flex-1">
-              <p className="m-0 truncate text-card text-text">{section?.label ?? INSTITUTION}</p>
-              <p className="m-0 hidden truncate text-caption text-text-muted md:block">
-                {INSTITUTION}. Цикл оцінювання {CYCLE}, станом на {CYCLE_DATE}
+            <div className="flex min-w-0 flex-1 items-center gap-3">
+              <p className="m-0 hidden shrink-0 items-center gap-1 text-caption font-semibold text-text-muted lg:flex">
+                Integrity Assessment Platform
+                <Tooltip
+                  placement="bottom"
+                  content="Оцінювання це інструмент розвитку, а не контролю. Результати показують, куди рухатися далі."
+                >
+                  <span role="img" aria-label="Про продукт" className="inline-flex text-text-muted">
+                    <Info aria-hidden className="size-4" />
+                  </span>
+                </Tooltip>
               </p>
+              <p className="m-0 min-w-0 truncate text-card text-text">{INSTITUTION}</p>
             </div>
             <HeaderActions role={role} />
           </div>

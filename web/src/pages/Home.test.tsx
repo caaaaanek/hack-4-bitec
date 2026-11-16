@@ -31,8 +31,8 @@ describe('Dashboard', () => {
       '54,2 бала, Визначений, достовірність C',
     )
     expect(screen.getByText('Підзвітність: самооцінку не підтверджують факти')).toBeInTheDocument()
-    expect(screen.getByText('потрібна перевірка')).toBeInTheDocument()
-    expect(screen.getByText('зараховано з обмеженням')).toBeInTheDocument()
+    expect(screen.getByText('Потрібна перевірка')).toBeInTheDocument()
+    expect(screen.getByText('Зараховано з обмеженням')).toBeInTheDocument()
     expect(container.textContent).not.toMatch(/—|підприємств|рейтинг/i)
   })
 
@@ -45,7 +45,7 @@ describe('Dashboard', () => {
 
   it('пояснення обмеження показується в підказці', async () => {
     setup()
-    await userEvent.hover(screen.getByText('зараховано з обмеженням'))
+    await userEvent.hover(screen.getByText('Зараховано з обмеженням'))
     expect(screen.getByRole('tooltip')).toHaveTextContent('Сприйняття 80, факти 35, зараховано 60')
   })
 
@@ -80,11 +80,5 @@ describe('Dashboard', () => {
     await userEvent.click(screen.getByRole('tab', { name: 'Динаміка' }))
     await userEvent.click(screen.getByRole('button', { name: 'Показати як таблицю' }))
     expect(screen.getByRole('table', { name: /за цикли оцінювання/ })).toBeInTheDocument()
-  })
-
-  it('банер закривається', async () => {
-    setup()
-    await userEvent.click(screen.getByRole('button', { name: 'Закрити повідомлення' }))
-    expect(screen.queryByText(/інструмент розвитку/)).not.toBeInTheDocument()
   })
 })

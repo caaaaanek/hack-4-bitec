@@ -40,7 +40,7 @@ describe('badges', () => {
   })
   it('trust has accessible text', () => {
     const { container } = render(<TrustBadge grade="B" />)
-    expect(screen.getByText('є зауваження')).toBeInTheDocument()
+    expect(screen.getByText('Є зауваження')).toBeInTheDocument()
     expect(screen.getByText('B')).toBeInTheDocument()
     expect(screen.getByText(/Достовірність/)).toBeInTheDocument()
     expect(container.querySelector('[data-trust="B"]')).not.toBeNull()
@@ -53,9 +53,9 @@ describe('badges', () => {
         <TrustBadge grade="insufficient" />
       </>,
     )
-    expect(container).toHaveTextContent('підтверджується')
-    expect(container).toHaveTextContent('потрібна перевірка')
-    expect(container).toHaveTextContent('недостатньо даних')
+    expect(container).toHaveTextContent('Підтверджується')
+    expect(container).toHaveTextContent('Потрібна перевірка')
+    expect(container).toHaveTextContent('Недостатньо даних')
   })
   it('source label has marker shape', () => {
     const { container } = render(<SourceLabel source="experts" />)

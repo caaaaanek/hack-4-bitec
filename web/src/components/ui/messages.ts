@@ -24,16 +24,16 @@ export const RESPONDENT_CATEGORIES = {
 export const TRUST_LABEL = 'Достовірність'
 
 export const TRUST_GRADE_TEXT = {
-  A: { letter: 'A', word: 'підтверджується', rule: 'Жоден прапорець не спрацював.' },
-  B: { letter: 'B', word: 'є зауваження', rule: 'Спрацювали один або два незначні прапорці.' },
+  A: { letter: 'A', word: 'Підтверджується', rule: 'Жоден прапорець не спрацював.' },
+  B: { letter: 'B', word: 'Є зауваження', rule: 'Спрацювали один або два незначні прапорці.' },
   C: {
     letter: 'C',
-    word: 'потрібна перевірка',
+    word: 'Потрібна перевірка',
     rule: 'Спрацював хоча б один серйозний прапорець або три і більше незначних.',
   },
   insufficient: {
     letter: '?',
-    word: 'недостатньо даних',
+    word: 'Недостатньо даних',
     rule: `У групі менше ${K_MIN_GROUP} відповідей (мінімальна група k), тому достовірність не оцінюється.`,
   },
 } as const
@@ -43,4 +43,4 @@ export const TRUST_HINT =
   K_MIN_GROUP +
   ' (мінімальна група k), достовірність не оцінюється.'
 
-export const FLAG_WEIGHT_LABEL = { minor: 'незначний', major: 'серйозний' } as const
+export const FLAG_WEIGHT_LABEL = { minor: 'Незначний', major: 'Серйозний' } as const

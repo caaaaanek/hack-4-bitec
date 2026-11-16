@@ -8,17 +8,17 @@ describe('тема', () => {
     localStorage.clear()
   })
 
-  it('за замовчуванням темна', () => {
-    expect(readTheme()).toBe('dark')
+  it('за замовчуванням світла', () => {
+    expect(readTheme()).toBe('light')
   })
 
   it('перемикає, ставить атрибут і запамʼятовує вибір', () => {
     const { result } = renderHook(() => useTheme())
     act(() => result.current.toggle())
-    expect(result.current.theme).toBe('light')
-    expect(document.documentElement.getAttribute('data-theme')).toBe('light')
-    expect(localStorage.getItem('iap-theme')).toBe('light')
-    act(() => result.current.toggle())
     expect(result.current.theme).toBe('dark')
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark')
+    expect(localStorage.getItem('iap-theme')).toBe('dark')
+    act(() => result.current.toggle())
+    expect(result.current.theme).toBe('light')
   })
 })

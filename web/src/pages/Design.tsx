@@ -432,9 +432,9 @@ export function Design() {
         </div>
         <div className="grid gap-4 md:grid-cols-4">
           <KpiTile label="Індекс доброчесності" value="62" unit="з 100" delta={4.5} />
-          <KpiTile label="Культура" value="58" delta={-2} category="culture" />
-          <KpiTile label="Система" value="64" delta={0} category="system" />
-          <KpiTile label="Підзвітність" value="66" delta={3} category="accountability" />
+          <KpiTile label="Культура" value="58" delta={-2} />
+          <KpiTile label="Система" value="64" delta={0} />
+          <KpiTile label="Підзвітність" value="66" delta={3} />
         </div>
       </Section>
 

@@ -170,10 +170,10 @@ describe('states', () => {
 describe('KpiTile і ChangeChip', () => {
   it('чип зміни називає напрям словом, не лише кольором', () => {
     const { rerender } = render(<ChangeChip delta={2.5} />)
-    expect(screen.getByText('зросло')).toBeInTheDocument()
+    expect(screen.getByText('Зросло')).toBeInTheDocument()
     rerender(<ChangeChip delta={-1} />)
-    expect(screen.getByText('знизилось')).toBeInTheDocument()
+    expect(screen.getByText('Знизилось')).toBeInTheDocument()
     rerender(<ChangeChip delta={0} />)
-    expect(screen.getByText('без змін')).toBeInTheDocument()
+    expect(screen.getByText('Без змін')).toBeInTheDocument()
   })
 })
