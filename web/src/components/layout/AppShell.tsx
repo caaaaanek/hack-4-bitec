@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
+import { Menu, Search, X } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { ForbiddenState, Logo, Select, SkipLink } from '@/components/ui'
 import { useInstitution } from '@/demo/useInstitution'
@@ -15,21 +15,20 @@ import {
   type Role,
 } from '@/lib/access'
 import { useDemo } from '@/demo/demoContext'
+import { CommandPalette } from './CommandPalette'
 import { HeaderActions } from './HeaderActions'
 import { PAGE_TITLE_SLOT, PageTitle } from './PageTitle'
 import { navFor } from './nav'
 
 /** Назва продукту: «Integrity» жирним, «Index» приглушено. */
-function Brand({ showText }: { showText: boolean }) {
+function Brand() {
   return (
     <div className="flex items-center gap-2.5 px-1.5">
       <Logo />
-      {showText && (
-        <span className="text-section leading-none tracking-tight text-text">
-          <span className="font-bold">Integrity</span>{' '}
-          <span className="font-medium text-text-muted">Index</span>
-        </span>
-      )}
+      <span className="text-section leading-none tracking-tight text-text">
+        <span className="font-bold">Integrity</span>{' '}
+        <span className="font-medium text-text-muted">Index</span>
+      </span>
     </div>
   )
 }
@@ -58,15 +57,7 @@ function RoleCard() {
   )
 }
 
-function NavList({
-  role,
-  onNavigate,
-  expanded = true,
-}: {
-  role: Role
-  onNavigate?: () => void
-  expanded?: boolean
-}) {
+function NavList({ role, onNavigate }: { role: Role; onNavigate?: () => void }) {
   const counts = useNavCounts()
   return (
     <ul className="m-0 flex list-none flex-col gap-1 p-0">
@@ -82,8 +73,7 @@ function NavList({
               title={count ? `${label}. ${count.label}` : label}
               className={({ isActive }) =>
                 cn(
-                  'group relative flex min-h-10 items-center gap-3 rounded-[12px] px-3 py-2.5 text-body font-medium no-underline',
-                  !expanded && 'justify-center px-0 2xl:justify-start 2xl:px-3',
+                  'flex min-h-10 items-center gap-3 rounded-[12px] px-3 py-2.5 text-body font-medium no-underline',
                   'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
                   isActive
                     ? 'bg-surface-muted text-text'
@@ -92,25 +82,13 @@ function NavList({
               }
             >
               <Icon aria-hidden className="size-[18px] shrink-0" />
-              <span className={cn('min-w-0 flex-1', !expanded && 'hidden 2xl:inline')}>
-                {label}
-              </span>
+              <span className="min-w-0 flex-1">{label}</span>
               {count && (
                 <span
                   aria-hidden
-                  className={cn(
-                    'rounded-full bg-attention-bg px-[7px] py-px text-[11px] font-semibold tabular-nums text-attention-text',
-                    !expanded && 'absolute right-0.5 top-0 px-1 leading-4 2xl:static 2xl:px-[7px]',
-                  )}
+                  className="rounded-full bg-attention-bg px-[7px] py-px text-[11px] font-semibold tabular-nums text-attention-text"
                 >
-                  {expanded ? (
-                    count.text
-                  ) : (
-                    <>
-                      <span className="2xl:hidden">{count.short}</span>
-                      <span className="hidden 2xl:inline">{count.text}</span>
-                    </>
-                  )}
+                  {count.text}
                 </span>
               )}
             </NavLink>
@@ -121,15 +99,31 @@ function NavList({
   )
 }
 
+function SearchButton({ onOpen }: { onOpen: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      aria-label="Пошук по сторінках"
+      aria-keyshortcuts="Control+K Meta+K"
+      className="flex h-10 w-full items-center gap-2 rounded-[12px] bg-surface-muted px-3 text-body text-text-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+    >
+      <Search aria-hidden className="size-4" />
+      <span className="flex-1 text-left">Пошук</span>
+      <kbd className="rounded-md bg-surface px-1.5 py-0.5 font-sans text-[11px] font-semibold text-text-muted">
+        ⌘K
+      </kbd>
+    </button>
+  )
+}
+
 export function AppShell() {
   const [open, setOpen] = useState(false)
-  const [wide, setWide] = useState(false)
+  const [palette, setPalette] = useState(false)
   const { pathname } = useLocation()
   const { role } = useDemo()
   const institution = useInstitution()
   const allowed = !isKnownRoute(pathname) || canAccess(role, pathname)
-  // «Широке» меню (текст і картка ролі): за кнопкою або на 1920 і ширше (2xl).
-  const textShown = (cls: string) => (wide ? '' : cls)
 
   useEffect(() => {
     if (!open) return
@@ -138,61 +132,39 @@ export function AppShell() {
     return () => document.removeEventListener('keydown', onKey)
   }, [open])
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setPalette((v) => !v)
+      }
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <div className="min-h-screen xl:flex">
       <SkipLink />
       <nav
         aria-label="Основна навігація"
         data-print="hide"
-        className={cn(
-          'sticky top-0 hidden h-dvh shrink-0 flex-col gap-[18px] overflow-y-auto overflow-x-hidden border-r border-border bg-surface px-4 pb-4 pt-[22px] xl:flex',
-          wide ? 'w-[260px]' : 'w-[76px] 2xl:w-[260px]',
-        )}
+        className="sticky top-0 hidden h-dvh w-[260px] shrink-0 flex-col gap-[18px] overflow-y-auto border-r border-border bg-surface px-4 pb-4 pt-[22px] xl:flex"
       >
-        <div className={cn(wide ? '' : 'flex justify-center 2xl:block')}>
-          <div className="hidden 2xl:block">
-            <Brand showText />
-          </div>
-          <div className="2xl:hidden">
-            <Brand showText={wide} />
-          </div>
-        </div>
+        <Brand />
+        <SearchButton onOpen={() => setPalette(true)} />
         <div className="flex flex-col gap-1.5">
-          <p
-            className={cn(
-              'm-0 px-2.5 text-[11px] uppercase text-text-muted',
-              textShown('hidden 2xl:block'),
-            )}
-          >
-            Меню
-          </p>
-          <NavList role={role} expanded={wide} />
+          <p className="m-0 px-2.5 text-[11px] uppercase text-text-muted">Меню</p>
+          <NavList role={role} />
         </div>
-        <div className="mt-auto flex flex-col gap-2">
-          <div className={textShown('hidden 2xl:block')}>
-            <RoleCard />
-          </div>
-          <button
-            type="button"
-            aria-expanded={wide}
-            aria-label={wide ? 'Згорнути меню' : 'Розгорнути меню'}
-            title={wide ? 'Згорнути меню' : 'Розгорнути меню'}
-            onClick={() => setWide((v) => !v)}
-            className="inline-flex min-h-10 items-center justify-center gap-2 rounded-[12px] text-caption text-text-muted hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus 2xl:hidden"
-          >
-            {wide ? (
-              <PanelLeftClose aria-hidden className="size-5" />
-            ) : (
-              <PanelLeftOpen aria-hidden className="size-5" />
-            )}
-            {wide && <span>Згорнути</span>}
-          </button>
+        <div className="mt-auto">
+          <RoleCard />
         </div>
       </nav>
 
       <div className="min-w-0 flex-1">
         <header data-print="hide" className="sticky top-0 z-30 bg-bg/90 backdrop-blur">
-          <div className="flex items-center gap-3 px-4 py-3 md:px-7 md:py-[18px] short:py-2.5">
+          <div className="flex items-center gap-3 px-4 py-3 md:px-7 md:py-[18px]">
             <button
               type="button"
               aria-expanded={open}
@@ -208,7 +180,7 @@ export function AppShell() {
               <span className="sr-only">Меню</span>
             </button>
             <div id={PAGE_TITLE_SLOT} className="flex min-w-0 flex-1 items-center" />
-            <HeaderActions role={role} />
+            <HeaderActions />
           </div>
           {open && (
             <nav
@@ -216,18 +188,19 @@ export function AppShell() {
               aria-label="Основна навігація"
               className="flex flex-col gap-3 border-y border-border bg-surface px-4 py-3 xl:hidden"
             >
+              <SearchButton
+                onOpen={() => {
+                  setOpen(false)
+                  setPalette(true)
+                }}
+              />
               <NavList role={role} onNavigate={() => setOpen(false)} />
               <RoleCard />
             </nav>
           )}
         </header>
 
-        <main
-          id="main"
-          tabIndex={-1}
-          key={pathname}
-          className="min-w-0 px-4 pb-7 pt-1 md:px-7 short:pb-4"
-        >
+        <main id="main" tabIndex={-1} key={pathname} className="min-w-0 px-4 pb-7 pt-1 md:px-7">
           {allowed && role === 'observer' && pathname !== '/institutions' && (
             <nav aria-label="Хлібні крихти" className="mb-2 text-caption text-text-muted">
               <Link to="/institutions" className="text-accent underline underline-offset-2">
@@ -247,6 +220,7 @@ export function AppShell() {
           )}
         </main>
       </div>
+      <CommandPalette open={palette} onClose={() => setPalette(false)} role={role} />
     </div>
   )
 }

@@ -114,24 +114,6 @@ export function Home() {
             {scoreText(inst.index)}, {MATURITY[level].name}, достовірність {t.letter}
           </p>
         </div>
-        <nav aria-label="Швидкі переходи" className="flex flex-wrap gap-2">
-          <button type="button" onClick={() => openWhy()} className={linkBtn('primary')}>
-            <CircleHelp aria-hidden className="size-4" />
-            Чому такий індекс
-          </button>
-          {canAccess(role, '/recommendations') && (
-            <Link to="/recommendations" className={linkBtn('secondary')}>
-              <Lightbulb aria-hidden className="size-4" />
-              Рекомендації
-            </Link>
-          )}
-          {canAccess(role, '/reports') && (
-            <Link to="/reports" className={linkBtn('secondary')}>
-              <FileText aria-hidden className="size-4" />
-              Звіт
-            </Link>
-          )}
-        </nav>
       </div>
 
       <KpiRow
@@ -205,6 +187,24 @@ export function Home() {
               </span>
             </Tooltip>
           </p>
+          <nav aria-label="Швидкі переходи" className="mt-3 flex flex-wrap justify-center gap-2">
+            <button type="button" onClick={() => openWhy()} className={linkBtn('primary')}>
+              <CircleHelp aria-hidden className="size-4" />
+              Чому такий індекс
+            </button>
+            {canAccess(role, '/recommendations') && (
+              <Link to="/recommendations" className={linkBtn('secondary')}>
+                <Lightbulb aria-hidden className="size-4" />
+                Рекомендації
+              </Link>
+            )}
+            {canAccess(role, '/reports') && (
+              <Link to="/reports" className={linkBtn('secondary')}>
+                <FileText aria-hidden className="size-4" />
+                Звіт
+              </Link>
+            )}
+          </nav>
         </Card>
 
         <DynamicsPanel

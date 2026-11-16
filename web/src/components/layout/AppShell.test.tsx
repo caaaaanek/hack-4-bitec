@@ -75,6 +75,33 @@ describe('AppShell і демо-панель', () => {
     expect(screen.getByTestId('probe')).toHaveTextContent('leader|alpha|/')
   })
 
+  it('пошук ⌘K: палітра показує лише доступні сторінки, Enter переходить', async () => {
+    const user = userEvent.setup()
+    setup('/')
+    await user.keyboard('{Control>}k{/Control}')
+    const box = screen.getByPlaceholderText('Назва сторінки')
+    expect(box).toHaveFocus()
+    const options = screen.getAllByRole('option').map((o) => o.textContent)
+    expect(options).toContain('Огляд')
+    expect(options).not.toContain('Керування циклом')
+    await user.type(box, 'ог')
+    await user.keyboard('{Enter}')
+    expect(screen.queryByPlaceholderText('Назва сторінки')).toBeNull()
+    expect(screen.getByTestId('probe')).toHaveTextContent('/')
+    // відкриття кнопкою в бічній панелі
+    await user.click(screen.getAllByRole('button', { name: 'Пошук по сторінках' })[0]!)
+    expect(screen.getByPlaceholderText('Назва сторінки')).toBeInTheDocument()
+    await user.type(screen.getByPlaceholderText('Назва сторінки'), 'ъъъ')
+    expect(screen.getByText('Нічого не знайдено')).toBeInTheDocument()
+  })
+
+  it('верхня панель без дзвінка й довідки, є вибір ролі в картці «Роль»', () => {
+    setup('/')
+    expect(screen.queryByRole('button', { name: 'Сповіщення' })).toBeNull()
+    expect(screen.queryByRole('link', { name: /Довідка/ })).toBeNull()
+    expect(screen.getAllByRole('combobox', { name: 'Роль для демо' }).length).toBeGreaterThan(0)
+  })
+
   it('ForbiddenState окремо: текст і посилання', () => {
     render(
       <MemoryRouter>
