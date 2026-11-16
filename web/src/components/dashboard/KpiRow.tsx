@@ -62,6 +62,7 @@ function Tile({ label, value, sub, icon, to, onClick, href, actionLabel }: TileP
     el = (
       <button
         type="button"
+        data-print-keep
         onClick={onClick}
         aria-label={actionLabel}
         className={cn(cls, 'w-full text-left')}

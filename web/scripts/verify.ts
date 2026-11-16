@@ -15,11 +15,13 @@ const OUT = join(process.cwd(), 'artifacts', 'screens')
 const slug = (p: string) =>
   p === '/' ? 'home' : p.replace(/^\/|\/$/g, '').replace(/[^a-z0-9]+/gi, '-')
 
-/** Світла тема (основна) на всіх контрольних ширинах; темна лише на 1280 для ключових екранів. */
-const DARK_PATHS = new Set(['/', '/trends', '/recommendations'])
-const themedWidths = (path: string): [number, 'dark' | 'light'][] => [
+/** Висоти вікна для контрольних ширин: на 1280 і 1920 це 720 і 1080 (екрани 16:9). */
+const HEIGHT: Record<number, number> = { 360: 800, 768: 1024, 1280: 720, 1920: 1080 }
+/** Світла тема (основна) на всіх контрольних ширинах; темна на 1280x720 і 1920x1080 для всіх екранів. */
+const themedWidths = (): [number, 'dark' | 'light'][] => [
   ...WIDTHS.map((w): [number, 'dark' | 'light'] => [w, 'light']),
-  ...(DARK_PATHS.has(path) ? [[1280, 'dark'] as [number, 'dark' | 'light']] : []),
+  [1280, 'dark'],
+  [1920, 'dark'],
 ]
 
 interface Geometry {
@@ -81,8 +83,11 @@ async function checkRoute(
 ): Promise<Result> {
   const problems: string[] = []
   const origin = new URL(base).origin
-  for (const [width, theme] of themedWidths(route.path)) {
-    const ctx = await browser.newContext({ viewport: { width, height: 900 }, locale: 'uk-UA' })
+  for (const [width, theme] of themedWidths()) {
+    const ctx = await browser.newContext({
+      viewport: { width, height: HEIGHT[width] ?? 900 },
+      locale: 'uk-UA',
+    })
     const page = await ctx.newPage()
     const tag = `${width}px${theme === 'dark' ? ' dark' : ''}`
     await ctx.addInitScript((t) => localStorage.setItem('iap-theme', t), theme)
@@ -105,6 +110,16 @@ async function checkRoute(
       await page.waitForSelector(route.ready ?? '[data-ready="true"]', { timeout: 10_000 })
       await page.evaluate(() => document.fonts.ready)
       problems.push(...(await checkPage(page, tag, width)))
+      if (route.path === '/' && role.id === 'leader') {
+        // Дашборд: 1920x1080 без прокрутки, 1280x720 не більше ~160 px прокрутки
+        const extra = await page.evaluate(
+          () => document.documentElement.scrollHeight - window.innerHeight,
+        )
+        if (width === 1920 && extra > 1)
+          problems.push(`[${tag}] дашборд прокручується на ${extra} px`)
+        if (width === 1280 && extra > 160)
+          problems.push(`[${tag}] дашборд прокручується на ${extra} px (більше 160)`)
+      }
       const geo = await readGeometry(page, route.path)
       if (geo && !route.path.startsWith('/s/'))
         for (const p of compareGeometry(`${role.id}|${tag}`, geo)) problems.push(`[${tag}] ${p}`)

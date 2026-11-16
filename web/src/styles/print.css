@@ -14,7 +14,7 @@
     font-size: 11pt;
   }
   nav,
-  button,
+  button:not([data-print-keep]),
   [role='tablist'],
   [data-print='hide'],
   [data-skip-link],
