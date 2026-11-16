@@ -1,29 +1,22 @@
-import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import {
   BarChart3,
   ChevronDown,
   ChevronRight,
   CircleCheck,
+  CircleHelp,
   Info,
   Table2,
   TriangleAlert,
 } from 'lucide-react'
-import {
-  Badge,
-  Card,
-  MATURITY,
-  SourceMarker,
-  buttonBase,
-  buttonSizes,
-  buttonVariants,
-} from '@/components/ui'
-import type { MaturityLevel } from '@/components/ui'
+import { Badge, Card, SourceMarker, buttonBase, buttonSizes, buttonVariants } from '@/components/ui'
 import { SOURCES } from '@/components/ui/config'
 import { cn } from '@/lib/cn'
 import { Num } from '@/components/dashboard/Num'
+import { WhyPanel } from '@/components/dashboard/WhyPanel'
+import { useInstitution } from '@/demo/useInstitution'
 import { DataTable } from '@/components/dashboard/ChartFrame'
-import { components, currentIndex, factItems, perceptionItems } from '@/demo/data'
 import {
   MODE_LABELS,
   buildTree,
@@ -32,14 +25,7 @@ import {
   type ExplainMode,
   type TreeNode,
 } from '@/lib/scoring/explain'
-import {
-  COMPONENT_IDS,
-  LEVEL_UPPER_BOUNDS,
-  LIMITER_MARGIN,
-  fmt,
-  fmtIndex,
-  type ComponentId,
-} from '@/lib/scoring/methodology'
+import { COMPONENT_IDS, fmt, fmtIndex, type ComponentId } from '@/lib/scoring/methodology'
 
 const MODES: ExplainMode[] = ['perception', 'facts', 'credited']
 const WEIGHT_HINT = 'Яку частку батьківського вузла становить цей вузол, у відсотках.'
@@ -157,17 +143,31 @@ function Row({
   )
 }
 
-function ExplainInner({ initial }: { initial: ComponentId | null }) {
+function ExplainInner({ initial, nodeId }: { initial: ComponentId | null; nodeId: string | null }) {
+  const inst = useInstitution()
+  const { components, perceptionItems, factItems } = inst
+  const currentIndex = inst.index
   const limited = components.find((c) => c.credited.limited)?.id
-  const [mode, setMode] = useState<ExplainMode>('credited')
+  const [whyOpen, setWhyOpen] = useState(false)
+  const [mode, setMode] = useState<ExplainMode>(
+    nodeId && factItems.some((i) => i.id === nodeId) ? 'facts' : 'credited',
+  )
   const [asTable, setAsTable] = useState(false)
   const [expanded, setExpanded] = useState<Set<string>>(
     () => new Set(['index', initial ?? limited ?? 'culture']),
   )
-  const [focusId, setFocusId] = useState('index')
+  const [focusId, setFocusId] = useState(nodeId ?? 'index')
   const treeRef = useRef<HTMLDivElement>(null)
 
-  const root = useMemo(() => buildTree(mode, components, perceptionItems, factItems), [mode])
+  const root = useMemo(
+    () => buildTree(mode, components, perceptionItems, factItems),
+    [mode, components, perceptionItems, factItems],
+  )
+
+  useEffect(() => {
+    if (nodeId)
+      document.querySelector(`[data-node="${nodeId}"]`)?.scrollIntoView?.({ block: 'center' })
+  }, [nodeId])
   const rows = visibleNodes(root, expanded)
   const total = sumCheck(root)
   const ok = total === root.value && (mode !== 'credited' || total === currentIndex)
@@ -227,17 +227,6 @@ function ExplainInner({ initial }: { initial: ComponentId | null }) {
   }
 
   const flat = useMemo(() => visibleNodes(root, new Set(allIds(root))), [root])
-  const levels = [1, 2, 3, 4, 5] as MaturityLevel[]
-  const bound = (l: MaturityLevel) => {
-    const lo = l === 1 ? 0 : LEVEL_UPPER_BOUNDS[l - 2]!
-    const hi = l === 5 ? 100 : LEVEL_UPPER_BOUNDS[l - 1]!
-    return l === 1
-      ? `від 0 до ${fmt(hi)}`
-      : l === 5
-        ? `вище ${fmt(lo)}`
-        : `вище ${fmt(lo)} до ${fmt(hi)}`
-  }
-
   return (
     <div data-ready="true" className="flex flex-col gap-3">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -248,6 +237,14 @@ function ExplainInner({ initial }: { initial: ComponentId | null }) {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setWhyOpen(true)}
+            className={cn(buttonBase, buttonVariants.secondary, buttonSizes.md)}
+          >
+            <CircleHelp aria-hidden className="size-4" />
+            Як це рахується
+          </button>
           <div
             role="group"
             aria-label="Що показувати"
@@ -288,8 +285,9 @@ function ExplainInner({ initial }: { initial: ComponentId | null }) {
         </div>
       </div>
 
+      <WhyPanel open={whyOpen} onClose={() => setWhyOpen(false)} inst={inst} />
       <div className="grid gap-3 xl:grid-cols-12">
-        <Card as="section" aria-labelledby="tree-h" className="p-0 md:p-0 xl:col-span-8">
+        <Card as="section" aria-labelledby="tree-h" className="p-0 md:p-0 xl:col-span-12">
           <h2 id="tree-h" className="sr-only">
             Дерево розкладу, режим «{MODE_LABELS[mode]}»
           </h2>
@@ -365,55 +363,6 @@ function ExplainInner({ initial }: { initial: ComponentId | null }) {
             </span>
           </p>
         </Card>
-
-        <Card as="aside" aria-labelledby="how-h" className="p-4 md:p-4 xl:col-span-4">
-          <h2 id="how-h" className="card-title mb-2">
-            Як це рахується
-          </h2>
-          <ol className="m-0 flex list-decimal flex-col gap-2 pl-5 text-body">
-            <li>
-              Індекс це середнє трьох компонентів: Культура, Система, Підзвітність. Вага кожного
-              однакова, по третині.
-            </li>
-            <li>
-              Компонент складається з кількох питань або показників. Їхні ваги разом дають 100 %.
-            </li>
-            <li>
-              Сприйняття це оцінки з анкет (робоча група, особовий склад, експерти). Факти це
-              відсотки з обліку та рівні за анкетами.
-            </li>
-            <li>
-              Обмежувач: оцінка не вище за факти більш ніж на один рівень, тобто на {LIMITER_MARGIN}{' '}
-              пунктів. До індексу йде менше з двох значень: сприйняття або факти плюс{' '}
-              {LIMITER_MARGIN}.
-            </li>
-            <li>
-              Внесок вузла в пунктах це його значення, помножене на вагу. Внески разом дають індекс.
-            </li>
-          </ol>
-          <h3 className="m-0 mb-1 mt-3 text-body font-semibold">Рівні зрілості за індексом</h3>
-          <ul className="m-0 flex list-none flex-col gap-1 p-0 text-caption">
-            {levels.map((l) => (
-              <li key={l} className="flex flex-wrap items-center gap-2">
-                <span
-                  className={cn(
-                    'inline-flex size-6 items-center justify-center rounded-sm border tabular',
-                    MATURITY[l].classes,
-                  )}
-                >
-                  {l}
-                </span>
-                {MATURITY[l].name}: {bound(l)}
-              </li>
-            ))}
-          </ul>
-          <p className="m-0 mt-3 text-caption text-text-muted">
-            Це інструмент розвитку: розклад показує, де саме можна покращити результат.{' '}
-            <Link to="/" className="text-accent underline">
-              Повернутися до огляду
-            </Link>
-          </p>
-        </Card>
       </div>
     </div>
   )
@@ -422,6 +371,16 @@ function ExplainInner({ initial }: { initial: ComponentId | null }) {
 export function Explain() {
   const [params] = useSearchParams()
   const c = params.get('c')
-  const initial = COMPONENT_IDS.includes(c as ComponentId) ? (c as ComponentId) : null
-  return <ExplainInner key={initial ?? 'default'} initial={initial} />
+  const n = params.get('n')
+  const inst = useInstitution()
+  const items = [...inst.perceptionItems, ...inst.factItems]
+  const fromNode = items.find((i) => i.id === n)?.component ?? null
+  const initial = COMPONENT_IDS.includes(c as ComponentId) ? (c as ComponentId) : fromNode
+  return (
+    <ExplainInner
+      key={`${inst.id}-${initial ?? 'default'}-${n ?? ''}`}
+      initial={initial}
+      nodeId={fromNode ? n : null}
+    />
+  )
 }

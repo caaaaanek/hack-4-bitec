@@ -79,6 +79,42 @@ export function App() {
                     />
                   }
                 />
+                <Route
+                  path="/tracker"
+                  element={
+                    <Placeholder
+                      title="Трекер"
+                      description="Тут зʼявляться заходи з відповідальними посадами та строками."
+                    />
+                  }
+                />
+                <Route
+                  path="/trends"
+                  element={
+                    <Placeholder
+                      title="Динаміка"
+                      description="Тут зʼявиться повна версія графіка динаміки індексу."
+                    />
+                  }
+                />
+                <Route
+                  path="/integrations"
+                  element={
+                    <Placeholder
+                      title="Звідки беруться дані"
+                      description="Тут зʼявиться перелік джерел даних і чесні статуси інтеграцій."
+                    />
+                  }
+                />
+                <Route
+                  path="/institutions"
+                  element={
+                    <Placeholder
+                      title="Заклади"
+                      description="Тут зʼявиться список закладів із узагальненими даними."
+                    />
+                  }
+                />
                 <Route path="/me" element={<Me />} />
                 <Route path="/design" element={<Design />} />
                 <Route

@@ -24,6 +24,22 @@ describe('access', () => {
       expect(canAccess(r, '/explain')).toBe(true)
     }
   })
+  it('нові маршрути: трекер для керівника й аудиту, заклади лише для спостерігача', () => {
+    for (const r of ['leader', 'auditor'] as const) expect(canAccess(r, '/tracker')).toBe(true)
+    expect(canAccess('observer', '/tracker')).toBe(false)
+    expect(canAccess('leader', '/recommendations')).toBe(true)
+    expect(canAccess('auditor', '/recommendations')).toBe(false)
+    expect(canAccess('observer', '/recommendations')).toBe(false)
+    expect(canAccess('observer', '/institutions')).toBe(true)
+    expect(canAccess('leader', '/institutions')).toBe(false)
+    expect(defaultRoute('observer')).toBe('/institutions')
+    for (const r of ['leader', 'observer', 'auditor'] as const) {
+      expect(canAccess(r, '/trends')).toBe(true)
+      expect(canAccess(r, '/integrations')).toBe(true)
+    }
+    expect(canAccess('auditor', '/reports')).toBe(false)
+    expect(canAccess('respondent', '/tracker')).toBe(false)
+  })
   it('респондент лише /s/:token і /me', () => {
     expect(canAccess('respondent', '/s/demo')).toBe(true)
     expect(canAccess('respondent', '/me')).toBe(true)

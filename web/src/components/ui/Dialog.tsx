@@ -43,9 +43,19 @@ export interface DialogProps {
   description?: string
   children?: ReactNode
   footer?: ReactNode
+  /** «side»: висувна панель праворуч на всю висоту (на вузьких екранах на всю ширину). */
+  variant?: 'center' | 'side'
 }
 
-export function Dialog({ open, onClose, title, description, children, footer }: DialogProps) {
+export function Dialog({
+  open,
+  onClose,
+  title,
+  description,
+  children,
+  footer,
+  variant = 'center',
+}: DialogProps) {
   const titleId = useId()
   const descId = useId()
   const panelRef = useRef<HTMLDivElement>(null)
@@ -81,6 +91,7 @@ export function Dialog({ open, onClose, title, description, children, footer }: 
   }, [open])
 
   if (!open) return null
+  const side = variant === 'side'
 
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key !== 'Tab') return
@@ -97,7 +108,12 @@ export function Dialog({ open, onClose, title, description, children, footer }: 
   }
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-end justify-center md:items-center md:p-6">
+    <div
+      className={cn(
+        'fixed inset-0 z-50 flex',
+        side ? 'justify-end' : 'items-end justify-center md:items-center md:p-6',
+      )}
+    >
       <div
         data-testid="dialog-backdrop"
         aria-hidden
@@ -113,8 +129,10 @@ export function Dialog({ open, onClose, title, description, children, footer }: 
         tabIndex={-1}
         onKeyDown={handleKeyDown}
         className={cn(
-          'relative flex max-h-[90vh] w-full flex-col bg-surface text-text shadow-lg',
-          'rounded-t-lg md:max-w-lg md:rounded-lg focus:outline-none',
+          'relative flex w-full flex-col bg-surface text-text shadow-lg focus:outline-none',
+          side
+            ? 'h-dvh max-w-full border-l border-border sm:max-w-md md:max-w-xl'
+            : 'max-h-[90vh] rounded-t-lg md:max-w-lg md:rounded-lg',
         )}
       >
         <div className="flex items-start justify-between gap-4 p-4 md:p-6 md:pb-4">
@@ -130,7 +148,13 @@ export function Dialog({ open, onClose, title, description, children, footer }: 
           </div>
           <IconButton label="Закрити" icon={<X className="size-5" />} onClick={onClose} />
         </div>
-        {children && <div className="overflow-y-auto px-4 text-body md:px-6">{children}</div>}
+        {children && (
+          <div
+            className={cn('overflow-y-auto px-4 text-body md:px-6', side && 'min-h-0 flex-1 pb-4')}
+          >
+            {children}
+          </div>
+        )}
         {footer && (
           <div className="flex flex-col-reverse gap-2 p-4 sm:flex-row sm:justify-end md:p-6">
             {footer}

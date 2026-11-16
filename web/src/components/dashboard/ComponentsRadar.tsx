@@ -1,5 +1,20 @@
 import { fmt } from '@/lib/scoring/methodology'
-import { PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer } from 'recharts'
+import {
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+} from 'recharts'
+import { LEVEL_UPPER_BOUNDS } from '@/lib/scoring/methodology'
+
+/** Анімація появи до 800 мс, вимкнена при prefers-reduced-motion. */
+const animate = (): boolean =>
+  typeof window !== 'undefined' &&
+  window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === false
+
+const RINGS = [...LEVEL_UPPER_BOUNDS, 100]
 
 export interface RadarRow {
   name: string
@@ -21,10 +36,19 @@ export function ComponentsRadar({ data }: { data: RadarRow[] }) {
       >
         <RadarChart
           data={data}
-          outerRadius="78%"
-          margin={{ top: 30, right: 8, bottom: 22, left: 8 }}
+          outerRadius="92%"
+          margin={{ top: 34, right: 8, bottom: 30, left: 8 }}
         >
-          <PolarGrid stroke="var(--color-border)" />
+          <PolarGrid stroke="var(--color-border-strong)" strokeOpacity={0.5} />
+          <PolarRadiusAxis
+            angle={150}
+            domain={[0, 100]}
+            ticks={RINGS}
+            tickFormatter={(v: number) => String(RINGS.indexOf(v) + 1)}
+            tick={false}
+            axisLine={false}
+            tickLine={false}
+          />
           <PolarAngleAxis
             dataKey="name"
             tick={({ x: rx = 0, y: ry = 0, payload }) => {
@@ -51,7 +75,8 @@ export function ComponentsRadar({ data }: { data: RadarRow[] }) {
             strokeDasharray="6 4"
             fill={PREV}
             fillOpacity={0.08}
-            isAnimationActive={false}
+            isAnimationActive={animate()}
+            animationDuration={800}
             dot={({ cx = 0, cy = 0 }) => (
               <rect key={`${cx}${cy}`} x={cx - 4} y={cy - 4} width={8} height={8} fill={PREV} />
             )}
@@ -62,7 +87,8 @@ export function ComponentsRadar({ data }: { data: RadarRow[] }) {
             strokeWidth={3}
             fill={CUR}
             fillOpacity={0.22}
-            isAnimationActive={false}
+            isAnimationActive={animate()}
+            animationDuration={800}
             dot={({ cx = 0, cy = 0 }) => (
               <circle key={`${cx}${cy}`} cx={cx} cy={cy} r={5} fill={CUR} />
             )}
@@ -90,6 +116,7 @@ export function RadarLegend({ current, previous }: { current: string; previous: 
         </svg>
         Цикл {previous}
       </li>
+      <li className="text-text-muted">Кільця 1-5: верхні межі рівнів зрілості</li>
     </ul>
   )
 }

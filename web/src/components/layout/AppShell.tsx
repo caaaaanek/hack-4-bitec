@@ -3,7 +3,7 @@ import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Info, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { ForbiddenState, Logo, SkipLink, Tooltip } from '@/components/ui'
-import { INSTITUTION } from '@/demo/data'
+import { useInstitution } from '@/demo/useInstitution'
 import { canAccess, defaultRoute, isKnownRoute, type Role } from '@/lib/access'
 import { useDemo } from '@/demo/demoContext'
 import { HeaderActions } from './HeaderActions'
@@ -62,6 +62,7 @@ export function AppShell() {
   const [wide, setWide] = useState(false)
   const { pathname } = useLocation()
   const { role } = useDemo()
+  const institution = useInstitution()
   const allowed = !isKnownRoute(pathname) || canAccess(role, pathname)
 
   useEffect(() => {
@@ -134,7 +135,7 @@ export function AppShell() {
                   </span>
                 </Tooltip>
               </p>
-              <p className="m-0 min-w-0 truncate text-card text-text">{INSTITUTION}</p>
+              <p className="m-0 min-w-0 truncate text-card text-text">{institution.name}</p>
             </div>
             <HeaderActions role={role} />
           </div>

@@ -2,10 +2,14 @@ import {
   ClipboardCheck,
   ClipboardList,
   FileText,
+  Building2,
+  Database,
   Gauge,
   History,
   Lightbulb,
+  ListChecks,
   ListTree,
+  TrendingUp,
   PencilLine,
   Settings,
   UserRound,
@@ -21,9 +25,13 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
+  { to: '/institutions', label: 'Заклади', icon: Building2 },
   { to: '/', label: 'Огляд', icon: Gauge, end: true },
   { to: '/explain', label: 'Розклад індексу', icon: ListTree },
+  { to: '/trends', label: 'Динаміка', icon: TrendingUp },
   { to: '/recommendations', label: 'Рекомендації', icon: Lightbulb },
+  { to: '/tracker', label: 'Трекер', icon: ListChecks },
+  { to: '/integrations', label: 'Звідки беруться дані', icon: Database },
   { to: '/reports', label: 'Звіт', icon: FileText },
   { to: '/manage', label: 'Керування циклом', icon: Settings },
   { to: '/surveys', label: 'Анкети', icon: ClipboardList },

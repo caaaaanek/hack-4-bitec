@@ -107,9 +107,9 @@ const PROFILES: Profile[] = [
 ]
 
 const ATTENTION_TITLE: Record<ComponentId, string> = {
-  culture: 'Додати більше практичних прикладів',
+  culture: 'Більше практичних прикладів',
   system: 'Зробити процедури помітнішими',
-  accountability: 'Підтвердити факти документами',
+  accountability: 'Підтвердити факти',
 }
 
 function generate(p: Profile): Institution {

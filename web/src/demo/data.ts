@@ -261,7 +261,7 @@ export const strengths = [
 export const attention = [
   {
     id: 'a1',
-    title: 'Підтвердити факти документами',
+    title: 'Підтвердити факти',
     component: 'accountability' as ComponentId,
     value: 35,
     hint: 'Факти за компонентом Підзвітність, 0-100.',
@@ -275,7 +275,7 @@ export const attention = [
   },
   {
     id: 'a3',
-    title: 'Додати більше практичних прикладів',
+    title: 'Більше практичних прикладів',
     component: 'culture' as ComponentId,
     value: 40,
     hint: 'Факти за компонентом Культура, 0-100.',

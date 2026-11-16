@@ -52,7 +52,7 @@ export function Gauge({ value, level }: { value: number; level: MaturityLevel })
   return (
     <svg
       viewBox="0 0 320 190"
-      className="mx-auto block h-auto w-full max-w-[340px] short:max-w-[240px]"
+      className="mx-auto block h-auto w-full max-w-[340px] short:max-w-[270px]"
       aria-hidden
       focusable="false"
     >
