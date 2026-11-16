@@ -2,15 +2,26 @@ import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import { cn } from '@/lib/cn'
-import { Badge, SkipLink } from '@/components/ui'
+import { ForbiddenState, SkipLink } from '@/components/ui'
 import { CYCLE, CYCLE_DATE, INSTITUTION } from '@/demo/data'
-import { NAV_ITEMS } from './nav'
+import { canAccess, defaultRoute, isKnownRoute, type Role } from '@/lib/access'
+import { useDemo } from '@/demo/demoContext'
+import { DemoPanel } from './DemoPanel'
+import { navFor } from './nav'
 
 /** compact: на ширинах 1280-1535 меню згорнуте в іконки (розгортається кнопкою). */
-function NavList({ onNavigate, expanded = true }: { onNavigate?: () => void; expanded?: boolean }) {
+function NavList({
+  role,
+  onNavigate,
+  expanded = true,
+}: {
+  role: Role
+  onNavigate?: () => void
+  expanded?: boolean
+}) {
   return (
     <ul className="m-0 flex list-none flex-col gap-1 p-0">
-      {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
+      {navFor(role).map(({ to, label, icon: Icon, end }) => (
         <li key={to}>
           <NavLink
             to={to}
@@ -42,6 +53,8 @@ export function AppShell() {
   const [open, setOpen] = useState(false)
   const [wide, setWide] = useState(false)
   const { pathname } = useLocation()
+  const { role } = useDemo()
+  const allowed = !isKnownRoute(pathname) || canAccess(role, pathname)
 
   useEffect(() => {
     if (!open) return
@@ -72,9 +85,7 @@ export function AppShell() {
               Цикл оцінювання {CYCLE}, станом на {CYCLE_DATE}
             </p>
           </div>
-          <Badge tone="neutral" title="Усі дані на екрані синтетичні">
-            Демо
-          </Badge>
+          <DemoPanel />
         </div>
         {open && (
           <nav
@@ -82,7 +93,7 @@ export function AppShell() {
             aria-label="Основна навігація"
             className="border-t border-border bg-surface px-(--gutter) py-3 xl:hidden"
           >
-            <NavList onNavigate={() => setOpen(false)} />
+            <NavList role={role} onNavigate={() => setOpen(false)} />
           </nav>
         )}
       </header>
@@ -96,7 +107,7 @@ export function AppShell() {
             wide ? 'w-60' : 'w-[4.5rem] 2xl:w-60',
           )}
         >
-          <NavList expanded={wide} />
+          <NavList role={role} expanded={wide} />
           <button
             type="button"
             aria-expanded={wide}
@@ -119,7 +130,14 @@ export function AppShell() {
           key={pathname}
           className="min-w-0 flex-1 px-(--gutter) py-3 md:py-4"
         >
-          <Outlet />
+          {allowed ? (
+            <Outlet />
+          ) : (
+            <div data-ready="true" className="space-y-4">
+              <h1 className="text-title">Сторінка недоступна</h1>
+              <ForbiddenState homeHref={defaultRoute(role)} />
+            </div>
+          )}
         </main>
       </div>
     </div>

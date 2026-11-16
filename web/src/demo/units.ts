@@ -57,5 +57,10 @@ export function resolveScope(
   while ((responses[cur.id] ?? 0) < k && cur.parentId) {
     cur = unitById(cur.parentId, list) ?? cur
   }
-  return { unit: cur, requested, hidden: cur.id !== requested.id, responses: responses[cur.id] ?? 0 }
+  return {
+    unit: cur,
+    requested,
+    hidden: cur.id !== requested.id,
+    responses: responses[cur.id] ?? 0,
+  }
 }

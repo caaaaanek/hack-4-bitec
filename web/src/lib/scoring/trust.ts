@@ -13,7 +13,6 @@ export type TrustGrade = 'A' | 'B' | 'C' | 'insufficient'
 
 export type FlagWeight = 'minor' | 'major'
 
-
 /** Скільки незначних прапорців дорівнює серйозному. */
 export const MINOR_FLAGS_FOR_C = 3
 
