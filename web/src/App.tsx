@@ -4,6 +4,7 @@ import { ToastProvider } from '@/components/ui'
 import { AppShell } from '@/components/layout/AppShell'
 import { Home } from '@/pages/Home'
 import { Explain } from '@/pages/Explain'
+import { Survey } from '@/pages/Survey'
 import { Design } from '@/pages/Design'
 import { Placeholder } from '@/pages/Placeholder'
 import { DemoProvider } from '@/demo/DemoProvider'
@@ -17,6 +18,7 @@ export function App() {
         <BrowserRouter>
           <DemoProvider>
             <Routes>
+              <Route path="/s/:token" element={<Survey />} />
               <Route element={<AppShell />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/explain" element={<Explain />} />
