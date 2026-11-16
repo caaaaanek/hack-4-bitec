@@ -129,7 +129,7 @@ export function Dialog({
         tabIndex={-1}
         onKeyDown={handleKeyDown}
         className={cn(
-          'relative flex w-full flex-col bg-surface text-text shadow-lg focus:outline-none',
+          'relative flex w-full flex-col border border-border bg-surface text-text shadow-lg focus:outline-none',
           side
             ? 'h-dvh max-w-full border-l border-border sm:max-w-md md:max-w-xl'
             : 'max-h-[90vh] rounded-t-lg md:max-w-lg md:rounded-lg',

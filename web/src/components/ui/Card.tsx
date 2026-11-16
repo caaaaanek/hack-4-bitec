@@ -14,7 +14,7 @@ export function Card({ as, interactive = false, className, children, ...rest }: 
     <Tag
       data-print="card"
       className={cn(
-        'card relative min-w-0 bg-surface border border-border rounded-lg shadow-sm p-3 md:p-4',
+        'card relative min-w-0 rounded-lg border border-border bg-surface p-4 md:p-5',
         interactive &&
           'transition-shadow duration-150 ease-standard hover:bg-surface-raised hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
         className,

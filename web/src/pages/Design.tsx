@@ -1,11 +1,15 @@
 import { PageTitle } from '@/components/layout/PageTitle'
 import { useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { Inbox, Plus, Trash2 } from 'lucide-react'
+import { Inbox, Layers, Plus, Scale, Trash2, Users } from 'lucide-react'
 import {
   Badge,
+  BigNumber,
   Button,
   Card,
+  IconCircle,
+  SegmentedBar,
+  SegmentedControl,
   CardTitle,
   Checkbox,
   ConfirmDialog,
@@ -126,12 +130,12 @@ const TYPE_SCALE: Array<[string, string, string]> = [
   ['text-display 52/52', 'text-display tabular', '3,8'],
   ['text-numeral 30/33', 'text-numeral tabular', '63,2'],
   ['text-title 22/28', 'text-title', 'Заголовок екрана'],
-  ['text-section 22/30', 'text-section', 'Заголовок секції'],
-  ['text-card 18/26', 'text-card', 'Заголовок картки'],
+  ['text-section 18/26', 'text-section', 'Заголовок секції'],
+  ['text-card 16/24', 'text-card', 'Заголовок картки'],
   ['text-body-lg 16/24', 'text-body-lg', 'Основний текст для довгих описів і пояснень.'],
-  ['text-body 15/22', 'text-body', 'Текст за замовчуванням у таблицях і формах.'],
-  ['text-caption 14/20', 'text-caption text-text-muted', 'Підпис до значення'],
-  ['text-fine 14/20 medium', 'text-fine', 'Дрібний службовий текст'],
+  ['text-body 14/20', 'text-body', 'Текст за замовчуванням у таблицях і формах.'],
+  ['text-caption 13/18', 'text-caption text-text-muted', 'Підпис до значення'],
+  ['text-fine 12/16 medium', 'text-fine', 'Дрібний службовий текст'],
 ]
 const SPACING = [4, 8, 12, 16, 24, 32, 48, 64]
 
@@ -241,7 +245,7 @@ export function Design() {
             </div>
           ))}
         </Row>
-        <Row label="Радіуси 6 / 10 / 16">
+        <Row label="Радіуси 8 / 12 / 16">
           {['rounded-sm', 'rounded-md', 'rounded-lg'].map((r) => (
             <div
               key={r}
@@ -438,6 +442,51 @@ export function Design() {
           <KpiTile label="Система" value="64" delta={0} />
           <KpiTile label="Підзвітність" value="66" delta={3} />
         </div>
+      </Section>
+
+      <Section id="new-components" title="Число, іконка в колі, сегментована смуга, перемикач">
+        <Row label="Велике число (дробова частина приглушена)">
+          <BigNumber value="54,2" size="display" />
+          <BigNumber value="63,2" />
+        </Row>
+        <Row label="Іконка в тонованому колі за категорією">
+          <span className="inline-flex items-center gap-2">
+            <IconCircle tone="culture">
+              <Users className="size-4" />
+            </IconCircle>
+            Культура
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <IconCircle tone="system">
+              <Layers className="size-4" />
+            </IconCircle>
+            Система
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <IconCircle tone="accountability">
+              <Scale className="size-4" />
+            </IconCircle>
+            Підзвітність
+          </span>
+        </Row>
+        <Row label="Сегментована смуга">
+          <div className="w-full max-w-md space-y-2">
+            <SegmentedBar value={58} label="Культура: 58 зі 100" />
+            <SegmentedBar value={35} label="Підзвітність: 35 зі 100" />
+          </div>
+        </Row>
+        <Row label="Сегмент-перемикач">
+          <SegmentedControl
+            label="Приклад перемикача"
+            value="all"
+            onChange={() => {}}
+            options={[
+              { value: 'all', label: 'Усі' },
+              { value: 'work', label: 'В роботі' },
+              { value: 'done', label: 'Виконані' },
+            ]}
+          />
+        </Row>
       </Section>
 
       <Section id="overlays" title="Діалоги, сповіщення, підказки">

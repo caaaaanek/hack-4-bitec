@@ -166,14 +166,14 @@ export function Table<T>({
       </ul>
 
       <div
-        className="hidden overflow-auto rounded-lg border border-border bg-surface md:block"
+        className="hidden overflow-auto rounded-lg border border-border bg-surface p-2 md:block"
         style={stickyMaxHeight ? { maxHeight: stickyMaxHeight } : undefined}
       >
         <table className="hidden w-full border-collapse text-body md:table">
           <caption className={captionVisible ? 'p-3 text-left text-card text-text' : 'sr-only'}>
             {caption}
           </caption>
-          <thead className="sticky top-0 z-10 bg-surface-muted">
+          <thead className="sticky top-0 z-10">
             <tr>
               {columns.map((col) => {
                 const dir = dirOf(col.key)
@@ -184,7 +184,7 @@ export function Table<T>({
                     scope="col"
                     aria-sort={col.sortable ? ariaSortOf(dir) : undefined}
                     className={cn(
-                      'border-b border-border px-4 py-2 text-caption font-semibold text-text',
+                      'bg-surface-muted px-3 py-2.5 text-fine font-medium text-text-muted first:rounded-l-[10px] last:rounded-r-[10px]',
                       alignClass(col),
                     )}
                   >
@@ -211,7 +211,11 @@ export function Table<T>({
             {filterCols.length > 0 && (
               <tr>
                 {columns.map((col) => (
-                  <th key={col.key} scope="col" className="border-b border-border px-4 py-1.5">
+                  <th
+                    key={col.key}
+                    scope="col"
+                    className="bg-surface-muted px-3 py-1.5 first:rounded-l-[10px] last:rounded-r-[10px]"
+                  >
                     {col.filterable ? (
                       <Input
                         type="search"
@@ -230,12 +234,15 @@ export function Table<T>({
           </thead>
           <tbody>
             {sorted.map((row) => (
-              <tr key={rowKey(row)} className="border-b border-border last:border-b-0">
+              <tr
+                key={rowKey(row)}
+                className="border-b border-border transition-colors last:border-b-0 hover:bg-surface-muted/60"
+              >
                 {columns.map((col) => (
                   <td
                     key={col.key}
                     className={cn(
-                      'px-4 py-3 text-text',
+                      'px-3 py-3 text-text',
                       alignClass(col),
                       col.numeric && 'tabular-nums',
                     )}

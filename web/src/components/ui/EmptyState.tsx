@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { Inbox } from 'lucide-react'
+import { IconCircle } from './IconCircle'
 
 export interface EmptyStateProps {
   icon?: ReactNode
@@ -10,10 +11,10 @@ export interface EmptyStateProps {
 
 export function EmptyState({ icon, title, description, action }: EmptyStateProps) {
   return (
-    <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border-strong bg-surface p-8 text-center">
-      <span aria-hidden className="text-text-muted">
-        {icon ?? <Inbox className="size-8" />}
-      </span>
+    <div className="flex flex-col items-center gap-3 rounded-lg border border-border bg-surface p-8 text-center">
+      <IconCircle tone="neutral" size={48}>
+        {icon ?? <Inbox className="size-6" />}
+      </IconCircle>
       <p className="m-0 text-card text-text">{title}</p>
       {description && <p className="m-0 max-w-prose text-body text-text-muted">{description}</p>}
       {action}

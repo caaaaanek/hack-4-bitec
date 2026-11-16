@@ -55,7 +55,7 @@ export function Tabs({
       <div
         role="tablist"
         aria-label={ariaLabel}
-        className="flex overflow-x-auto border-b border-border"
+        className="inline-flex max-w-full gap-0.5 overflow-x-auto rounded-[12px] bg-surface-muted p-[3px]"
       >
         {items.map((item, i) => {
           const selected = item.id === current
@@ -74,11 +74,11 @@ export function Tabs({
               onClick={() => select(item.id)}
               onKeyDown={(e) => onKeyDown(e, i)}
               className={cn(
-                'touch-h shrink-0 whitespace-nowrap px-4 -mb-px border-b-4 text-body transition-colors duration-150 ease-standard',
+                'touch-h shrink-0 whitespace-nowrap rounded-[10px] px-4 text-body transition-colors duration-150 ease-standard',
                 'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus',
                 selected
-                  ? 'border-accent font-semibold text-text'
-                  : 'border-transparent text-text-muted hover:text-text hover:bg-surface-muted',
+                  ? 'bg-surface font-medium text-text shadow-md'
+                  : 'text-text-muted hover:text-text',
               )}
             >
               {item.label}

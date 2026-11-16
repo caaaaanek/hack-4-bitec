@@ -8,7 +8,7 @@ export function MaturityBadge({ level, className }: { level: MaturityLevel; clas
     <span
       data-maturity={level}
       className={cn(
-        'inline-flex items-center gap-2 rounded-sm border px-2 py-0.5 text-fine whitespace-nowrap tabular',
+        'inline-flex items-center gap-2 rounded-full border px-2.5 py-1 text-fine font-semibold whitespace-nowrap tabular',
         classes,
         className,
       )}

@@ -16,7 +16,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 export const badgeBase =
-  'inline-flex items-center gap-1.5 rounded-sm px-2 py-0.5 text-fine whitespace-nowrap tabular'
+  'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-fine font-semibold whitespace-nowrap tabular'
 
 export function Badge({ tone = 'neutral', className, ...rest }: BadgeProps) {
   return <span className={cn(badgeBase, tones[tone], className)} {...rest} />
