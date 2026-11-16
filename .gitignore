@@ -1,0 +1,63 @@
+# --- Secrets / credentials ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa*
+id_ed25519*
+secrets.*
+credentials*.json
+service-account*.json
+*.secret
+.npmrc
+.pypirc
+.netrc
+
+# --- OS / editor ---
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# --- Local agent settings (skills are tracked) ---
+.claude/settings.local.json
+CLAUDE.local.md
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+
+# --- Node ---
+node_modules/
+.npm/
+.pnpm-store/
+npm-debug.log*
+yarn-error.log*
+
+# --- Build / caches / logs ---
+dist/
+build/
+.cache/
+coverage/
+*.log
+tmp/
+.tmp/

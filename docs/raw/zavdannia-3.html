@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="uk" >
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- WP_HEAD() START -->
+
+			<script type='text/javascript' src='//ajax.googleapis.com/ajax/libs/webfont/1/webfont.js'></script>
+			<script type="text/javascript">
+			WebFont.load({
+				google: {
+					families: ["Inter:100,200,300,400,500,600,700,800,900","Inter:100,200,300,400,500,600,700,800,900","Special Elite:100,200,300,400,500,600,700,800,900"]
+				}
+			});
+			</script>
+			<meta name='robots' content='max-image-preview:large' />
+<title>Завдання 3. Integrity Management Dashboard - BITEC Hackathon</title>
+<link rel="alternate" type="application/rss+xml" title="BITEC Hackathon &raquo; стрічка" href="https://hack.bitec.com.ua/feed/" />
+<link rel="alternate" type="application/rss+xml" title="BITEC Hackathon &raquo; Канал коментарів" href="https://hack.bitec.com.ua/comments/feed/" />
+<style id='wp-block-library-inline-css'>
+:root{--wp-admin-theme-color:#007cba;--wp-admin-theme-color--rgb:0,124,186;--wp-admin-theme-color-darker-10:#006ba1;--wp-admin-theme-color-darker-10--rgb:0,107,161;--wp-admin-theme-color-darker-20:#005a87;--wp-admin-theme-color-darker-20--rgb:0,90,135;--wp-admin-border-width-focus:2px;--wp-block-synced-color:#7a00df;--wp-block-synced-color--rgb:122,0,223}@media (min-resolution:192dpi){:root{--wp-admin-border-width-focus:1.5px}}.wp-element-button{cursor:pointer}:root{--wp--preset--font-size--normal:16px;--wp--preset--font-size--huge:42px}:root .has-very-light-gray-background-color{background-color:#eee}:root .has-very-dark-gray-background-color{background-color:#313131}:root .has-very-light-gray-color{color:#eee}:root .has-very-dark-gray-color{color:#313131}:root .has-vivid-green-cyan-to-vivid-cyan-blue-gradient-background{background:linear-gradient(135deg,#00d084,#0693e3)}:root .has-purple-crush-gradient-background{background:linear-gradient(135deg,#34e2e4,#4721fb 50%,#ab1dfe)}:root .has-hazy-dawn-gradient-background{background:linear-gradient(135deg,#faaca8,#dad0ec)}:root .has-subdued-olive-gradient-background{background:linear-gradient(135deg,#fafae1,#67a671)}:root .has-atomic-cream-gradient-background{background:linear-gradient(135deg,#fdd79a,#004a59)}:root .has-nightshade-gradient-background{background:linear-gradient(135deg,#330968,#31cdcf)}:root .has-midnight-gradient-background{background:linear-gradient(135deg,#020381,#2874fc)}.has-regular-font-size{font-size:1em}.has-larger-font-size{font-size:2.625em}.has-normal-font-size{font-size:var(--wp--preset--font-size--normal)}.has-huge-font-size{font-size:var(--wp--preset--font-size--huge)}.has-text-align-center{text-align:center}.has-text-align-left{text-align:left}.has-text-align-right{text-align:right}#end-resizable-editor-section{display:none}.aligncenter{clear:both}.items-justified-left{justify-content:flex-start}.items-justified-center{justify-content:center}.items-justified-right{justify-content:flex-end}.items-justified-space-between{justify-content:space-between}.screen-reader-text{clip:rect(1px,1px,1px,1px);word-wrap:normal!important;border:0;-webkit-clip-path:inset(50%);clip-path:inset(50%);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}.screen-reader-text:focus{clip:auto!important;background-color:#ddd;-webkit-clip-path:none;clip-path:none;color:#444;display:block;font-size:1em;height:auto;left:5px;line-height:normal;padding:15px 23px 14px;text-decoration:none;top:5px;width:auto;z-index:100000}html :where(.has-border-color){border-style:solid}html :where([style*=border-top-color]){border-top-style:solid}html :where([style*=border-right-color]){border-right-style:solid}html :where([style*=border-bottom-color]){border-bottom-style:solid}html :where([style*=border-left-color]){border-left-style:solid}html :where([style*=border-width]){border-style:solid}html :where([style*=border-top-width]){border-top-style:solid}html :where([style*=border-right-width]){border-right-style:solid}html :where([style*=border-bottom-width]){border-bottom-style:solid}html :where([style*=border-left-width]){border-left-style:solid}html :where(img[class*=wp-image-]){height:auto;max-width:100%}:where(figure){margin:0 0 1em}html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:var(--wp-admin--admin-bar--height,0px)}@media screen and (max-width:600px){html :where(.is-position-sticky){--wp-admin--admin-bar--position-offset:0px}}
+</style>
+<style id='classic-theme-styles-inline-css'>
+/*! This file is auto-generated */
+.wp-block-button__link{color:#fff;background-color:#32373c;border-radius:9999px;box-shadow:none;text-decoration:none;padding:calc(.667em + 2px) calc(1.333em + 2px);font-size:1.125em}.wp-block-file__button{background:#32373c;color:#fff;text-decoration:none}
+</style>
+<style id='global-styles-inline-css'>
+body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: #abb8c3;--wp--preset--color--white: #ffffff;--wp--preset--color--pale-pink: #f78da7;--wp--preset--color--vivid-red: #cf2e2e;--wp--preset--color--luminous-vivid-orange: #ff6900;--wp--preset--color--luminous-vivid-amber: #fcb900;--wp--preset--color--light-green-cyan: #7bdcb5;--wp--preset--color--vivid-green-cyan: #00d084;--wp--preset--color--pale-cyan-blue: #8ed1fc;--wp--preset--color--vivid-cyan-blue: #0693e3;--wp--preset--color--vivid-purple: #9b51e0;--wp--preset--color--base: #ffffff;--wp--preset--color--contrast: #000000;--wp--preset--color--primary: #9DFF20;--wp--preset--color--secondary: #345C00;--wp--preset--color--tertiary: #F6F6F6;--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg,rgba(6,147,227,1) 0%,rgb(155,81,224) 100%);--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg,rgb(122,220,180) 0%,rgb(0,208,130) 100%);--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg,rgba(252,185,0,1) 0%,rgba(255,105,0,1) 100%);--wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg,rgba(255,105,0,1) 0%,rgb(207,46,46) 100%);--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg,rgb(238,238,238) 0%,rgb(169,184,195) 100%);--wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg,rgb(74,234,220) 0%,rgb(151,120,209) 20%,rgb(207,42,186) 40%,rgb(238,44,130) 60%,rgb(251,105,98) 80%,rgb(254,248,76) 100%);--wp--preset--gradient--blush-light-purple: linear-gradient(135deg,rgb(255,206,236) 0%,rgb(152,150,240) 100%);--wp--preset--gradient--blush-bordeaux: linear-gradient(135deg,rgb(254,205,165) 0%,rgb(254,45,45) 50%,rgb(107,0,62) 100%);--wp--preset--gradient--luminous-dusk: linear-gradient(135deg,rgb(255,203,112) 0%,rgb(199,81,192) 50%,rgb(65,88,208) 100%);--wp--preset--gradient--pale-ocean: linear-gradient(135deg,rgb(255,245,203) 0%,rgb(182,227,212) 50%,rgb(51,167,181) 100%);--wp--preset--gradient--electric-grass: linear-gradient(135deg,rgb(202,248,128) 0%,rgb(113,206,126) 100%);--wp--preset--gradient--midnight: linear-gradient(135deg,rgb(2,3,129) 0%,rgb(40,116,252) 100%);--wp--preset--font-size--small: clamp(0.875rem, 0.875rem + ((1vw - 0.2rem) * 0.227), 1rem);--wp--preset--font-size--medium: clamp(1rem, 1rem + ((1vw - 0.2rem) * 0.227), 1.125rem);--wp--preset--font-size--large: clamp(1.75rem, 1.75rem + ((1vw - 0.2rem) * 0.227), 1.875rem);--wp--preset--font-size--x-large: 2.25rem;--wp--preset--font-size--xx-large: clamp(4rem, 4rem + ((1vw - 0.2rem) * 10.909), 10rem);--wp--preset--font-family--dm-sans: "DM Sans", sans-serif;--wp--preset--font-family--ibm-plex-mono: 'IBM Plex Mono', monospace;--wp--preset--font-family--inter: "Inter", sans-serif;--wp--preset--font-family--system-font: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;--wp--preset--font-family--source-serif-pro: "Source Serif Pro", serif;--wp--preset--spacing--30: clamp(1.5rem, 5vw, 2rem);--wp--preset--spacing--40: clamp(1.8rem, 1.8rem + ((1vw - 0.48rem) * 2.885), 3rem);--wp--preset--spacing--50: clamp(2.5rem, 8vw, 4.5rem);--wp--preset--spacing--60: clamp(3.75rem, 10vw, 7rem);--wp--preset--spacing--70: clamp(5rem, 5.25rem + ((1vw - 0.48rem) * 9.096), 8rem);--wp--preset--spacing--80: clamp(7rem, 14vw, 11rem);--wp--preset--shadow--natural: 6px 6px 9px rgba(0, 0, 0, 0.2);--wp--preset--shadow--deep: 12px 12px 50px rgba(0, 0, 0, 0.4);--wp--preset--shadow--sharp: 6px 6px 0px rgba(0, 0, 0, 0.2);--wp--preset--shadow--outlined: 6px 6px 0px -3px rgba(255, 255, 255, 1), 6px 6px rgba(0, 0, 0, 1);--wp--preset--shadow--crisp: 6px 6px 0px rgba(0, 0, 0, 1);}:where(body .is-layout-flow)  > :first-child:first-child{margin-block-start: 0;}:where(body .is-layout-flow)  > :last-child:last-child{margin-block-end: 0;}:where(body .is-layout-flow)  > *{margin-block-start: 1.5rem;margin-block-end: 0;}:where(body .is-layout-constrained)  > :first-child:first-child{margin-block-start: 0;}:where(body .is-layout-constrained)  > :last-child:last-child{margin-block-end: 0;}:where(body .is-layout-constrained)  > *{margin-block-start: 1.5rem;margin-block-end: 0;}:where(body .is-layout-flex) {gap: 1.5rem;}:where(body .is-layout-grid) {gap: 1.5rem;}body .is-layout-flow > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-flow > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-flow > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignleft{float: left;margin-inline-start: 0;margin-inline-end: 2em;}body .is-layout-constrained > .alignright{float: right;margin-inline-start: 2em;margin-inline-end: 0;}body .is-layout-constrained > .aligncenter{margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)){max-width: var(--wp--style--global--content-size);margin-left: auto !important;margin-right: auto !important;}body .is-layout-constrained > .alignwide{max-width: var(--wp--style--global--wide-size);}body .is-layout-flex{display: flex;}body .is-layout-flex{flex-wrap: wrap;align-items: center;}body .is-layout-flex > *{margin: 0;}body .is-layout-grid{display: grid;}body .is-layout-grid > *{margin: 0;}.has-black-color{color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-color{color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-color{color: var(--wp--preset--color--white) !important;}.has-pale-pink-color{color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-color{color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-color{color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-color{color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-color{color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-color{color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-color{color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-color{color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-color{color: var(--wp--preset--color--vivid-purple) !important;}.has-black-background-color{background-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-background-color{background-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-background-color{background-color: var(--wp--preset--color--white) !important;}.has-pale-pink-background-color{background-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-background-color{background-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-background-color{background-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-background-color{background-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-background-color{background-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-background-color{background-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-background-color{background-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-background-color{background-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-background-color{background-color: var(--wp--preset--color--vivid-purple) !important;}.has-black-border-color{border-color: var(--wp--preset--color--black) !important;}.has-cyan-bluish-gray-border-color{border-color: var(--wp--preset--color--cyan-bluish-gray) !important;}.has-white-border-color{border-color: var(--wp--preset--color--white) !important;}.has-pale-pink-border-color{border-color: var(--wp--preset--color--pale-pink) !important;}.has-vivid-red-border-color{border-color: var(--wp--preset--color--vivid-red) !important;}.has-luminous-vivid-orange-border-color{border-color: var(--wp--preset--color--luminous-vivid-orange) !important;}.has-luminous-vivid-amber-border-color{border-color: var(--wp--preset--color--luminous-vivid-amber) !important;}.has-light-green-cyan-border-color{border-color: var(--wp--preset--color--light-green-cyan) !important;}.has-vivid-green-cyan-border-color{border-color: var(--wp--preset--color--vivid-green-cyan) !important;}.has-pale-cyan-blue-border-color{border-color: var(--wp--preset--color--pale-cyan-blue) !important;}.has-vivid-cyan-blue-border-color{border-color: var(--wp--preset--color--vivid-cyan-blue) !important;}.has-vivid-purple-border-color{border-color: var(--wp--preset--color--vivid-purple) !important;}.has-vivid-cyan-blue-to-vivid-purple-gradient-background{background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;}.has-light-green-cyan-to-vivid-green-cyan-gradient-background{background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;}.has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;}.has-luminous-vivid-orange-to-vivid-red-gradient-background{background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;}.has-very-light-gray-to-cyan-bluish-gray-gradient-background{background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;}.has-cool-to-warm-spectrum-gradient-background{background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;}.has-blush-light-purple-gradient-background{background: var(--wp--preset--gradient--blush-light-purple) !important;}.has-blush-bordeaux-gradient-background{background: var(--wp--preset--gradient--blush-bordeaux) !important;}.has-luminous-dusk-gradient-background{background: var(--wp--preset--gradient--luminous-dusk) !important;}.has-pale-ocean-gradient-background{background: var(--wp--preset--gradient--pale-ocean) !important;}.has-electric-grass-gradient-background{background: var(--wp--preset--gradient--electric-grass) !important;}.has-midnight-gradient-background{background: var(--wp--preset--gradient--midnight) !important;}.has-small-font-size{font-size: var(--wp--preset--font-size--small) !important;}.has-medium-font-size{font-size: var(--wp--preset--font-size--medium) !important;}.has-large-font-size{font-size: var(--wp--preset--font-size--large) !important;}.has-x-large-font-size{font-size: var(--wp--preset--font-size--x-large) !important;}
+</style>
+<link rel='stylesheet' id='oxygen-css' href='https://hack.bitec.com.ua/wp-content/plugins/oxygen/component-framework/oxygen.css?ver=4.7' media='all' />
+<style id='dominant-color-styles-inline-css'>
+img[data-dominant-color]:not(.has-transparency) { background-color: var(--dominant-color); }
+</style>
+<script src='https://hack.bitec.com.ua/wp-includes/js/jquery/jquery.min.js?ver=3.7.0' id='jquery-core-js'></script>
+<link rel="https://api.w.org/" href="https://hack.bitec.com.ua/wp-json/" /><link rel="alternate" type="application/json" href="https://hack.bitec.com.ua/wp-json/wp/v2/pages/185" /><link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://hack.bitec.com.ua/xmlrpc.php?rsd" />
+<meta name="generator" content="WordPress 6.3.1" />
+<link rel="canonical" href="https://hack.bitec.com.ua/zavdannia-3/" />
+<link rel='shortlink' href='https://hack.bitec.com.ua/?p=185' />
+<link rel="alternate" type="application/json+oembed" href="https://hack.bitec.com.ua/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhack.bitec.com.ua%2Fzavdannia-3%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://hack.bitec.com.ua/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fhack.bitec.com.ua%2Fzavdannia-3%2F&#038;format=xml" />
+<meta name="generator" content="Performance Lab 2.7.0; modules: images/dominant-color-images, images/webp-support, images/webp-uploads">
+<link rel="icon" href="https://hack.bitec.com.ua/wp-content/uploads/2025/11/logo-02.svg" sizes="32x32" />
+<link rel="icon" href="https://hack.bitec.com.ua/wp-content/uploads/2025/11/logo-02.svg" sizes="192x192" />
+<link rel="apple-touch-icon" href="https://hack.bitec.com.ua/wp-content/uploads/2025/11/logo-02.svg" />
+<meta name="msapplication-TileImage" content="https://hack.bitec.com.ua/wp-content/uploads/2025/11/logo-02.svg" />
+<link rel='stylesheet' id='oxygen-cache-142-css' href='//hack.bitec.com.ua/wp-content/uploads/oxygen/css/142.css?cache=1794816862&#038;ver=6.3.1' media='all' />
+<link rel='stylesheet' id='oxygen-universal-styles-css' href='//hack.bitec.com.ua/wp-content/uploads/oxygen/css/universal.css?cache=1794819448&#038;ver=6.3.1' media='all' />
+<!-- END OF WP_HEAD() -->
+</head>
+<body class="page-template-default page page-id-185 wp-embed-responsive  oxygen-body" >
+
+
+
+
+						<header id="_header-2-97" class="oxy-header-wrapper oxy-sticky-header oxy-overlay-header oxy-header" ><div id="_header_row-3-97" class="oxy-header-row" ><div class="oxy-header-container"><div id="_header_left-4-97" class="oxy-header-left" ><a id="link-36-97" class="ct-link" href="/"   ><img  id="image-33-97" alt="" src="https://hack.bitec.com.ua/wp-content/uploads/2025/11/logo-02.svg" class="ct-image" srcset="" sizes="(max-width: 1px) 100vw, 1px" /></a><div id="div_block-30-97" class="ct-div-block" ><div id="text_block-27-97" class="ct-text-block" >Building Integrity Hackathon</div><div id="text_block-32-97" class="ct-text-block" >Ukraine | 2026</div></div><div id="code_block-2080-142" class="ct-code-block" ><button type="button" class="hack-menu-btn" aria-expanded="false" aria-controls="div_block-37-97">☰ Меню</button></div><div id="div_block-37-97" class="ct-div-block" ><a id="link-67-97" class="ct-link" href="/#section-4-95" target="_self"  ><div id="text_block-43-97" class="ct-text-block" >Про хакатон</div></a><a id="link-70-97" class="ct-link" href="/#section-588-95" target="_self"  ><div id="text_block-64-97" class="ct-text-block" >Напрями</div></a><a id="link-1090-142" class="ct-link" href="/#section-686-95" target="_self"  ><div id="text_block-1091-142" class="ct-text-block" >Етапи</div></a><a id="link-73-97" class="ct-link" href="/otsiniuvannia/" target="_self"  ><div id="text_block-44-97" class="ct-text-block" >Оцінювання</div></a><a id="link-1092-142" class="ct-link" href="/podannia/" target="_self"  ><div id="text_block-1093-142" class="ct-text-block" >Подання</div></a><a id="link-2078-142" class="ct-link" href="/mentory/" target="_self"  ><div id="text_block-2079-142" class="ct-text-block" >Ментори</div></a><a id="link-1080-142" class="ct-link" href="/polityka-shi/" target="_self"  ><div id="text_block-1081-142" class="ct-text-block" >Політика ШІ</div></a><a id="link-76-97" class="ct-link" href="/arkhiv/" target="_self"  ><div id="text_block-45-97" class="ct-text-block" >Попередні хакатони</div></a></div></div><div id="_header_center-7-97" class="oxy-header-center" ></div><div id="_header_right-8-97" class="oxy-header-right" ></div></div></div></header>
+				<script type="text/javascript">
+			jQuery(document).ready(function() {
+				var selector = "#_header-2-97",
+					scrollval = parseInt("300");
+				if (!scrollval || scrollval < 1) {
+										if (jQuery(window).width() >= 1281){
+											jQuery("body").css("margin-top", jQuery(selector).outerHeight());
+						jQuery(selector).addClass("oxy-sticky-header-active");
+										}
+									}
+				else {
+					var scrollTopOld = 0;
+					jQuery(window).scroll(function() {
+						if (!jQuery('body').hasClass('oxy-nav-menu-prevent-overflow')) {
+							if (jQuery(this).scrollTop() > scrollval 
+																) {
+								if (
+																		jQuery(window).width() >= 1281 && 
+																		!jQuery(selector).hasClass("oxy-sticky-header-active")) {
+									if (jQuery(selector).css('position')!='absolute') {
+										jQuery("body").css("margin-top", jQuery(selector).outerHeight());
+									}
+									jQuery(selector)
+										.addClass("oxy-sticky-header-active")
+																	}
+							}
+							else {
+								jQuery(selector)
+									.removeClass("oxy-sticky-header-fade-in")
+									.removeClass("oxy-sticky-header-active");
+								if (jQuery(selector).css('position')!='absolute') {
+									jQuery("body").css("margin-top", "");
+								}
+							}
+							scrollTopOld = jQuery(this).scrollTop();
+						}
+					})
+				}
+			});
+		</script><div id='inner_content-3-99' class='ct-inner-content'><header id="_header-28-11" class="oxy-header-wrapper oxy-overlay-header oxy-header" ><div id="_header_row-29-11" class="oxy-header-row" ><div class="oxy-header-container"><div id="_header_left-30-11" class="oxy-header-left" ></div><div id="_header_center-33-11" class="oxy-header-center" ></div><div id="_header_right-34-11" class="oxy-header-right" ></div></div></div></header>
+		<div id='inner_content-10-11' class='ct-inner-content'>
+<div class="wp-block-group has-global-padding is-layout-constrained wp-container-3 wp-block-group-is-layout-constrained" style="max-width:1240px;margin-left:auto;margin-right:auto;box-sizing:border-box;padding-top:48px;padding-right:24px;padding-bottom:80px;padding-left:24px"><div class="wp-block-group__inner-container">
+
+<style>
+.hack-table{overflow-x:auto;margin:0 0 24px}
+.hack-table table{border-collapse:collapse;width:100%;font-size:16px;line-height:1.45}
+.hack-table th,.hack-table td{border:1px solid #d5d9e0;padding:8px 10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+.hack-table th{background:#f2f4f7;font-weight:700}
+pre.hack-code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:14px;line-height:1.5;background:#f4f5f7;border:1px solid #e1e4e8;border-radius:6px;padding:14px 16px;margin:0 0 24px;overflow-x:auto;white-space:pre}
+pre.hack-code code{font-family:inherit;background:none;padding:0}
+.wp-block-group code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;font-size:.92em;background:#f1f2f4;padding:1px 4px;border-radius:3px;overflow-wrap:anywhere}
+@media (max-width:640px){
+.hack-table table,.hack-table tbody,.hack-table tr,.hack-table td{display:block;width:100%}
+.hack-table thead{display:none}
+.hack-table tr{border:1px solid #d5d9e0;border-radius:6px;margin:0 0 12px;padding:6px 0}
+.hack-table td{border:0;padding:4px 12px}
+.hack-table td::before{content:attr(data-label);display:block;font-size:13px;font-weight:700;color:#5a6270}
+pre.hack-code{font-size:12px;padding:12px}
+}
+.hack-lead{font-size:18px;line-height:1.6;max-width:860px}
+.hack-korotko{background:#f6f8fa;border:1px solid #e1e4e8;border-radius:12px;padding:20px 24px;margin:24px 0 40px}
+.hack-korotko h2{margin-top:0}
+.hack-korotko>:last-child,.hack-korotko .wp-block-group__inner-container>:last-child{margin-bottom:0}
+.hack-btns{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 20px}
+a.hack-btn{display:inline-block;text-decoration:none;line-height:1.5;max-width:100%;box-sizing:border-box;white-space:normal}
+.hack-podaty{border-top:1px solid #e1e4e8;margin-top:48px;padding-top:24px}
+.wp-block-group p a,.wp-block-group li a{overflow-wrap:anywhere}
+@media (max-width:640px){.hack-korotko{padding:16px}}
+@media (max-width:479px){a.hack-btn{padding-left:20px;padding-right:20px}}
+.wp-block-heading{overflow-wrap:break-word}@media (max-width:374px){h1.wp-block-heading{font-size:28px}h2.wp-block-heading{font-size:22px}}
+</style>
+
+
+<h1 class="wp-block-heading">Завдання 3. Integrity Management Dashboard</h1>
+
+
+<p class="hack-lead">Цифрова система оцінювання системи доброчесності та підтримки управлінських рішень</p>
+
+
+<div class="wp-block-group hack-korotko is-layout-flow wp-block-group-is-layout-flow"><div class="wp-block-group__inner-container">
+
+<h2 class="wp-block-heading">Коротко</h2>
+
+
+<p><strong>Повний текст</strong> — нижче на цій сторінці і в PDF.</p>
+
+
+<div class="hack-btns"><a class="hack-btn" href="/wp-content/uploads/2026/11/zavdannia-3-1811daff.pdf">Завантажити PDF</a></div>
+
+
+<p><strong>Матеріали</strong></p>
+
+
+<ul class="wp-block-list">
+
+<li><a href="https://nuou.org.ua/assets/documents/recommendations_transform_dobrochesnist.pdf">Рекомендації щодо трансформації функціонування ВВНЗ (ВНП ЗВО) на засадах доброчесності та нульової толерантності до корупції</a> (МОУ, НУОУ, 2025) — PDF на сайті НУОУ. Контрольний чек-лист — додаток Б, анкети — додаток В.</li>
+
+
+<li>Дані для демонстрації команди формують самі, лише синтетичні.</li>
+
+</ul>
+
+
+<p><strong>Подання.</strong> Капітан подає посилання на репозиторій через форму, один раз на команду, до 18 листопада, 10:00. Завдання у формі вже обрано.</p>
+
+
+<div class="hack-btns"><a class="hack-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeGKOU9B0aOuLOdT8qaG4r_jPEdugCEPV8Y3JH-3GHRD_eDeA/viewform?usp=pp_url&amp;entry.16583388=%D0%97%D0%B0%D0%B2%D0%B4%D0%B0%D0%BD%D0%BD%D1%8F+3.+Integrity+Management+Dashboard">Подати роботу за цим завданням</a></div>
+
+
+<p>Вимоги — <a href="/podannia/">«Як подати роботу»</a>, покрокова інструкція — <a href="/repozytorii/">«Як організувати репозиторій»</a>.</p>
+
+</div></div>
+
+
+<h2 class="wp-block-heading">МЕТА</h2>
+
+
+<p>Створити цифрову інформаційно-аналітичну систему для автоматизації оцінювання стану та рівня зрілості системи доброчесності органу сектору безпеки і оборони, що забезпечує інтеграцію цифрових опитувальників, автоматичну обробку результатів, розрахунок інтегрального показника Integrity Index, їх візуалізацію на інформаційно-аналітичних панелях (Dashboard) та підтримку прийняття управлінських рішень.</p>
+
+
+<p>Метою рішення є забезпечення керівників та уповноважених підрозділів сучасним цифровим інструментом, який дозволяє не лише проводити оцінювання, а й отримувати цілісне уявлення про стан системи доброчесності, відстежувати її розвиток у динаміці, визначати проблемні компоненти та формувати пріоритети подальшого вдосконалення.</p>
+
+
+<p>Оцінювання є інструментом розвитку, а не контролю чи покарання: результати використовуються для визначення пріоритетів удосконалення системи доброчесності, а не для оцінки окремих посадових осіб.</p>
+
+
+<h2 class="wp-block-heading">ПРОБЛЕМА</h2>
+
+
+<p>Система оцінювання системи доброчесності передбачає проведення комплексного оцінювання за визначеною методикою із використанням цифрових опитувальників, аналізу отриманих результатів та формування рекомендацій щодо розвитку системи.</p>
+
+
+<p>Разом із тим процес обробки результатів, їх узагальнення, підготовки аналітичних матеріалів і представлення керівництву залишається переважно ручним, що потребує значних часових ресурсів, ускладнює проведення повторних оцінювань, порівняльний аналіз та моніторинг динаміки розвитку.</p>
+
+
+<p>Відсутність єдиного цифрового рішення не дозволяє забезпечити оперативне отримання інтегрованої управлінської інформації, автоматичне визначення сильних і слабких сторін системи доброчесності, а також формування рекомендацій для керівництва щодо її подальшого розвитку.</p>
+
+
+<p>Крім того, результати самооцінювання можуть бути схильними до соціально бажаних відповідей, що впливає на об&#39;єктивність висновків. Недостатній захист анонімності респондентів, відсутність автоматизованого зіставлення результатів різних категорій учасників оцінювання та об&#39;єктивних показників ускладнюють перевірку достовірності отриманих даних і визначення реального стану системи доброчесності.</p>
+
+
+<h2 class="wp-block-heading">ЗАВДАННЯ КОМАНДИ</h2>
+
+
+<p><strong>Розробити прототип цифрового рішення, яке дозволяє:</strong></p>
+
+
+<ol class="wp-block-list">
+
+<li>Інтегрувати у цифрове рішення наявні інструменти оцінювання системи доброчесності, зокрема анкети для визначення рівня зрілості доброчесності та окремі індикатори контрольного чек-листа, наведені у Рекомендаціях щодо трансформації функціонування ВВНЗ (ВНП ЗВО) на засадах доброчесності та нульової толерантності до корупції (додатки Б, В), посилання на які наведено в розділі «Орієнтири для розробки».</li>
+
+
+<li>Автоматизувати проведення самооцінювання системи доброчесності з можливістю залучення різних категорій респондентів, проведення експертного оцінювання та зіставлення отриманих результатів.</li>
+
+
+<li>Забезпечувати анонімність учасників опитування персоналу та захист їхніх відповідей від ідентифікації, зокрема шляхом обмеження відображення результатів для груп, менших за встановлений мінімальний розмір. Для інституційного оцінювання передбачити можливість визначення відповідальних за внесення та підтвердження інформації.</li>
+
+
+<li>Автоматично обробляти результати оцінювання, визначати рівень зрілості системи доброчесності за окремими компонентами та розраховувати інтегральний показник Integrity Index на основі обґрунтованої і прозорої методики.</li>
+
+
+<li>Забезпечувати зіставлення результатів самооцінювання різних категорій респондентів між собою та з об&#39;єктивними показниками (результатами перевірок, виконання антикорупційних заходів, охоплення персоналу навчанням тощо) для виявлення розбіжностей, оцінювання достовірності результатів і визначення напрямів додаткового аналізу.</li>
+
+
+<li>Візуалізувати результати оцінювання за окремими компонентами системи доброчесності, визначати сильні сторони, проблемні напрями та критичні зони.</li>
+
+
+<li>Формувати інтерактивні інформаційно-аналітичні панелі (Dashboard) для керівників різних рівнів із можливістю деталізації результатів.</li>
+
+
+<li>Відображати результати повторних оцінювань, аналізувати тенденції розвитку системи доброчесності та порівнювати результати у динаміці.</li>
+
+
+<li>Автоматично формувати обґрунтовані рекомендації щодо пріоритетних напрямів удосконалення системи доброчесності на основі результатів оцінювання, з можливістю їх перегляду, уточнення та прийняття відповідальною посадовою особою.</li>
+
+
+<li>Відстежувати виконання рекомендацій: кожна прийнята рекомендація має відповідального, строк і статус виконання, а її результат перевіряється наступним оцінюванням.</li>
+
+
+<li>Формувати аналітичні звіти для керівництва та експортувати результати у зручному форматі.</li>
+
+</ol>
+
+
+<h2 class="wp-block-heading">ОЧІКУВАНИЙ РЕЗУЛЬТАТ</h2>
+
+
+<p><strong>Рішення надає можливість:</strong></p>
+
+
+<p>автоматизоване проведення оцінювання стану та рівня зрілості системи доброчесності з використанням цифрових опитувальників;</p>
+
+
+<p>комплексну аналітичну обробку результатів, розрахунок Integrity Index, візуалізацію показників за компонентами системи доброчесності та аналіз їх динаміки;</p>
+
+
+<p>виявлення сильних сторін, проблемних напрямів і розбіжностей між результатами оцінювання та об&#39;єктивними показниками;</p>
+
+
+<p>формування обґрунтованих управлінських рекомендацій і моніторинг виконання заходів із розвитку системи доброчесності.</p>
+
+
+<h2 class="wp-block-heading">ЦІЛЬОВА АУДИТОРІЯ</h2>
+
+
+<ul class="wp-block-list">
+
+<li>керівництво Міністерства оборони України;</li>
+
+
+<li>керівники органів військового управління;</li>
+
+
+<li>командири військових частин;</li>
+
+
+<li>керівники підприємств, установ та організацій сектору безпеки і оборони;</li>
+
+
+<li>керівництво закладів військової освіти та члени робочих груп із розбудови доброчесності;</li>
+
+
+<li>Департамент з питань запобігання та виявлення корупції Міністерства оборони України;</li>
+
+
+<li>уповноважені підрозділи (особи) з питань запобігання та виявлення корупції;</li>
+
+
+<li>військовослужбовці та працівники – учасники оцінювання, яким система повертає узагальнені результати;</li>
+
+
+<li>підрозділи внутрішнього контролю та внутрішнього аудиту.</li>
+
+</ul>
+
+
+<h2 class="wp-block-heading">ОРІЄНТОВНИЙ ФУНКЦІОНАЛ</h2>
+
+
+<h3 class="wp-block-heading">Assessment Manager</h3>
+
+
+<ul class="wp-block-list">
+
+<li>створення циклів оцінювання;</li>
+
+
+<li>визначення учасників;</li>
+
+
+<li>налаштування мінімального розміру групи для відображення результатів;</li>
+
+
+<li>контроль проходження опитування;</li>
+
+
+<li>завершення оцінювання.</li>
+
+</ul>
+
+
+<h3 class="wp-block-heading">Digital Questionnaire</h3>
+
+
+<ul class="wp-block-list">
+
+<li>інтеграція цифрових опитувальників;</li>
+
+
+<li>підтримка самооцінювання та експертного оцінювання;</li>
+
+
+<li>підтримка різних типів опитувальників, шкал оцінювання та категорій респондентів;</li>
+
+
+<li>анонімне проходження опитування;</li>
+
+
+<li>контроль повноти заповнення.</li>
+
+</ul>
+
+
+<h3 class="wp-block-heading">Evidence Repository (опційно)</h3>
+
+
+<ul class="wp-block-list">
+
+<li>можливість додавання підтвердних матеріалів;</li>
+
+
+<li>прив&#39;язка документів до окремих критеріїв оцінювання.</li>
+
+</ul>
+
+
+<h3 class="wp-block-heading">Integrity Index Engine</h3>
+
+
+<ul class="wp-block-list">
+
+<li>автоматичний розрахунок інтегрального показника;</li>
+
+
+<li>розрахунок показників за окремими компонентами;</li>
+
+
+<li>документована методика розрахунку: користувач бачить, з яких критеріїв і з якою вагою складається показник;</li>
+
+
+<li>визначення рівня зрілості системи доброчесності за окремими компонентами з можливістю деталізації результатів до рівня індикаторів.</li>
+
+</ul>
+
+
+<h3 class="wp-block-heading">Executive Dashboard</h3>
+
+
+<ul class="wp-block-list">
+
+<li>загальний <strong>Integrity Index</strong>;</li>
+
+
+<li>оцінка окремих компонентів;</li>
+
+
+<li>сильні сторони;</li>
+
+
+<li>проблемні напрями;</li>
+
+
+<li>порівняння з попередніми оцінюваннями;</li>
+
+
+<li>візуалізація динаміки.</li>
+
+</ul>
+
+
+<h3 class="wp-block-heading">Comparative Analytics</h3>
+
+
+<ul class="wp-block-list">
+
+<li>аналіз змін у часі;</li>
+
+
+<li>порівняння результатів між оцінюваннями;</li>
+
+
+<li>зіставлення результатів оцінювання з обʼєктивними показниками;</li>
+
+
+<li>визначення позитивної та негативної динаміки.</li>
+
+</ul>
+
+
+<h3 class="wp-block-heading">Recommendations Engine</h3>
+
+
+<ul class="wp-block-list">
+
+<li>автоматичне формування рекомендацій;</li>
+
+
+<li>пояснення, на підставі яких результатів сформовано рекомендацію;</li>
+
+
+<li>визначення пріоритетних напрямів розвитку;</li>
+
+
+<li>передавання прийнятих рекомендацій для визначення відповідальних виконавців і строків та контроль їх виконання в системі;</li>
+
+
+<li>формування короткого управлінського висновку.</li>
+
+</ul>
+
+
+<h2 class="wp-block-heading">ОРІЄНТИРИ ДЛЯ РОЗРОБКИ (ДОПУСК / ОБМЕЖЕННЯ)</h2>
+
+
+<p>Для розроблення цифрового рішення командам пропонується використати Рекомендації щодо трансформації функціонування вищих військових навчальних закладів (військових навчальних підрозділів закладів вищої освіти) на засадах доброчесності та нульової толерантності до корупції (<a href="https://nuou.org.ua/assets/documents/recommendations_transform_dobrochesnist.pdf">https://nuou.org.ua/assets/documents/recommendations_transform_dobrochesnist.pdf</a>).</p>
+
+
+<p>Для демонстрації функціональних можливостей цифрового рішення як модельний об’єкт оцінювання використовується вищий військовий навчальний заклад (ВВНЗ). При цьому архітектура рішення має передбачати можливість адаптації опитувальників, критеріїв та індикаторів для інших органів сектору безпеки і оборони.</p>
+
+
+<p>Рекомендації містять:</p>
+
+
+<ul class="wp-block-list">
+
+<li>контрольний чек-лист оцінювання стану впровадження інструментів доброчесності (додаток Б);</li>
+
+
+<li>анкети визначення рівня зрілості доброчесності для різних категорій респондентів (додаток В);</li>
+
+
+<li>приклад аналітичного звіту за результатами оцінювання (додаток Г);</li>
+
+
+<li>типовий план заходів із розвитку системи доброчесності (додаток Д).</li>
+
+</ul>
+
+
+<p>Наведені інструменти використовуються як модельна основа для демонстрації функціональних можливостей цифрового рішення. Для розроблення прототипу допускається використання окремих анкет, індикаторів і компонентів оцінювання за умови збереження логіки відповідної моделі.</p>
+
+
+<p>Мінімальний демонстраційний сценарій має передбачати проходження цифрового опитування, автоматичну обробку та візуалізацію результатів, зіставлення результатів різних джерел оцінювання і формування управлінських рекомендацій. Повна цифровізація всіх інструментів оцінювання не є обов&#39;язковою. Перевагою рішення буде можливість подальшого розширення переліку опитувальників і масштабування системи.</p>
+
+
+<p>Команди повинні запропонувати та обґрунтувати демонстраційний алгоритм розрахунку інтегрального показника Integrity Index на основі використаних індикаторів оцінювання. Методика розрахунку, включно з принципами агрегування показників та застосуванням вагових коефіцієнтів, має бути прозорою і зрозумілою користувачеві.</p>
+
+
+<p>Для демонстрації роботи системи використовуються виключно синтетичні (штучно сформовані) дані, що не містять персональних даних, службової інформації та інших відомостей з обмеженим доступом.</p>
+
+
+<p>Основним предметом розроблення є <strong>цифрова автоматизація процесу оцінювання</strong>, аналітична обробка результатів та їх візуалізація.</p>
+
+
+<p>Рішення повинно:</p>
+
+
+<ul class="wp-block-list">
+
+<li>використовувати тестові або демонстраційні дані;</li>
+
+
+<li>підтримувати рольову модель доступу;</li>
+
+
+<li>забезпечувати можливість масштабування для інших органів сектору безпеки і оборони;</li>
+
+
+<li>передбачати можливість розгортання як модуля (сервісу) наявної інформаційної системи, а не лише як окремої системи;</li>
+
+
+<li>бути готовим до інтеграції з іншими цифровими сервісами.</li>
+
+</ul>
+
+
+<p>Не допускається використання:</p>
+
+
+<ul class="wp-block-list">
+
+<li>інформації з обмеженим доступом;</li>
+
+
+<li>персональних даних;</li>
+
+
+<li>ШІ-сервісів, заборонених пунктом 2 Політики використання ШІ;</li>
+
+
+<li>службової інформації.</li>
+
+</ul>
+
+
+<h2 class="wp-block-heading">РЕКОМЕНДАЦІЇ ДО КІНЦЕВОГО РІШЕННЯ</h2>
+
+
+<p>Перевагою рішення буде реалізація принципу <strong>«одноразове оцінювання — багаторазове використання результатів»</strong>.</p>
+
+
+<p>Результати оцінювання повинні автоматично використовуватися для:</p>
+
+
+<ul class="wp-block-list">
+
+<li>формування <strong>Integrity Index</strong>;</li>
+
+
+<li>побудови Dashboard для керівника;</li>
+
+
+<li>порівняльного аналізу;</li>
+
+
+<li>визначення тенденцій розвитку;</li>
+
+
+<li>автоматичного формування рекомендацій;</li>
+
+
+<li>підготовки аналітичної звітності.</li>
+
+</ul>
+
+
+<p>Особливу увагу доцільно приділити простоті використання системи керівниками різних рівнів та мінімізації ручної обробки результатів.</p>
+
+
+<p>Рекомендації мають бути пояснюваними, а рішення щодо них ухвалює посадова особа.</p>
+
+
+<p>Результати оцінювання не доцільно використовувати для порівняння чи оцінки окремих командирів (керівників): це стимулює формальні відповіді і знецінює оцінювання.</p>
+
+
+<p>Учасники оцінювання мають отримувати узагальнені результати: це підвищує довіру до процедури і мотивацію відповідати чесно.</p>
+
+
+<h2 class="wp-block-heading">ФУНКЦІОНАЛЬНІ РЕКОМЕНДАЦІЇ</h2>
+
+
+<p>Основними функціональними модулями можуть бути:</p>
+
+
+<ul class="wp-block-list">
+
+<li><strong>Assessment Manager</strong> – управління оцінюванням;</li>
+
+
+<li><strong>Digital Questionnaire</strong> – цифрове проходження опитування;</li>
+
+
+<li><strong>Integrity Index Engine</strong> – автоматичний розрахунок показників;</li>
+
+
+<li><strong>Executive Dashboard</strong> – інформаційно-аналітична панель керівника;</li>
+
+
+<li><strong>Comparative Analytics</strong> – аналіз динаміки;</li>
+
+
+<li><strong>Recommendations Engine</strong> – підтримка прийняття управлінських рішень;</li>
+
+
+<li><strong>Recommendations Tracker</strong> – контроль виконання рекомендацій;</li>
+
+
+<li><strong>Audit Trail</strong> – журнал дій користувачів;</li>
+
+
+<li><strong>Reporting Module</strong> – автоматичне формування звітності.</li>
+
+</ul>
+
+
+<h2 class="wp-block-heading">ТЕХНІЧНІ ВИМОГИ</h2>
+
+
+<ul class="wp-block-list">
+
+<li>вебзастосунок або інформаційна система;</li>
+
+
+<li>адаптивний інтерфейс;</li>
+
+
+<li>підтримка рольової моделі доступу;</li>
+
+
+<li>API для інтеграції;</li>
+
+
+<li>можливість експорту результатів у поширені формати;</li>
+
+
+<li>журнал дій користувачів (audit trail);</li>
+
+
+<li>захист анонімності респондентів на рівні зберігання даних;</li>
+
+
+<li>можливість розгортання в закритому відомчому контурі, без обовʼязкової залежності від зовнішніх хмарних сервісів;</li>
+
+
+<li>документована архітектура рішення.</li>
+
+</ul>
+
+
+<h2 class="wp-block-heading">ВИМОГИ ДО ДИЗАЙНУ ТА КОРИСТУВАЦЬКОГО ДОСВІДУ (UX/UI)</h2>
+
+
+<p>Інтерфейс має забезпечувати швидке сприйняття результатів оцінювання та підтримувати принцип:</p>
+
+
+<p><strong>«Один екран – повне розуміння стану системи доброчесності».</strong></p>
+
+
+<p>Бажано використовувати:</p>
+
+
+<ul class="wp-block-list">
+
+<li>інтерактивні інформаційні панелі;</li>
+
+
+<li>індикатори рівня доброчесності ;</li>
+
+
+<li>кругові, стовпчикові та радарні діаграми;</li>
+
+
+<li>кольорову індикацію сильних і слабких сторін;</li>
+
+
+<li>окремий екран для учасника оцінювання з узагальненими результатами його підрозділу, без можливості ідентифікації респондентів;</li>
+
+
+<li>можливість деталізації результатів від інтегрального показника до окремого критерію оцінювання.</li>
+
+</ul>
+
+
+<h2 class="wp-block-heading">ОЧІКУВАНИЙ ФОРМАТ КІНЦЕВОГО ПРОДУКТУ</h2>
+
+
+<p>Команда повинна представити:</p>
+
+
+<ol class="wp-block-list">
+
+<li>робочий MVP або інтерактивний прототип системи;</li>
+
+
+<li>демонстрацію проходження оцінювання із використанням цифрових опитувальників;</li>
+
+
+<li>приклад автоматичного розрахунку <strong>Integrity Index</strong>;</li>
+
+
+<li>приклад Dashboard керівника;</li>
+
+
+<li>приклади автоматично сформованих рекомендацій;</li>
+
+
+<li>опис механізму захисту анонімності респондентів;</li>
+
+
+<li>приклад зіставлення результатів самооцінювання з обʼєктивними показниками;</li>
+
+
+<li>розрахунок економії часу на підготовку аналітичних матеріалів порівняно з поточним ручним порядком;</li>
+
+
+<li>карту інтеграції: на базі яких наявних інформаційних систем рішення може працювати як модуль;</li>
+
+
+<li>аналіз можливих зловживань рішенням або його показниками і запобіжників від них;</li>
+
+
+<li>записка «Як ми використали ШІ», до однієї сторінки (пункт 5 Політики використання ШІ);</li>
+
+
+<li>концепцію інтеграції з іншими цифровими рішеннями у сфері доброчесності.</li>
+
+</ol>
+
+
+<p>Усе подається публічним репозиторієм на GitHub разом із відео демонстрації до 3 хвилин – за Вимогами до подання роботи.</p>
+
+
+<h2 class="wp-block-heading">КРИТЕРІЇ ОЦІНЮВАННЯ</h2>
+
+
+<p>Журі оцінює рішення за критеріями (вагові коефіцієнти визначають організатори):</p>
+
+
+<ol class="wp-block-list">
+
+<li>достовірність результатів — анонімність, захист від соціально бажаних відповідей, зіставлення з обʼєктивними даними;</li>
+
+
+<li>прозорість методики розрахунку Integrity Index і пояснюваність рекомендацій;</li>
+
+
+<li>доведення рекомендацій до дії — відповідальний, строк, контроль виконання;</li>
+
+
+<li>простота використання керівниками та учасниками оцінювання;</li>
+
+
+<li>реалістичність інтеграції з наявними інформаційними системами;</li>
+
+
+<li>етичне обґрунтування – як рішення запобігає зловживанням, зокрема використанню індексу для покарання;</li>
+
+
+<li>авторство і керованість рішення — команда сама обґрунтовує проблему, користувача й ключові рішення, а висновки системи ухвалюють явні правила або людина (пункти 3 і 4 Політики використання ШІ);</li>
+
+
+<li>якість прототипу і демонстрації.</li>
+
+</ol>
+
+
+<div class="wp-block-group hack-podaty is-layout-flow wp-block-group-is-layout-flow"><div class="wp-block-group__inner-container">
+
+<div class="hack-btns"><a class="hack-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeGKOU9B0aOuLOdT8qaG4r_jPEdugCEPV8Y3JH-3GHRD_eDeA/viewform?usp=pp_url&amp;entry.16583388=%D0%97%D0%B0%D0%B2%D0%B4%D0%B0%D0%BD%D0%BD%D1%8F+3.+Integrity+Management+Dashboard">Подати роботу за цим завданням</a></div>
+
+
+<p>Питання щодо подання — на <a href="mailto:bitec@edu.nuou.org.ua">bitec@edu.nuou.org.ua</a>, або капітан пише організаторам у WhatsApp.</p>
+
+</div></div>
+
+</div></div>
+</div></div><section id="section-2-98" class=" ct-section Main-div" ><div class="ct-section-inner-wrap"><div id="new_columns-57-98" class="ct-new-columns" ><div id="div_block-58-98" class="ct-div-block" ><a id="link-41-98" class="ct-link atomic-logo" href="/" target="_self"  ><img  id="image-42-98" alt="" src="https://hack.bitec.com.ua/wp-content/uploads/2025/11/logo-02.svg" class="ct-image" srcset="" sizes="(max-width: 300px) 100vw, 300px" /></a><div id="div_block-43-98" class="ct-div-block" ><div id="text_block-44-98" class="ct-text-block" >Building Integrity Hackathon</div><div id="text_block-45-98" class="ct-text-block" >Ukraine | 2026</div></div></div><div id="div_block-59-98" class="ct-div-block" ><div id="text_block-65-98" class="ct-text-block" >Контакти</div><div id="text_block-68-98" class="ct-text-block main-txt" >bitec@edu.nuou.org.ua<br>(044) 271-08-43</div></div></div><div id="text_block-77-98" class="ct-text-block" >© 2026 Building Integrity Hackathon · BITEC, National Defence University of Ukraine</div></div></section>	<!-- WP_FOOTER -->
+<script>jQuery(document).on('click','a[href*="#"]',function(t){if(jQuery(t.target).closest('.wc-tabs').length>0){return}if(jQuery(this).is('[href="#"]')||jQuery(this).is('[href="#0"]')||jQuery(this).is('[href*="replytocom"]')){return};if(location.pathname.replace(/^\//,"")==this.pathname.replace(/^\//,"")&&location.hostname==this.hostname){var e=jQuery(this.hash);(e=e.length?e:jQuery("[name="+this.hash.slice(1)+"]")).length&&(t.preventDefault(),jQuery("html, body").animate({scrollTop:e.offset().top-0},500))}});</script><style id='wp-block-heading-inline-css'>
+h1.has-background,h2.has-background,h3.has-background,h4.has-background,h5.has-background,h6.has-background{padding:1.25em 2.375em}
+</style>
+<style id='wp-block-paragraph-inline-css'>
+.is-small-text{font-size:.875em}.is-regular-text{font-size:1em}.is-large-text{font-size:2.25em}.is-larger-text{font-size:3em}.has-drop-cap:not(:focus):first-letter{float:left;font-size:8.4em;font-style:normal;font-weight:100;line-height:.68;margin:.05em .1em 0 0;text-transform:uppercase}body.rtl .has-drop-cap:not(:focus):first-letter{float:none;margin-left:.1em}p.has-drop-cap.has-background{overflow:hidden}p.has-background{padding:1.25em 2.375em}:where(p.has-text-color:not(.has-link-color)) a{color:inherit}
+</style>
+<style id='wp-block-list-inline-css'>
+ol,ul{box-sizing:border-box}ol.has-background,ul.has-background{padding:1.25em 2.375em}
+</style>
+<style id='wp-block-group-inline-css'>
+.wp-block-group{box-sizing:border-box}
+</style>
+<script type="text/javascript" id="ct-footer-js"></script><script type="text/javascript" id="ct_code_block_js_2080">(function () {
+  var btn = document.querySelector('.hack-menu-btn');
+  var menu = document.getElementById('div_block-37-97');
+  if (!btn || !menu) return;
+  function set(open) {
+    menu.classList.toggle('hack-menu-open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  btn.addEventListener('click', function () { set(btn.getAttribute('aria-expanded') !== 'true'); });
+  menu.addEventListener('click', function (e) { if (e.target.closest('a')) set(false); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') { set(false); btn.focus(); }
+  });
+})();</script>
+<style type="text/css" id="ct_code_block_css_2080">#_header_left-4-97 > .ct-code-block { display: none; }
+@media (max-width: 991px) {
+  #_header_left-4-97 { flex: 1 1 100%; flex-wrap: wrap; min-width: 0; }
+  #_header_left-4-97 > #div_block-30-97 { flex: 1 1 0; min-width: 0; }
+  #_header_left-4-97 > .ct-code-block { display: block; margin-left: auto; padding-left: 12px; }
+  .hack-menu-btn {
+    display: inline-flex; align-items: center; min-height: 44px; margin: 0; padding: 0 14px;
+    font-family: Inter, sans-serif; font-size: 15px; font-weight: 600; line-height: 1; color: #000;
+    background: #fff; border: 1px solid #6799b2; border-radius: 8px; cursor: pointer; white-space: nowrap;
+  }
+  .hack-menu-btn[aria-expanded="true"] { background: #eef4f7; }
+  .hack-menu-btn:focus-visible, #div_block-37-97 > a:focus-visible { outline: 3px solid #6799b2; outline-offset: 2px; }
+  #div_block-37-97.hack-menu-open {
+    display: flex; visibility: visible; flex-direction: column; align-items: stretch; flex: 0 0 100%; width: 100%;
+    gap: 0; margin: 12px 0 0; padding: 0; text-align: left;
+  }
+  #div_block-37-97.hack-menu-open > a {
+    flex-direction: row; justify-content: flex-start; align-items: center; min-height: 48px;
+    padding: 0 4px; border-top: 1px solid #e3e3e3;
+  }
+  #div_block-37-97.hack-menu-open .ct-text-block { font-size: 16px; text-align: left; }
+}</style>
+<!-- /WP_FOOTER --> 
+</body>
+</html>
