@@ -87,7 +87,6 @@ describe('Дашборд', () => {
     expect(within(dialog).getByText('Показано з обмеженням')).toBeInTheDocument()
     expect(within(dialog).getByText('Як це рахується')).toBeInTheDocument()
     expect(within(dialog).getByText('Шкала рівнів зрілості')).toBeInTheDocument()
-    expect(within(dialog).getByText(/Це інструмент розвитку, а не контролю/)).toBeInTheDocument()
     expect(dialog.contains(document.activeElement)).toBe(true)
     await userEvent.keyboard('{Escape}')
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()

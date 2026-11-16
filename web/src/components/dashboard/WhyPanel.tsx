@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { SearchCheck, Sprout, TriangleAlert } from 'lucide-react'
+import { SearchCheck, TriangleAlert } from 'lucide-react'
 import { Dialog, MATURITY, type MaturityLevel } from '@/components/ui'
 import {
   FLAG_HINT,
@@ -210,11 +210,6 @@ export function WhyPanel({
           )}
           <p className="m-0 mt-2 text-caption text-text-muted">{FLAG_HINT}</p>
         </section>
-
-        <p className="m-0 flex items-start gap-2 rounded-md bg-accent-soft p-3 text-body">
-          <Sprout aria-hidden className="mt-0.5 size-5 shrink-0 text-accent" />
-          Це інструмент розвитку, а не контролю. Результати показують, куди рухатися далі.
-        </p>
       </div>
     </Dialog>
   )

@@ -158,6 +158,7 @@ export function Home() {
             <GaugeIcon aria-hidden />
             Індекс доброчесності
           </h2>
+          <p className="m-0 text-caption text-text-muted">{inst.name}</p>
           <p className="sr-only">{gaugeDescription}</p>
           <div className="mt-1 flex flex-1 flex-col justify-center gap-2 short:gap-1">
             <Gauge value={inst.index} level={level} />

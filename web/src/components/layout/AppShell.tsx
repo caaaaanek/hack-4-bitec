@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Info, Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
+import { Menu, PanelLeftClose, PanelLeftOpen, X } from 'lucide-react'
 import { cn } from '@/lib/cn'
-import { ForbiddenState, Logo, SkipLink, Tooltip } from '@/components/ui'
+import { ForbiddenState, Logo, SkipLink } from '@/components/ui'
 import { useInstitution } from '@/demo/useInstitution'
 import { useNavCounts } from '@/demo/navCounts'
 import { canAccess, defaultRoute, isKnownRoute, type Role } from '@/lib/access'
@@ -148,24 +148,7 @@ export function AppShell() {
               <span className="sr-only md:hidden">Меню</span>
             </button>
             <Logo className="hidden md:block xl:hidden" />
-            <div className="flex min-w-0 flex-1 items-center gap-3">
-              <p className="m-0 hidden shrink-0 items-center gap-1 text-caption font-semibold text-text-muted lg:flex">
-                Integrity Assessment Platform
-                <Tooltip
-                  placement="bottom"
-                  content="Оцінювання це інструмент розвитку, а не контролю. Результати показують, куди рухатися далі."
-                >
-                  <span role="img" aria-label="Про продукт" className="inline-flex text-text-muted">
-                    <Info aria-hidden className="size-4" />
-                  </span>
-                </Tooltip>
-              </p>
-              <p className="m-0 min-w-0 truncate text-card text-text">
-                {role === 'observer' && pathname === '/institutions'
-                  ? 'Усі заклади'
-                  : institution.name}
-              </p>
-            </div>
+            <div className="min-w-0 flex-1" />
             <HeaderActions role={role} />
           </div>
           {open && (

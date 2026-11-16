@@ -154,9 +154,6 @@ export function Trends() {
               ? `Потребує уваги: ${down.map((r) => `${r.label} (${pointsText(r.delta)})`).join(', ')}.`
               : 'Негативної динаміки за компонентами немає.'}
           </p>
-          <p className="m-0 mt-2 text-caption text-text-muted">
-            Це інструмент розвитку, а не контролю: висновок показує, де зміни вже видно.
-          </p>
         </Card>
       </div>
     </div>
