@@ -64,3 +64,20 @@
 - Фізичний друк і чорно-білий вигляд: перевірено лише за CSS.
 - Firefox і WebKit: Playwright запускався лише в Chromium.
 - Екранні читачі: перевірено лише aria-атрибути в тестах.
+
+## Перенесення візуальної системи колеги
+
+Еталон: https://integrity-prototype.vercel.app (виміри в `docs/REFERENCE_TOKENS.md`, скрипт `scripts/ref-capture.ts`, скріншоти в `.ref/`, у git не потрапляють). Функціонал, дані, тексти, ролі й доступи не змінювались.
+
+| Етап | Коміт                                                                                                                                                               |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0    | `chore: capture reference design tokens`                                                                                                                            |
+| 1    | `feat: new design tokens and typography` (Onest замість Inter)                                                                                                      |
+| 2    | `feat: app shell in new design`                                                                                                                                     |
+| 3    | `feat: base components in new design`                                                                                                                               |
+| 4    | `feat: restyle dashboard, index, compare, recommendations`; `feat: restyle tracker, checklist, cycles, survey`; `feat: restyle me, report, audit and extra screens` |
+| 5    | `test: full screen matrix in new design`                                                                                                                            |
+
+Перевірки: typecheck, lint, 180 тестів, build, `check:contrast` (189 пар, 0 провалів), `npm run verify` (40 екранів ready, світла тема на 360, 768, 1280, 1920, темна на 1280x720 і 1920x1080). Дашборд: 1920x1080 без прокрутки, 1280x720 близько 144 px.
+
+Оновлені тести: `Institutions.test` не змінювався, змінено лише очікування в тестах, що залежали від розмітки, які пройшли без правок; тестів не видалено. Відхилення від еталона через контраст описані в `docs/DESIGN_SYSTEM.md`, розділ «Відхилення від еталона».
