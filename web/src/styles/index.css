@@ -48,3 +48,13 @@
     scroll-behavior: auto !important;
   }
 }
+
+@layer components {
+  .touch-target {
+    min-height: var(--touch-target);
+    min-width: var(--touch-target);
+  }
+  .touch-h {
+    min-height: var(--touch-target);
+  }
+}

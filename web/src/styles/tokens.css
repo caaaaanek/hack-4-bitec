@@ -155,8 +155,8 @@
     --gutter: 2rem;
   }
 }
-@media (pointer: fine) {
+@media (pointer: fine) and (min-width: 48rem) {
   :root {
-    --touch-target: 2.25rem; /* 36 px, 44 px лише на сенсорних ширинах */
+    --touch-target: 2.25rem; /* 36 px; 44 px на сенсорних і вузьких ширинах */
   }
 }
