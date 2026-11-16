@@ -39,9 +39,23 @@ describe('badges', () => {
     expect(container.querySelector('[data-maturity="3"]')).not.toBeNull()
   })
   it('trust has accessible text', () => {
-    render(<TrustBadge level="medium" />)
-    expect(screen.getByText('Середня')).toBeInTheDocument()
-    expect(screen.getByText(/Довіра до оцінки/)).toBeInTheDocument()
+    const { container } = render(<TrustBadge grade="B" />)
+    expect(screen.getByText('є зауваження')).toBeInTheDocument()
+    expect(screen.getByText('B')).toBeInTheDocument()
+    expect(screen.getByText(/Достовірність/)).toBeInTheDocument()
+    expect(container.querySelector('[data-trust="B"]')).not.toBeNull()
+  })
+  it('trust grades: letter and word for A, C and insufficient', () => {
+    const { container } = render(
+      <>
+        <TrustBadge grade="A" />
+        <TrustBadge grade="C" />
+        <TrustBadge grade="insufficient" />
+      </>,
+    )
+    expect(container).toHaveTextContent('підтверджується')
+    expect(container).toHaveTextContent('потрібна перевірка')
+    expect(container).toHaveTextContent('недостатньо даних')
   })
   it('source label has marker shape', () => {
     const { container } = render(<SourceLabel source="experts" />)

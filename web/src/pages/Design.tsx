@@ -139,10 +139,10 @@ interface Demo {
   trust: string
 }
 const DEMO_ROWS: Demo[] = [
-  { id: 'a', name: 'Прозорість рішень', level: 4, trust: 'Висока' },
-  { id: 'b', name: 'Конфлікт інтересів', level: 2, trust: 'Середня' },
-  { id: 'c', name: 'Академічна культура', level: 3, trust: 'Висока' },
-  { id: 'd', name: 'Обізнаність щодо правил', level: 5, trust: 'Низька' },
+  { id: 'a', name: 'Прозорість рішень', level: 4, trust: 'A' },
+  { id: 'b', name: 'Конфлікт інтересів', level: 2, trust: 'B' },
+  { id: 'c', name: 'Академічна культура', level: 3, trust: 'A' },
+  { id: 'd', name: 'Обізнаність щодо правил', level: 5, trust: 'C' },
 ]
 
 export function Design() {
@@ -355,10 +355,11 @@ export function Design() {
             <MaturityBadge key={l} level={l} />
           ))}
         </Row>
-        <Row label="Довіра до оцінки">
-          <TrustBadge level="high" />
-          <TrustBadge level="medium" />
-          <TrustBadge level="low" />
+        <Row label="Достовірність">
+          <TrustBadge grade="A" />
+          <TrustBadge grade="B" />
+          <TrustBadge grade="C" />
+          <TrustBadge grade="insufficient" />
         </Row>
       </Section>
 
@@ -378,7 +379,7 @@ export function Design() {
               numeric: true,
               render: (r: Demo) => <MaturityBadge level={r.level as MaturityLevel} />,
             },
-            { key: 'trust', header: 'Довіра', sortable: true },
+            { key: 'trust', header: 'Достовірність', sortable: true },
           ]}
         />
         <Tabs

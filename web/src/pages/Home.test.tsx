@@ -20,6 +20,14 @@ describe('Dashboard', () => {
     expect(screen.getByText('Індекс доброчесності')).toBeInTheDocument()
     expect(screen.getByText('Зросло на 7,2 пункта')).toBeInTheDocument()
     expect(screen.getAllByText(/зараховано 60/).length).toBeGreaterThan(0)
+    expect(screen.getByTestId('summary')).toHaveTextContent(
+      '54,2 бала, Визначений, достовірність C',
+    )
+    expect(screen.getByText('Підзвітність: самооцінку не підтверджують факти')).toBeInTheDocument()
+    expect(screen.getByText('потрібна перевірка')).toBeInTheDocument()
+    expect(
+      screen.getByText(/Розбіжність сприйняття й фактів у Підзвітності \(80 проти 35\)/),
+    ).toBeInTheDocument()
     expect(screen.getByText('Показано з обмеженням')).toBeInTheDocument()
     expect(screen.getByText('Варто перевірити додатково')).toBeInTheDocument()
     expect(screen.getAllByText(/Сприйняття/).length).toBeGreaterThan(0)

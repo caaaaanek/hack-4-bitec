@@ -91,7 +91,6 @@ export const MATURITY: Record<MaturityLevel, { name: string; classes: string }> 
   },
 }
 
-export type TrustLevel = 'high' | 'medium' | 'low'
 export type SourceId = 'wg' | 'os' | 'experts' | 'facts'
 
 export const SOURCES: Record<

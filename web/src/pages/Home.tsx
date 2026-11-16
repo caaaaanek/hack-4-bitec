@@ -3,20 +3,21 @@ import { ArrowUp, FileText, Lightbulb, ListTree } from 'lucide-react'
 import { MATURITY, MaturityBadge, buttonBase, buttonSizes, buttonVariants } from '@/components/ui'
 import type { MaturityLevel } from '@/components/ui'
 import { cn } from '@/lib/cn'
-import { COMPONENT_LABELS, fmt, fmtIndex, pointsText } from '@/lib/scoring/methodology'
+import { TRUST_GRADE_TEXT, TRUST_LABEL } from '@/components/ui/messages'
+import { COMPONENT_LABELS, fmt, fmtIndex, pointsText, scoreText } from '@/lib/scoring/methodology'
 import {
   attention,
   components,
   currentIndex,
   currentLevel,
   CYCLE,
-  flags,
   indexDelta,
   previous,
   previousIndex,
   strengths,
   trend,
-  trust,
+  trustSummary,
+  summaryReason,
 } from '@/demo/data'
 import { ChartFrame, DataTable } from '@/components/dashboard/ChartFrame'
 import { Gauge } from '@/components/dashboard/Gauge'
@@ -44,7 +45,12 @@ function buildConclusion(): string {
       `Для компонента «${COMPONENT_LABELS[limited.id]}» сприйняття (${fmt(limited.perception)}) помітно вище за факти (${fmt(limited.facts)}), тому зараховано ${fmt(limited.credited.value)}.`,
     )
   }
-  parts.push('Довіра до оцінки середня, тож спершу варто підтвердити факти документами.')
+  const t = TRUST_GRADE_TEXT[trustSummary.grade]
+  parts.push(
+    trustSummary.grade === 'A'
+      ? `Достовірність ${t.letter}: ${t.word}.`
+      : `Достовірність ${t.letter}: ${t.word}, тож спершу варто підтвердити факти документами.`,
+  )
   return parts.join(' ')
 }
 
@@ -64,7 +70,14 @@ export function Home() {
   return (
     <div data-ready="true" className="flex flex-col gap-3 short:gap-2">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="m-0 text-section short:text-card">Огляд результатів</h1>
+        <div>
+          <h1 className="sr-only">Огляд результатів</h1>
+          <p className="m-0 text-section short:text-card" data-testid="summary">
+            {scoreText(currentIndex)}, {MATURITY[currentLevel].name}, {TRUST_LABEL.toLowerCase()}{' '}
+            {TRUST_GRADE_TEXT[trustSummary.grade].letter}
+          </p>
+          <p className="m-0 text-caption text-text-muted">{summaryReason}</p>
+        </div>
         <nav aria-label="Швидкі переходи" className="flex flex-wrap gap-2">
           <Link to="/explain" className={linkBtn('primary')}>
             <ListTree aria-hidden className="size-4" />
@@ -171,7 +184,7 @@ export function Home() {
         />
 
         <div className="flex flex-col gap-3 xl:col-span-4">
-          <TrustCard level={trust.level} reasons={trust.reasons} />
+          <TrustCard grade={trustSummary.grade} raised={trustSummary.raised} />
           {limited && (
             <LimiterBlock
               label={COMPONENT_LABELS[limited.id]}
@@ -196,7 +209,7 @@ export function Home() {
         </div>
       </div>
 
-      <FlagStrip flags={flags} />
+      <FlagStrip flags={trustSummary.raised} />
     </div>
   )
 }

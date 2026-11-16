@@ -81,3 +81,25 @@ export function pointsText(n: number): string {
         : 'пунктів'
   return `${fmt(abs)} ${word}`
 }
+
+/** Рівень анкети 1-5 переводиться в шкалу 0-100: 1 це 0, 5 це 100. */
+export const levelToScore = (level: number): number => (level - 1) * 25
+
+/** Зважене середнє. Ваги в частках від 100 (у сумі 100). */
+export function weightedMean(items: readonly { weight: number; value: number }[]): number {
+  const total = items.reduce((s, i) => s + i.weight, 0)
+  return round1(items.reduce((s, i) => s + i.weight * i.value, 0) / total)
+}
+
+/** «54,2 бала», «1 бал», «3 бали», «5 балів». */
+export function scoreText(n: number): string {
+  const abs = Math.abs(n)
+  const word = !Number.isInteger(abs)
+    ? 'бала'
+    : abs % 10 === 1 && abs % 100 !== 11
+      ? 'бал'
+      : [2, 3, 4].includes(abs % 10) && ![12, 13, 14].includes(abs % 100)
+        ? 'бали'
+        : 'балів'
+  return `${fmt(abs)} ${word}`
+}

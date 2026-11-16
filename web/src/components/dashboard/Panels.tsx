@@ -1,7 +1,14 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Eye, FileQuestion, Info, Scale, SearchCheck, Sprout, TrendingUp, X } from 'lucide-react'
-import { Card, SourceMarker, TrustBadge, type TrustLevel } from '@/components/ui'
+import { Eye, Info, Scale, TriangleAlert, SearchCheck, Sprout, TrendingUp, X } from 'lucide-react'
+import { Card, SourceMarker, TrustBadge } from '@/components/ui'
+import {
+  FLAG_WEIGHT_LABEL,
+  TRUST_GRADE_TEXT,
+  TRUST_HINT,
+  TRUST_LABEL,
+} from '@/components/ui/messages'
+import type { TrustFlag, TrustGrade } from '@/lib/scoring/trust'
 import { cn } from '@/lib/cn'
 import { LIMITER_MARGIN, fmt } from '@/lib/scoring/methodology'
 import { Num } from './Num'
@@ -44,31 +51,31 @@ export function DevelopmentBanner() {
   )
 }
 
-export function TrustCard({ level, reasons }: { level: TrustLevel; reasons: string[] }) {
+export function TrustCard({ grade, raised }: { grade: TrustGrade; raised: TrustFlag[] }) {
+  const major = raised.filter((f) => f.weight === 'major').length
+  const minor = raised.length - major
+  const counts = [major > 0 && `серйозних: ${major}`, minor > 0 && `незначних: ${minor}`].filter(
+    Boolean,
+  )
   return (
     <Card as="section" aria-labelledby="trust-h" className="p-4 md:p-4 short:p-3 short:md:p-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 id="trust-h" className="m-0 text-card">
-          Довіра до оцінки
+          {TRUST_LABEL}
         </h2>
-        <Num hint="Наскільки результатам можна вірити: залежить від кількості відповідей, підтвердження фактів і розбіжності між сприйняттям та фактами.">
-          <TrustBadge level={level} />
+        <Num hint={TRUST_HINT}>
+          <TrustBadge grade={grade} />
         </Num>
       </div>
-      <p className="m-0 mt-1 text-caption text-text-muted short:sr-only">
-        Чи можна вірити цьому результату. Причини:
+      <p className="m-0 mt-2 flex items-start gap-2 text-body">
+        <Scale aria-hidden className="mt-0.5 size-5 shrink-0 text-attention-text" />
+        <span>
+          {TRUST_GRADE_TEXT[grade].rule}{' '}
+          <span className="short:hidden">
+            {counts.length > 0 ? ` Спрацювало прапорців (${counts.join(', ')}), деталі нижче.` : ''}
+          </span>
+        </span>
       </p>
-      <ul className="m-0 mt-2 flex list-none flex-col gap-2 p-0">
-        {reasons.map((r, i) => {
-          const Icon = i === 0 ? Scale : FileQuestion
-          return (
-            <li key={r} className="flex items-start gap-2 text-body">
-              <Icon aria-hidden className="mt-0.5 size-5 shrink-0 text-attention-text" />
-              {r}
-            </li>
-          )
-        })}
-      </ul>
     </Card>
   )
 }
@@ -230,7 +237,7 @@ export function Conclusion({ paragraphs }: { paragraphs: string }) {
   )
 }
 
-export function FlagStrip({ flags }: { flags: { id: string; title: string; text: string }[] }) {
+export function FlagStrip({ flags }: { flags: TrustFlag[] }) {
   return (
     <section aria-labelledby="flags-h">
       <h2
@@ -242,19 +249,27 @@ export function FlagStrip({ flags }: { flags: { id: string; title: string; text:
           Напрям для додаткового аналізу. Це не висновок про людей чи підрозділи.
         </span>
       </h2>
-      <ul className="m-0 grid list-none gap-3 p-0 md:grid-cols-3">
-        {flags.map((f) => (
-          <li
-            key={f.id}
-            className="flex items-start gap-3 rounded-lg border border-border border-l-4 border-l-attention-solid bg-surface p-3 short:p-2"
-          >
-            <SearchCheck aria-hidden className="mt-0.5 size-5 shrink-0 text-attention-text" />
-            <div>
-              <p className="m-0 text-body font-semibold">{f.title}</p>
-              <p className="m-0 text-caption text-text-muted">{f.text}</p>
-            </div>
-          </li>
-        ))}
+      <ul className="m-0 grid list-none gap-3 p-0 md:grid-cols-2">
+        {flags.map((f) => {
+          const Icon = f.weight === 'major' ? TriangleAlert : SearchCheck
+          return (
+            <li
+              key={f.id}
+              className="flex items-start gap-3 rounded-lg border border-border border-l-4 border-l-attention-solid bg-surface p-3 short:p-2"
+            >
+              <Icon aria-hidden className="mt-0.5 size-5 shrink-0 text-attention-text" />
+              <div>
+                <p className="m-0 text-body font-semibold">
+                  {f.title}
+                  <span className="ml-2 whitespace-nowrap text-caption font-normal text-text-muted">
+                    ({FLAG_WEIGHT_LABEL[f.weight]})
+                  </span>
+                </p>
+                <p className="m-0 text-caption text-text-muted">{f.explanation}</p>
+              </div>
+            </li>
+          )
+        })}
       </ul>
     </section>
   )
