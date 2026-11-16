@@ -8,12 +8,17 @@ import {
   CircleCheck,
   CircleHelp,
   Info,
+  Layers,
+  Scale,
   Table2,
+  Users,
+  type LucideIcon,
   TriangleAlert,
 } from 'lucide-react'
 import {
   Badge,
   Card,
+  IconCircle,
   SegmentedControl,
   SourceMarker,
   buttonBase,
@@ -45,6 +50,12 @@ const KIND_LABEL = {
   component: 'Компонент',
   item: 'Питання або показник',
 } as const
+
+const COMPONENT_ICON: Record<ComponentId, LucideIcon> = {
+  culture: Users,
+  system: Layers,
+  accountability: Scale,
+}
 
 const pct = (n: number) => `${fmt(n)} %`
 /** Внесок із двома знаками, щоб сума була видна. */
@@ -93,8 +104,8 @@ function Row({
         'grid grid-cols-1 items-start gap-x-2 gap-y-1 border-b border-border py-2 pr-2 sm:grid-cols-[minmax(0,1fr)_4.5rem_4.5rem_5rem]',
         'focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus',
         hasKids && 'cursor-pointer hover:bg-surface-muted',
-        node.kind === 'index' && 'bg-accent-soft font-semibold',
-        node.kind === 'component' && 'bg-surface-muted/50 font-semibold',
+        node.kind === 'index' && 'rounded-[12px] bg-accent-soft font-semibold',
+        node.kind === 'component' && 'rounded-[12px] bg-surface-muted/60 font-semibold',
       )}
     >
       <div className="flex min-w-0 items-start gap-1.5">
@@ -102,6 +113,14 @@ function Row({
           <Chevron aria-hidden className="mt-0.5 size-4 shrink-0" />
         ) : (
           <span aria-hidden className="size-4 shrink-0" />
+        )}
+        {node.kind === 'component' && node.id in COMPONENT_ICON && (
+          <IconCircle tone={node.id as ComponentId} size={24}>
+            {(() => {
+              const Icon = COMPONENT_ICON[node.id as ComponentId]
+              return <Icon className="size-3.5" />
+            })()}
+          </IconCircle>
         )}
         <div className="min-w-0">
           <span className="text-body">{node.label}</span>
@@ -278,13 +297,13 @@ function ExplainInner({ initial, nodeId }: { initial: ComponentId | null; nodeId
 
       <WhyPanel open={whyOpen} onClose={() => setWhyOpen(false)} inst={inst} />
       <div className="grid gap-3 xl:grid-cols-12">
-        <Card as="section" aria-labelledby="tree-h" className="p-0 md:p-0 xl:col-span-12">
+        <Card as="section" aria-labelledby="tree-h" className="p-2 md:p-2 xl:col-span-12">
           <h2 id="tree-h" className="sr-only">
             Дерево розкладу, режим «{MODE_LABELS[mode]}»
           </h2>
           <div
             aria-hidden
-            className="hidden grid-cols-[minmax(0,1fr)_3.5rem_3.5rem_4rem] gap-x-2 border-b border-border bg-surface-muted px-2 py-1.5 text-caption font-semibold sm:grid sm:grid-cols-[minmax(0,1fr)_4.5rem_4.5rem_5rem]"
+            className="hidden grid-cols-[minmax(0,1fr)_3.5rem_3.5rem_4rem] gap-x-2 border-b border-border rounded-[10px] bg-surface-muted px-2 py-2 text-fine font-medium text-text-muted sm:grid sm:grid-cols-[minmax(0,1fr)_4.5rem_4.5rem_5rem]"
           >
             <span>Вузол</span>
             <span className="text-right">Вага</span>
@@ -332,7 +351,7 @@ function ExplainInner({ initial, nodeId }: { initial: ComponentId | null; nodeId
             role="status"
             data-testid="sum-check"
             className={cn(
-              'm-0 flex items-start gap-2 rounded-b-lg px-3 py-2 text-body font-semibold',
+              'm-0 mt-2 flex items-start gap-2 rounded-[12px] px-3 py-2 text-body font-semibold',
               ok ? 'bg-strength-bg text-strength-text' : 'bg-attention-bg text-attention-text',
             )}
           >
