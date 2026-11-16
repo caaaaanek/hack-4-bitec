@@ -220,7 +220,7 @@ export function Conclusion({ paragraphs }: { paragraphs: string }) {
       <h2 id="concl-h" className="m-0 mb-2 text-card">
         Короткий висновок
       </h2>
-      <p className="m-0 text-body-lg">{paragraphs}</p>
+      <p className="m-0 text-body">{paragraphs}</p>
     </Card>
   )
 }

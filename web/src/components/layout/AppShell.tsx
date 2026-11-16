@@ -94,7 +94,7 @@ export function AppShell() {
           id="main"
           tabIndex={-1}
           key={pathname}
-          className="min-w-0 flex-1 px-(--gutter) py-4 md:py-6"
+          className="min-w-0 flex-1 px-(--gutter) py-3 md:py-4"
         >
           <Outlet />
         </main>

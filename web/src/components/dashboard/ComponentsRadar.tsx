@@ -1,11 +1,5 @@
-import {
-  PolarAngleAxis,
-  PolarGrid,
-  PolarRadiusAxis,
-  Radar,
-  RadarChart,
-  ResponsiveContainer,
-} from 'recharts'
+import { fmt } from '@/lib/scoring/methodology'
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer } from 'recharts'
 
 export interface RadarRow {
   name: string
@@ -25,15 +19,30 @@ export function ComponentsRadar({ data }: { data: RadarRow[] }) {
         height="100%"
         initialDimension={{ width: 320, height: 220 }}
       >
-        <RadarChart data={data} outerRadius="68%" margin={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+        <RadarChart
+          data={data}
+          outerRadius="78%"
+          margin={{ top: 30, right: 8, bottom: 22, left: 8 }}
+        >
           <PolarGrid stroke="var(--color-border)" />
-          <PolarAngleAxis dataKey="name" tick={{ fontSize: 14, fill: 'var(--color-text)' }} />
-          <PolarRadiusAxis
-            angle={90}
-            domain={[0, 100]}
-            tickCount={5}
-            tick={{ fontSize: 14, fill: 'var(--color-text-muted)' }}
-            axisLine={false}
+          <PolarAngleAxis
+            dataKey="name"
+            tick={({ x: rx = 0, y: ry = 0, payload }) => {
+              const x = Number(rx)
+              const y = Number(ry)
+              const row = data.find((d) => d.name === payload.value)
+              const top = payload.index === 0
+              return (
+                <text x={x} y={y} textAnchor="middle" fontSize={14} fill="var(--color-text)">
+                  <tspan x={x} dy={top ? -18 : 14}>
+                    {payload.value}
+                  </tspan>
+                  <tspan x={x} dy={top ? 16 : 17} fontWeight={700}>
+                    {row ? fmt(row.current) : ''}
+                  </tspan>
+                </text>
+              )
+            }}
           />
           <Radar
             dataKey="previous"

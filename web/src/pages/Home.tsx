@@ -3,7 +3,7 @@ import { ArrowUp, FileText, Lightbulb, ListTree } from 'lucide-react'
 import { MATURITY, MaturityBadge, buttonBase, buttonSizes, buttonVariants } from '@/components/ui'
 import type { MaturityLevel } from '@/components/ui'
 import { cn } from '@/lib/cn'
-import { COMPONENT_LABELS, fmt, pointsText } from '@/lib/scoring/methodology'
+import { COMPONENT_LABELS, fmt, fmtIndex, pointsText } from '@/lib/scoring/methodology'
 import {
   attention,
   components,
@@ -34,21 +34,17 @@ import {
 
 const LEVELS: MaturityLevel[] = [1, 2, 3, 4, 5]
 const limited = components.find((c) => c.credited.limited)
-const best = [...components].sort((a, b) => b.credited.value - a.credited.value)[0]!
 
 function buildConclusion(): string {
   const parts = [
-    `Заклад перебуває на рівні зрілості ${currentLevel} «${MATURITY[currentLevel].name}»: індекс доброчесності ${fmt(currentIndex)} з 100, що на ${pointsText(indexDelta)} вище, ніж у попередньому циклі.`,
-    `Найвищий результат у компоненті «${COMPONENT_LABELS[best.id]}» (${fmt(best.credited.value)}).`,
+    `Заклад перебуває на рівні зрілості ${currentLevel} «${MATURITY[currentLevel].name}»: індекс доброчесності ${fmtIndex(currentIndex)} з 100, що на ${pointsText(indexDelta)} вище, ніж у попередньому циклі.`,
   ]
   if (limited) {
     parts.push(
       `Для компонента «${COMPONENT_LABELS[limited.id]}» сприйняття (${fmt(limited.perception)}) помітно вище за факти (${fmt(limited.facts)}), тому зараховано ${fmt(limited.credited.value)}.`,
     )
   }
-  parts.push(
-    `Довіра до оцінки середня, тож варто спершу підтвердити факти документами. Далі зручно перейти до рекомендацій.`,
-  )
+  parts.push('Довіра до оцінки середня, тож спершу варто підтвердити факти документами.')
   return parts.join(' ')
 }
 
@@ -62,11 +58,11 @@ export function Home() {
     previous: previous.credited[c.id],
   }))
   const prevCycle = previous.cycle
-  const gaugeDescription = `Індекс ${fmt(currentIndex)} з 100, рівень ${currentLevel} «${MATURITY[currentLevel].name}». Межі рівнів: 12,5, 37,5, 62,5 і 87,5. Динаміка за три цикли: ${trend.map((t) => `${t.cycle}: ${fmt(t.index)}`).join(', ')}.`
-  const radarDescription = `Зараховано в циклі ${CYCLE}: ${components.map((c) => `${COMPONENT_LABELS[c.id]} ${fmt(c.credited.value)}`).join(', ')}. У циклі ${prevCycle}: ${components.map((c) => `${COMPONENT_LABELS[c.id]} ${fmt(previous.credited[c.id])}`).join(', ')}.`
+  const gaugeDescription = `Індекс ${fmtIndex(currentIndex)} з 100, рівень ${currentLevel} «${MATURITY[currentLevel].name}». Динаміка: ${trend.map((t) => `${t.cycle} ${fmtIndex(t.index)}`).join(', ')}.`
+  const radarDescription = `Цикл ${CYCLE}: ${components.map((c) => `${COMPONENT_LABELS[c.id]} ${fmt(c.credited.value)}`).join(', ')}. Цикл ${prevCycle}: ${components.map((c) => `${COMPONENT_LABELS[c.id]} ${fmt(previous.credited[c.id])}`).join(', ')}.`
 
   return (
-    <div data-ready="true" className="flex flex-col gap-4">
+    <div data-ready="true" className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="m-0 text-section">Огляд результатів</h1>
         <nav aria-label="Швидкі переходи" className="flex flex-wrap gap-2">
@@ -86,7 +82,7 @@ export function Home() {
       </div>
       <DevelopmentBanner />
 
-      <div className="grid gap-4 xl:grid-cols-12">
+      <div className="grid gap-3 xl:grid-cols-12">
         <ChartFrame
           className="xl:col-span-4"
           title="Індекс доброчесності"
@@ -95,42 +91,41 @@ export function Home() {
           chart={
             <div className="flex flex-col gap-1">
               <Gauge value={currentIndex} level={currentLevel} />
-              <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1">
+              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
                 <MaturityBadge level={currentLevel} />
-                <p className="m-0 flex items-center gap-1 text-body font-semibold text-strength-text">
+                <ol aria-label="Рівні зрілості" className="m-0 flex list-none gap-1.5 p-0">
+                  {LEVELS.map((l) => (
+                    <li
+                      key={l}
+                      title={`${l} ${MATURITY[l].name}`}
+                      aria-current={l === currentLevel ? 'step' : undefined}
+                      className={cn(
+                        'flex size-8 items-center justify-center rounded-sm border text-caption tabular',
+                        l === currentLevel
+                          ? cn(MATURITY[l].classes, 'font-bold ring-2 ring-text')
+                          : 'border-border bg-surface text-text-muted',
+                      )}
+                    >
+                      <span className="sr-only">
+                        Рівень {l}: {MATURITY[l].name}
+                        {l === currentLevel ? ', поточний' : ''}
+                      </span>
+                      <span aria-hidden>{l}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+              <p className="m-0 flex flex-wrap items-center justify-center gap-x-2 text-body font-semibold text-strength-text">
+                <span className="inline-flex items-center gap-1">
                   <ArrowUp aria-hidden className="size-4" />
                   <Num hint="Різниця між індексом цього циклу та попереднього, у пунктах шкали 0-100.">
                     Зросло на {pointsText(indexDelta)}
                   </Num>
-                </p>
-              </div>
-              <p className="m-0 text-center text-caption text-text-muted">
-                Попередній цикл {prevCycle}: {fmt(previousIndex)}
+                </span>
+                <span className="text-caption font-normal text-text-muted">
+                  (цикл {prevCycle}: {fmtIndex(previousIndex)})
+                </span>
               </p>
-              <ol
-                aria-label="Рівні зрілості"
-                className="m-0 flex list-none justify-center gap-1.5 p-0"
-              >
-                {LEVELS.map((l) => (
-                  <li
-                    key={l}
-                    title={`${l} ${MATURITY[l].name}`}
-                    aria-current={l === currentLevel ? 'step' : undefined}
-                    className={cn(
-                      'flex size-8 items-center justify-center rounded-sm border text-caption tabular',
-                      l === currentLevel
-                        ? cn(MATURITY[l].classes, 'font-bold ring-2 ring-text')
-                        : 'border-border bg-surface text-text-muted',
-                    )}
-                  >
-                    <span className="sr-only">
-                      Рівень {l}: {MATURITY[l].name}
-                      {l === currentLevel ? ', поточний' : ''}
-                    </span>
-                    <span aria-hidden>{l}</span>
-                  </li>
-                ))}
-              </ol>
               <TrendLine data={trend} />
             </div>
           }
@@ -140,7 +135,7 @@ export function Home() {
               head={['Цикл', 'Індекс', 'Рівень']}
               rows={[...trend]
                 .reverse()
-                .map((t) => [t.cycle, fmt(t.index), `${levelName(t.index)}`])}
+                .map((t) => [t.cycle, fmtIndex(t.index), `${levelName(t.index)}`])}
             />
           }
         />
@@ -173,7 +168,7 @@ export function Home() {
           }
         />
 
-        <div className="flex flex-col gap-4 xl:col-span-4">
+        <div className="flex flex-col gap-3 xl:col-span-4">
           <TrustCard level={trust.level} reasons={trust.reasons} />
           {limited && (
             <LimiterBlock
@@ -187,14 +182,14 @@ export function Home() {
         </div>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-12">
-        <div className="xl:col-span-4">
+      <div className="grid gap-3 xl:grid-cols-12">
+        <div className="flex flex-col *:flex-1 xl:col-span-3">
           <InsightList title="Сильні сторони" kind="strength" items={strengths} />
         </div>
-        <div className="xl:col-span-4">
+        <div className="flex flex-col *:flex-1 xl:col-span-4">
           <InsightList title="Напрями, що потребують уваги" kind="attention" items={attention} />
         </div>
-        <div className="xl:col-span-4">
+        <div className="flex flex-col *:flex-1 xl:col-span-5">
           <Conclusion paragraphs={buildConclusion()} />
         </div>
       </div>

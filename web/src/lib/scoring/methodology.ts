@@ -65,6 +65,10 @@ export function fmt(n: number): string {
   return round1(n).toLocaleString('uk-UA', { maximumFractionDigits: 1 })
 }
 
+/** Індекс завжди з одним знаком після коми: 47,0. */
+export const fmtIndex = (n: number): string =>
+  round1(n).toLocaleString('uk-UA', { minimumFractionDigits: 1, maximumFractionDigits: 1 })
+
 /** «7,2 пункта», «1 пункт», «3 пункти», «5 пунктів». */
 export function pointsText(n: number): string {
   const abs = Math.abs(n)

@@ -28,7 +28,7 @@ export function ChartFrame({
   const id = useId()
   return (
     <Card as="section" aria-labelledby={id} className={cn('flex flex-col p-4 md:p-4', className)}>
-      <div className="mb-2 flex items-start justify-between gap-2">
+      <div className="mb-2 flex flex-wrap items-start justify-between gap-x-2 gap-y-1">
         <div>
           <h2 id={id} className="m-0 text-card">
             {title}
@@ -39,12 +39,7 @@ export function ChartFrame({
           type="button"
           aria-pressed={asTable}
           onClick={() => setAsTable((v) => !v)}
-          className={cn(
-            buttonBase,
-            buttonVariants.ghost,
-            buttonSizes.sm,
-            'shrink-0 !min-h-9 md:!min-h-9 touch-h',
-          )}
+          className={cn(buttonBase, buttonVariants.ghost, buttonSizes.sm, 'shrink-0 !px-2')}
         >
           {asTable ? (
             <BarChart3 aria-hidden className="size-4" />

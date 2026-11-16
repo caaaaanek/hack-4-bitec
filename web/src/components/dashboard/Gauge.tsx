@@ -19,7 +19,8 @@ const arc = (v0: number, v1: number) => {
 
 /** Gauge 0-100: п'ять рівнів зрілості, межі підписано, маркер значення. */
 export function Gauge({ value, level }: { value: number; level: MaturityLevel }) {
-  const [mx, my] = pt(value, R)
+  const [nx0, ny0] = pt(value, R - W / 2 - 5)
+  const [nx1, ny1] = pt(value, R + W / 2 + 5)
   return (
     <svg
       viewBox="0 0 320 188"
@@ -79,13 +80,14 @@ export function Gauge({ value, level }: { value: number; level: MaturityLevel })
       <text x={CX + R} y={CY + 24} textAnchor="middle" fontSize="14" fill="var(--color-text-muted)">
         100
       </text>
-      <circle
-        cx={mx}
-        cy={my}
-        r="10"
-        fill="var(--color-surface)"
+      <line
+        x1={nx0}
+        y1={ny0}
+        x2={nx1}
+        y2={ny1}
         stroke="var(--color-text)"
-        strokeWidth="3"
+        strokeWidth="5"
+        strokeLinecap="round"
       />
       <text
         x={CX}
