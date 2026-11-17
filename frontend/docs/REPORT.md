@@ -6,7 +6,7 @@
 
 | Етап | Коміт                                            | Зміст                                                                                                                          |
 | ---- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
-| 1    | `b65e70b chore: project scaffold`                | Vite, React 19, TypeScript strict, Tailwind 4, eslint, prettier, alias `@/`, Vitest, `web/CLAUDE.md` (36 рядків), `.gitignore` |
+| 1    | `b65e70b chore: project scaffold`                | Vite, React 19, TypeScript strict, Tailwind 4, eslint, prettier, alias `@/`, Vitest, `frontend/CLAUDE.md` (36 рядків), `.gitignore` |
 | 2    | `f38f5d8 feat: design tokens and contrast check` | `tokens.css`, `print.css`, `fonts.css`, `docs/DESIGN_SYSTEM.md`, `scripts/check-contrast.mjs`                                  |
 | 3    | `5d868f8 feat: base ui components`               | Усі компоненти зі списку, плюс `SourceMarker` для маркерів джерел                                                              |
 | 4    | `0f3ea94 feat: design showcase page`             | `/design` з токенами й компонентами, заглушка `/`                                                                              |
