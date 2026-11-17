@@ -21,7 +21,7 @@ docker compose up --build
 1. Бекенд: `cd backend`, далі кроки з `backend/README.md` (alembic, seed, uvicorn на порту 8000).
 2. Фронтенд:
    ```bash
-   cd web
+   cd frontend
    npm ci
    npm run dev          # http://localhost:5173, /api проксіюється на http://localhost:8000
    ```
@@ -53,8 +53,8 @@ python scripts/demo_wave.py --title "Хвиля 2 (листопад)" --shift 1
 
 ```bash
 cd backend && pytest              # бекенд: 59 тестів
-cd web && npm run check           # фронтенд: typecheck, lint, тести, збірка
-cd web && npm run check:contrast  # контраст кольорів
+cd frontend && npm run check           # фронтенд: typecheck, lint, тести, збірка
+cd frontend && npm run check:contrast  # контраст кольорів
 ```
 
 `npm run verify` додатково знімає скріншоти всіх екранів у Playwright. Для цього потрібні запущений бекенд із демо-даними і змінна `DEMO_PASSWORD`.
