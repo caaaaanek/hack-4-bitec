@@ -24,6 +24,7 @@ service-account*.json
 ._*
 Thumbs.db
 Desktop.ini
+desktop.ini
 .idea/
 .vscode/
 *.swp
@@ -57,6 +58,7 @@ yarn-error.log*
 dist/
 build/
 .cache/
+*.cache
 coverage/
 *.log
 tmp/
