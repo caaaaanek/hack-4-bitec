@@ -1,6 +1,7 @@
 # Integrity Assessment Platform: frontend
 
 Фронтенд платформи оцінювання доброчесності для ВВНЗ. Працюємо лише всередині `frontend/`. Лише синтетичні дані.
+Поки не підключений до бекенду (`../backend`): дані з `src/demo`.
 
 ## Стек
 
@@ -33,9 +34,8 @@ Vitest, Playwright (devDependency, перевірка екранів), eslint, p
 
 ## Коміти
 
-Один коміт на етап. Без пушу, remote не чіпати, git config не змінювати. Без співавтора:
-жодних Co-Authored-By, Claude-Session, «Generated with Claude Code». Англійською, коротко
-(feat:/fix:/chore:/docs:/test:).
+Гілки, коміти й пуш — за кореневим `AGENTS.md` (без співавтора й згадок ШІ, git config не змінювати).
+Один коміт на етап.
 
 ## Інше
 
