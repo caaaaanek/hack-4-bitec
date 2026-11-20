@@ -5,12 +5,36 @@
 *.pem
 *.key
 *.p12
+*.pfx
+*.crt
+id_rsa*
+id_ed25519*
 secrets/
-credentials.json
+secrets.*
+credentials*.json
+service-account*.json
+*.secret
+.npmrc
+.pypirc
+.netrc
+
+# --- Database dumps / local databases ---
+*.sql
+*.sql.gz
+*.dump
+*.backup
+*.db
+*.sqlite
+*.sqlite3
+pgdata/
 
 # --- OS ---
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
 Thumbs.db
+Desktop.ini
 desktop.ini
 
 # --- IDE / editors ---
@@ -20,11 +44,17 @@ desktop.ini
 *.swo
 *~
 
+# --- Local agent settings (skills are tracked) ---
+.claude/settings.local.json
+CLAUDE.local.md
+Claude outputs/
+
 # --- Logs / temp ---
 *.log
 logs/
 tmp/
 temp/
+.tmp/
 *.tmp
 *.bak
 
@@ -32,8 +62,7 @@ temp/
 .cache/
 *.cache
 
-# --- Dependencies / build ---
-node_modules/
+# --- Build ---
 dist/
 build/
 out/
@@ -47,10 +76,19 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+env/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.ipynb_checkpoints/
 *.egg-info/
+
+# --- Node ---
+node_modules/
+.npm/
+.pnpm-store/
+npm-debug.log*
+yarn-error.log*
 
 # --- Java / JVM ---
 target/
@@ -59,3 +97,6 @@ target/
 
 # --- Docker (локальні оверрайди) ---
 docker-compose.override.yml
+
+# Локальне сховище файлів-доказів
+backend/data/

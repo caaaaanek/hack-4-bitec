@@ -1,0 +1,118 @@
+# Усе одним запуском: cp .env.example .env (заповнити), потім docker compose up --build
+# Фронтенд: http://localhost:8080 (API там само за /api/v1), API напряму: http://localhost:8000/docs
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: imd
+      POSTGRES_USER: imd
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Задайте POSTGRES_PASSWORD у .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # По TCP: під час першої ініціалізації тимчасовий сервер слухає лише сокет, і pg_isready без -h відповідав би «готово» зарано
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U imd -d imd"]
+      interval: 3s
+      retries: 20
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql+psycopg://imd:${POSTGRES_PASSWORD}@db:5432/imd
+      JWT_SECRET: ${JWT_SECRET:?Задайте JWT_SECRET у .env}
+      DEMO_PASSWORD: ${DEMO_PASSWORD:?Задайте DEMO_PASSWORD у .env}
+      INTEGRATION_API_KEY: ${INTEGRATION_API_KEY:-}
+      INTEGRATION_KEYS: ${INTEGRATION_KEYS:-}
+      TIMEZONE: ${TIMEZONE:-Europe/Kyiv}
+      DEFAULT_MIN_GROUP_SIZE: ${DEFAULT_MIN_GROUP_SIZE:-5}
+      THEME2_URL: ${THEME2_URL:-}
+      THEME2_API_KEY: ${THEME2_API_KEY:-}
+      THEME2_PUBLIC_URL: ${THEME2_PUBLIC_URL:-}
+      THEME2_SYNC_SECONDS: ${THEME2_SYNC_SECONDS:-10}
+      ASSISTANT_ENABLED: ${ASSISTANT_ENABLED:-false}
+      ASSISTANT_URL: ${ASSISTANT_URL:-http://host.docker.internal:11434/api/generate}
+      ASSISTANT_MODEL: ${ASSISTANT_MODEL:-llama3.1:8b}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:3000}
+      # Демо-історія при старті: дві закриті хвилі, рішення й заходи (повторний старт нічого не дублює)
+      SEED_WITH_WAVES: ${SEED_WITH_WAVES:-true}
+      # false: без демо-даних (лише анкети з додатків Б і В і адміністратор admin); вимикає й SEED_WITH_WAVES
+      SEED_DEMO: ${SEED_DEMO:-true}
+      ROOT_PATH: ${ROOT_PATH:-}
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:8080}
+      EVIDENCE_MAX_BYTES: ${EVIDENCE_MAX_BYTES:-10485760}
+      EVIDENCE_MAX_FILES_PER_ITEM: ${EVIDENCE_MAX_FILES_PER_ITEM:-10}
+      PASSWORD_LOGIN_ENABLED: ${PASSWORD_LOGIN_ENABLED:-true}
+      PROXY_AUTH_ENABLED: ${PROXY_AUTH_ENABLED:-false}
+      PROXY_AUTH_HEADER: ${PROXY_AUTH_HEADER:-X-Remote-User}
+      TRUSTED_PROXIES: ${TRUSTED_PROXIES:-}
+      PROXY_AUTH_SECRET: ${PROXY_AUTH_SECRET:-}
+      # nginx фронтенду в мережі compose: від нього беремо реальну IP клієнта з X-Forwarded-For (ліміти спроб).
+      # Вхід через SSO цим не вмикається, для нього окремо TRUSTED_PROXIES.
+      FORWARDED_PROXIES: ${FORWARDED_PROXIES:-172.16.0.0/12,192.168.0.0/16,10.0.0.0/8}
+      # Асистент фронтенду (/api/assistant): OpenAI-сумісна модель. Порожньо — відповіді шаблонами правил.
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_MODEL: ${LLM_MODEL:-gemma4-26b}
+      LLM_ALLOW_EXTERNAL: ${LLM_ALLOW_EXTERNAL:-false}
+      LLM_MAX_CONCURRENT: ${LLM_MAX_CONCURRENT:-4}
+      POOL_ENCRYPTION_KEY: ${POOL_ENCRYPTION_KEY:-}
+      # Ключ буфера з файлу (Docker secret під іншою людиною): має пріоритет над POOL_ENCRYPTION_KEY
+      POOL_ENCRYPTION_KEY_FILE: ${POOL_ENCRYPTION_KEY_FILE:-}
+      # Закритий контур = без обов'язкової залежності від зовнішніх сервісів, а не «без інтернету»:
+      # живі Prozorro й реєстр декларацій НАЗК — необов'язкові джерела модуля «Перевірки».
+      EXTERNAL_FETCH_ENABLED: ${EXTERNAL_FETCH_ENABLED:-true}
+      COUNTERPARTY_API_URL: ${COUNTERPARTY_API_URL:-}
+      COUNTERPARTY_API_KEY: ${COUNTERPARTY_API_KEY:-}
+      # Ролі й безпека (docs/role-workflows.md): див. .env.example.
+      # SECURITY_PROFILE=production вмикає всі запобіжники разом; окремі змінні нижче порожні за замовчуванням,
+      # тож значення бере профіль, а явно задана змінна його перекриває.
+      SECURITY_PROFILE: ${SECURITY_PROFILE:-demo}
+      CHECKLIST_CONFIRMERS: ${CHECKLIST_CONFIRMERS:-auditor}
+      CHECKLIST_REQUIRE_FILE: ${CHECKLIST_REQUIRE_FILE:-true}
+      ORG_KIND: ${ORG_KIND:-institution}
+      LEADER_CHILD_DETAILS: ${LEADER_CHILD_DETAILS:-}
+      INVITE_TTL_HOURS: ${INVITE_TTL_HOURS:-72}
+      FOUR_EYES_ENABLED: ${FOUR_EYES_ENABLED:-}
+      STAFF_TOKEN_ONLY: ${STAFF_TOKEN_ONLY:-}
+      FACT_OWNERS: ${FACT_OWNERS:-}
+      AUDIT_ANCHOR_DIR: ${AUDIT_ANCHOR_DIR:-}
+      AUDIT_ANCHOR_TSA_URL: ${AUDIT_ANCHOR_TSA_URL:-}
+      CANDOR_MIN_PER_VARIANT: ${CANDOR_MIN_PER_VARIANT:-30}
+      # Автопілот хвиль: крок кожні N секунд (0 — лише вручну, POST /api/v1/autopilot/tick)
+      AUTOPILOT_INTERVAL_SECONDS: ${AUTOPILOT_INTERVAL_SECONDS:-300}
+    volumes:
+      - evidence:/data/evidence
+    ports:
+      # Лише локально: прямий доступ до API (Swagger) з машини стенда. Ззовні — через nginx на :8080.
+      # Інакше запит на :8000 прийшов би з адреси шлюзу Docker (вона в FORWARDED_PROXIES) і міг би підробити X-Forwarded-For.
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Фронтенд: frontend-proto (React, збірка Vite) через nginx; /api проксіюється на backend.
+  # Моки 5 джерел фактів (ARTEMIDA, атестація, навчання, закупівлі, повідомлення): шлють факти за 12 місяців
+  # у POST /indicators, кожне своїм ключем з INTEGRATION_KEYS. Лише на вимогу:
+  #   docker compose --profile mocks run --rm mocks
+  mocks:
+    profiles: ["mocks"]
+    build: ./backend
+    command: ["python", "scripts/mock_sources.py", "--url", "http://backend:8000"]
+    environment:
+      # Порожньо — скрипт сам скаже, якого ключа бракує (тут не :?, бо compose перевіряє весь файл навіть без профілю)
+      INTEGRATION_KEYS: ${INTEGRATION_KEYS:-}
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend-proto
+    ports:
+      - "8080:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  evidence: 

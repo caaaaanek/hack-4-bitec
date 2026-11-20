@@ -1,0 +1,8 @@
+node_modules
+dist
+api
+server.mjs
+start.sh
+.vercel
+.vercelignore
+*.png
