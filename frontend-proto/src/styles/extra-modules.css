@@ -1,0 +1,279 @@
+/* Нові модулі: флешкартки, питання аудитора, черговий, автопілот, нормативка, перевірки. Лише розкладка; кольори з токенів base.css. */
+.txt { overflow-wrap: anywhere; white-space: normal; line-height: 1.45; }
+.sev { border-left: 3px solid var(--line); padding-left: 12px; }
+.sev.critical { border-left-color: var(--red); }
+.sev.warning { border-left-color: var(--amber); }
+.sev.info { border-left-color: var(--blue); }
+.qa-list { display: flex; flex-direction: column; gap: 14px; }
+.qa-item { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; }
+.qa-item.done { opacity: .72; }
+.mod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.chk-row { display: flex; gap: 8px; align-items: center; }
+.drop { border: 1.5px dashed var(--line); border-radius: 14px; padding: 18px; text-align: center; }
+.drop:focus-within, .drop.on { border-color: var(--teal); }
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+#notesBtn .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 999px; font-size: 10px; font-weight: 700; background: var(--red); color: #fff; }
+/* Вікно сповіщень: ширина за розміром екрана, прокрутка всередині */
+.popover.notes-pop { width: clamp(320px, 380px, 92vw); max-width: 92vw; padding: 0; overflow: hidden; }
+.notes { display: flex; flex-direction: column; max-height: 70vh; outline: none; }
+.notes-h { font-weight: 600; padding: 14px 16px 10px; border-bottom: 1px solid var(--line); }
+.notes-e { padding: 14px 16px; }
+.notes-l { list-style: none; margin: 0; padding: 0 16px; overflow-y: auto; overscroll-behavior: contain; }
+.notes-l > li { padding: 12px 0; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 4px; }
+.notes-l > li:first-child { border-top: 0; }
+.notes-k { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; color: var(--muted); }
+.notes-t { font-weight: 500; line-height: 1.4; overflow-wrap: anywhere; }
+.notes-b { margin: 2px 0 0; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+/* Заголовок секції модуля і розгортуване «Докладніше» */
+.mod-h { flex-wrap: wrap; gap: 10px; }
+.mod-h h2 { overflow-wrap: anywhere; }
+.more > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: var(--teal-deep); }
+.more > summary::-webkit-details-marker { display: none; }
+.more > summary svg { width: 15px; height: 15px; transition: transform .2s; }
+.more[open] > summary svg { transform: rotate(180deg); }
+.more-b { margin-top: 8px; display: flex; flex-direction: column; gap: 8px; }
+/* Пункти чергового в «Що потребує уваги» */
+.dg { margin-top: 6px; }
+.dg-i { border-top: 1px solid var(--line); }
+.dg-i > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; padding: 11px 0; }
+.dg-i > summary::-webkit-details-marker { display: none; }
+.dg-i > summary > svg { width: 16px; height: 16px; flex: none; color: var(--muted); transition: transform .2s; }
+.dg-i[open] > summary > svg { transform: rotate(180deg); }
+.dg-b { padding: 0 0 12px 18px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; }
+.fix-l { margin: 4px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.ev-btn { cursor: pointer; border: 0; font: inherit; font-size: 12px; }
+/* Довгі підписи доказів (кнопка «до числа» і той самий текст без переходу) переносяться: на 390 px не було б горизонтального скролу. */
+.qa-item .tags .pill { white-space: normal; max-width: 100%; text-align: left; }
+.ev-btn svg { width: 12px; height: 12px; }
+.ev-btn:hover { outline: 1px solid var(--teal); }
+/* Автопілот у «Керуванні циклом» */
+.ap-grid { display: grid; grid-template-columns: minmax(0, 2fr) minmax(220px, 1fr); gap: 18px; align-items: start; }
+.ap-acts { display: flex; flex-direction: column; gap: 10px; }
+.ap-form { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+@media (max-width: 900px) { .ap-grid { grid-template-columns: 1fr; } }
+.kt-txt { font-size: 20px; font-weight: 600; letter-spacing: -.01em; line-height: 1.2; overflow-wrap: anywhere; }
+/* Навчання: колоди */
+.deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.deck { display: flex; flex-direction: column; gap: 10px; padding: 16px; border: 1px solid var(--line); border-radius: var(--r); background: var(--panel); }
+.deck-h { display: flex; gap: 12px; align-items: center; }
+.deck-d { flex: 1; }
+.deck-bar { height: 6px; border-radius: 99px; background: var(--soft); overflow: hidden; }
+.deck-bar > i { display: block; height: 100%; border-radius: inherit; background: var(--teal); transition: width .3s; }
+.deck-f { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+/* Навчання: картка зі стосом і перегортанням */
+.fc-col { max-width: 480px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+.fc-top { display: flex; align-items: center; gap: 10px; }
+/* 20 px зверху й знизу: запас для ближнього краю картки під час повороту (при perspective 3200px він виступає до ~24 px),
+   знизу в цьому ж запасі лежить край колоди */
+.fc-stack { position: relative; padding: 20px 0; }
+/* Стос непрозорий і нерухомий: лише край колоди, що визирає знизу (смуги висотою 40 px за нижнім краєм картки),
+   тож коли картка стоїть ребром, позаду не видно «другої картки» */
+.fc-layer { position: absolute; height: 40px; border: 2px solid var(--teal-pale); border-radius: 26px; background: var(--teal-soft); }
+.fc-layer.l1 { left: 12px; right: 12px; bottom: 10px; }
+.fc-layer.l2 { left: 26px; right: 26px; bottom: 0; background: var(--teal-pale); }
+/* Висота під екран: над карткою 154 px (шапка, «Усі колоди», запас стосу), під нею до 196 px (стос, Назад/Далі, підказки, відступ),
+   тож картка з кнопками вміщається від 1366x768 до 910x512. Довгий текст прокручується всередині.
+   Висота ціла (round), щоб текст на гранях не розмивався; перший рядок для браузерів без round() */
+.fc3 { position: relative; height: clamp(260px, calc(100vh - 350px), 600px); height: round(down, clamp(260px, calc(100vh - 350px), 600px), 1px); perspective: 3200px; border-radius: 26px; outline: none; cursor: pointer; }
+.fc3:focus-visible { box-shadow: 0 0 0 3px var(--panel), 0 0 0 6px var(--teal); }
+.fc-in { position: relative; width: 100%; height: 100%; transition: transform .45s ease; transform-style: preserve-3d; }
+.fc3.flipped .fc-in { transform: rotateY(180deg); }
+.fc-face { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 20px 22px; border: 2px solid var(--teal); border-radius: 26px; background: var(--teal-soft); backface-visibility: hidden; -webkit-backface-visibility: hidden; -webkit-font-smoothing: antialiased; }
+/* Під час повороту: прокрутний блок не винесено в окремий шар (інакше текст звороту блимає), шар картки готується заздалегідь */
+.fc3.turning .fc-body { overflow: hidden; }
+.fc3.turning .fc-in { will-change: transform; }
+.fc-face.back { transform: rotateY(180deg); }
+.fc-head { align-self: stretch; display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--teal-deep); }
+.fc-flip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--teal); background: var(--panel); color: var(--teal-deep); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.fc-flip svg { width: 14px; height: 14px; }
+.fc-body { flex: 1; min-height: 0; width: 100%; overflow-y: auto; display: flex; align-items: center; justify-content: center; }
+.fc-q { margin: auto 0; font-size: 22px; line-height: 1.4; font-weight: 600; text-align: center; overflow-wrap: anywhere; }
+.fc-steps { margin: auto 0; padding-left: 24px; display: flex; flex-direction: column; gap: 12px; font-size: 17px; line-height: 1.4; font-weight: 500; }
+.fc-tag { padding: 4px 12px; border-radius: 999px; background: var(--panel); color: var(--teal-deep); font-size: 12px; font-weight: 600; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fc-nav { display: flex; align-items: center; gap: 10px; }
+.fc-dots { flex: 1; display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+.fc-dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.fc-dots i.seen { background: var(--teal-pale); }
+.fc-dots i.on { background: var(--teal); transform: scale(1.25); }
+.fc-hint { text-align: center; }
+.fc-done { display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; padding: 32px 24px; }
+.fc-done h2 { margin: 6px 0 0; font-size: 20px; }
+.fc-ok { width: 56px; height: 56px; border-radius: 50%; background: var(--teal-soft); color: var(--teal-deep); display: grid; place-items: center; }
+@media (max-width: 640px) { .fc-q { font-size: 20px; } .fc-steps { font-size: 16px; } .fc-face { padding: 16px; } }
+@media (prefers-reduced-motion: reduce) {
+  .fc-in, .fc3.flipped .fc-in { transition: none; transform: none; }
+  .fc-face { backface-visibility: visible; transform: none; transition: opacity .3s; }
+  .fc-face.back { transform: none; opacity: 0; pointer-events: none; }
+  .fc3.flipped .fc-face.back { opacity: 1; pointer-events: auto; }
+  .fc3.flipped .fc-face.front { opacity: 0; pointer-events: none; }
+}
+
+/* Автопілот: усе в одній картці, компактна форма */
+.ap-sum { display: flex; flex-wrap: wrap; gap: 6px 22px; margin: 2px 0 10px; font-size: 14px; }
+.ap-sum .lbl { margin-right: 4px; }
+.ap-acts { display: flex; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 12px; }
+.ap-sw { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+.ap-fields { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-top: 12px; }
+.ap-fields .field { width: 180px; margin: 0; }
+.ap-fields .ap-num { width: 150px; }
+@media (max-width: 640px) { .ap-fields .field, .ap-fields .ap-num { width: calc(50% - 6px); } .ap-fields .btn { width: 100%; justify-content: center; } }
+/* «Що люди бояться сказати прямо» і «Ознаки підгонки» на «Огляді» */
+.cd-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 14px; }
+.cd-item { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.cd-st { font-weight: 600; overflow-wrap: anywhere; }
+.cd-nums { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.cd-nums > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.cd-nums b { font-size: 26px; font-weight: 600; letter-spacing: -.02em; }
+.cd-bar { position: relative; height: 8px; border-radius: 999px; background: var(--line); }
+.cd-bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 999px; }
+.cd-direct { background: var(--blue); } .cd-indirect { background: var(--amber); }
+.cd-self { background: var(--teal); } .cd-others { background: var(--blue); }
+.cd-ci { position: absolute; top: -4px; bottom: -4px; border: 2px solid var(--fg); border-top: 0; border-bottom: 0; opacity: .55; }
+.cd-say { margin: 0; font-size: 13.5px; }
+.cd-flags { display: flex; flex-direction: column; gap: 8px; margin-top: 14px; }
+.cd-flag { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.cd-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.cd-foot { margin-top: 12px; font-size: 12.5px; }
+@media (max-width: 520px) { .cd-nums b { font-size: 22px; } }
+.row .t.gm-t { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; }
+.ix-extra { display: flex; flex-direction: column; gap: 2px; }
+.ix-card .ix-extra + .ix-extra { margin-top: 14px; }
+/* Брифінг і шлях до наступного рівня */
+.bf-nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.bf-num { background: var(--soft); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.bf-num b { font-size: 15px; overflow-wrap: anywhere; }
+.row .t.nl-t { white-space: normal; overflow-wrap: anywhere; }
+/* Підрозділи за рівнями: стовпчики без назв */
+.ch-bars { display: flex; align-items: flex-end; gap: 16px; height: 170px; padding-top: 8px; }
+.ch-b { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; min-width: 0; }
+.ch-b span { font-size: 15px; font-weight: 600; }
+.ch-b i { width: 100%; border-radius: 8px 8px 3px 3px; }
+.ch-b small { color: var(--muted); }
+.rv-units { white-space: normal; overflow-wrap: anywhere; }
+/* Прозорість: хеші, якір журналу, лотерея, запити другій людині */
+.hash-full { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12.5px; overflow-wrap: anywhere; word-break: break-all; background: var(--soft); border-radius: 8px; padding: 6px 8px; margin: 6px 0; }
+.an-last { display: flex; flex-direction: column; gap: 4px; }
+.an-form { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-top: 12px; }
+.an-form .field { margin: 0; min-width: 0; } .an-form .an-h { flex: 1 1 260px; }
+.note-box.an-bad { background: var(--red-soft); }
+.lt-t { white-space: normal; overflow-wrap: anywhere; font-size: 13.5px; min-width: 0; }
+.lt-st { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex: none; }
+.ap-t { overflow-wrap: anywhere; min-width: 0; }
+.ap-act { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin-top: 12px; }
+.ap-act .field { flex: 1 1 240px; margin: 0; }
+@media (max-width: 520px) { .lt-st { align-items: flex-start; } }
+.lt-more summary { cursor: pointer; color: var(--teal-deep); font-weight: 600; font-size: 12.5px; display: inline; }
+.lt-more[open] { margin-top: 6px; }
+@media (max-width: 520px) { .lt-row { flex-wrap: wrap; } .lt-row .lt-t { flex: 1 1 calc(100% - 60px); } .lt-st { flex-direction: row; flex-wrap: wrap; margin-left: 54px; } }
+/* Урна з трьома ключами */
+.urn-share { margin-top: 12px; }
+.urn-qr { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+.urn-qr .hash-full { flex: 1 1 220px; }
+.urn-qr-svg { width: 160px; max-width: 100%; background: #fff; border-radius: 8px; padding: 6px; }
+.urn-qr-svg svg { display: block; width: 100%; height: auto; }
+.urn-in { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.urn-setup { display: flex; flex-direction: column; gap: 8px; max-width: 520px; }
+.urn-setup .field { margin: 0; }
+.urn-demo { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 10px; }
+.urn-demo-i { background: var(--soft); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+@media print { .urn-share { break-inside: avoid; } }
+.mt-url a { overflow-wrap: anywhere; }
+.row .t.mt-t { white-space: normal; overflow-wrap: anywhere; }
+
+/* Адміністрування: Люди, Довідники, Реєстр ризиків, учасники, відповідальні (views/Admin.jsx) */
+.btn-s { padding: 6px 12px; }
+.btn.dis { opacity: .6; pointer-events: none; }
+.adm-err { color: color-mix(in srgb, var(--red) 60%, var(--fg)); }
+.adm-err:empty { display: none; }
+.adm-tbl td { vertical-align: middle; }
+.adm-st { white-space: nowrap; }
+.adm-st .dot { display: inline-block; margin-right: 6px; vertical-align: middle; }
+.adm-acts { white-space: nowrap; text-align: right; }
+.adm-acts .btn + .btn { margin-left: 4px; }
+.adm-chk { display: flex; gap: 8px; align-items: center; cursor: pointer; }
+.adm-chk input { width: 16px; height: 16px; accent-color: var(--teal); flex: none; }
+.adm-add { display: flex; gap: 8px; margin-top: 10px; }
+.adm-add .inp { flex: 1; min-width: 0; }
+.rk-sum { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-bottom: 12px; font-size: 14px; }
+.rk-warn { color: color-mix(in srgb, var(--red) 60%, var(--fg)); }
+.as-all, .as-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.as-row { grid-template-columns: 44px 1fr 1fr; align-items: center; }
+.as-list { display: flex; flex-direction: column; gap: 6px; max-height: 55vh; overflow: auto; padding-right: 4px; }
+.as-row .inp, .as-all .inp { min-width: 0; padding: 6px 8px; font-size: 13px; }
+.pt-list { max-height: 50vh; overflow: auto; }
+@media (max-width: 620px) { .as-row { grid-template-columns: 1fr 1fr; } .as-row b { grid-column: 1 / -1; } .adm-acts { text-align: left; } }
+.ck-who { margin-top: 6px; }
+.adm-line { font-size: 14px; line-height: 1.5; }
+/* «Питання перевірки»: список як чек-лист підготовки */
+.adv-list { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.adv-row { border-bottom: 1px solid var(--line); }
+.adv-row > summary { list-style: none; display: grid; grid-template-columns: 20px 22px minmax(0, 1fr) 20px; gap: 12px; align-items: start; padding: 14px 4px; cursor: pointer; }
+.adv-row > summary::-webkit-details-marker { display: none; }
+.adv-row > summary:hover { background: color-mix(in srgb, var(--soft) 60%, transparent); }
+.adv-row input { margin-top: 3px; width: 17px; height: 17px; accent-color: var(--teal); }
+.adv-n { color: var(--muted); font-size: 13px; padding-top: 2px; }
+.adv-q { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.adv-q .txt { font-size: 15px; font-weight: 600; line-height: 1.45; }
+.adv-hot { color: color-mix(in srgb, var(--red) 70%, var(--fg)); font-weight: 600; }
+.adv-row .chev { color: var(--muted); padding-top: 2px; transition: transform .15s; }
+.adv-row[open] .chev { transform: rotate(180deg); }
+.adv-row.done .adv-q .txt { text-decoration: line-through; color: var(--muted); font-weight: 500; }
+.adv-body { display: flex; flex-direction: column; gap: 10px; padding: 0 4px 16px 66px; }
+.adv-prog { display: flex; align-items: center; gap: 10px; min-width: 200px; }
+.adv-prog .dist-bar { width: 120px; }
+@media (max-width: 640px) { .adv-body { padding-left: 4px; } .adv-prog { min-width: 0; width: 100%; } .adv-prog .dist-bar { flex: 1; } }
+.notes-sig { border-bottom: 1px solid var(--line); }
+.notes-sig > li { padding: 0; }
+.sig-row { display: flex; gap: 10px; align-items: flex-start; width: 100%; padding: 11px 0; border: 0; background: none; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+button.sig-row:hover .notes-t { text-decoration: underline; }
+.sig-row .dot { margin-top: 7px; flex: none; }
+.sig-row .grow { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.sig-row svg { width: 16px; height: 16px; color: var(--muted); margin-top: 3px; flex: none; }
+/* Таблиця, що на вузькому екрані стає картками: підпис колонки з data-l */
+@media (max-width: 700px) {
+  .tbl-stack, .tbl-stack tbody, .tbl-stack tr, .tbl-stack td { display: block; width: 100%; }
+  .tbl-stack thead { display: none; }
+  .tbl-stack tr { padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .tbl-stack tr:last-child { border-bottom: 0; }
+  .tbl-stack td { border: 0 !important; padding: 4px 0 !important; min-width: 0 !important; white-space: normal !important; }
+  .tbl-stack td[data-l] { display: flex; gap: 12px; justify-content: space-between; align-items: baseline; }
+  .tbl-stack td[data-l]::before { content: attr(data-l); color: var(--muted); font-size: 12.5px; flex: none; }
+  .tbl-stack td[data-l] > * { text-align: right; }
+}
+@media (max-width: 700px) { .tbl-stack td.blk { padding-top: 6px !important; } }
+/* Телефон: довгі назви в списках переносяться, а не обрізаються; заголовки таблиці розкладу теж */
+@media (max-width: 640px) {
+  .rows .row .t { white-space: normal; overflow: visible; }
+  .ex-tbl th { white-space: normal; }
+}
+/* Телефон: шапка в один рядок. Доступність і тема переїжджають у меню профілю */
+.only-m { display: none; }
+@media (max-width: 600px) {
+  #a11yBtn, #themeBtn { display: none; }
+  .only-m { display: flex; }
+  .prof-m { flex-direction: column; gap: 6px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+  .prof-m .btn { justify-content: flex-start; }
+  .top { flex-wrap: nowrap; gap: 8px; }
+  .top h1 { flex: 1 1 0; min-width: 0; font-size: 17px; overflow-wrap: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .top .sp { display: none; }
+}
+.ck-st { display: flex; gap: 8px; align-items: baseline; line-height: 1.45; }
+.ck-st .dot { flex: none; transform: translateY(-1px); }
+.ck-need { color: color-mix(in srgb, var(--amber) 70%, var(--fg)); }
+.cov-line { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+.cov-line b { font-size: 32px; font-weight: 700; letter-spacing: -.02em; }
+.fd-h { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.fd-h .dot { transform: translateY(-1px); }
+.rec-meta { margin-bottom: 8px; display: flex; align-items: center; flex-wrap: wrap; gap: 0 4px; }
+.rec-hi { color: color-mix(in srgb, var(--red) 65%, var(--fg)); font-weight: 600; }
+/* Шкала рівнів у вузькій картці: назву й межі показуємо лише для поточного рівня, решта у підказці */
+.lvs-compact .lvs-lbl > div:not(.here) span, .lvs-compact .lvs-lbl > div:not(.here) small { display: none; }
+.lvs-compact .lvs-lbl > div.here { overflow: visible; white-space: nowrap; }
+.dp-inline { display: inline-flex; align-items: center; gap: 8px; }
+/* Довгі пункти чек-листа: три рядки, повністю — по кліку чи фокусу */
+.ck-txt { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; outline: none; }
+.ck-txt:focus { display: block; overflow: visible; }
+.ck-txt:focus-visible { box-shadow: 0 0 0 2px var(--teal); border-radius: 4px; }
+/* Знак Integra замість зеленої плашки з піктограмою */
+.logo.brand-mark { background: none; color: var(--fg); border-radius: 0; }
