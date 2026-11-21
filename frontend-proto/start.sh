@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Локальний запуск: збірка сайту + ШІ-асистент на локальній моделі (Ollama), без хмари.
 #   ./start.sh              — модель за замовчуванням
-#   ./start.sh qwen2.5:3b   — інша модель
+#   ./start.sh gemma3:12b   — інша модель (лише дозволені, див. docs/ai.md)
 set -euo pipefail
 cd "$(dirname "$0")"
 MODEL="${1:-gemma3:4b}"

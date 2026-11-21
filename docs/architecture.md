@@ -39,7 +39,7 @@ hack-4-bitec/
 
 ## Модулі
 
-Модулі з умови завдання і де вони реалізовані. Фронтенд: `frontend-proto` (маршрути `#…`).
+Модулі з умови завдання і де вони реалізовані. Фронтенд: `frontend-proto` (маршрути `#…`); «лише API» означає, що окремого екрана ще немає.
 
 | Модуль | Backend | Frontend |
 |---|---|---|
@@ -51,19 +51,19 @@ hack-4-bitec/
 | Comparative Analytics: РГ / ОС / експерти / факти, динаміка | `routers/results.py` (history, compare), `routers/indicators.py` (факти, сигнали ризику) | `#compare`, `#trends`, `#institutions` |
 | Recommendations Engine: явні правила | `services/recommendations.py`, `routers/recommendations.py`, каталог з Додатку Д | `#recs`, `#whatif` «Що, якщо» |
 | Recommendations Tracker: відповідальний, строк, статус | `routers/measures.py`, синхронізація з темою 2 (`routers/integrations.py`) | `#tracker` |
-| Audit Trail: журнал дій | `audit.py` (ланцюжок хешів), `GET /admin/audit-log`, `POST /admin/audit-log/verify`; якір назовні (файл WORM / мітка часу RFC 3161, `services/audit_anchor.py`); перегляди чужих підрозділів: `GET /admin/result-views` | `#audit` з перевіркою; якір і перегляди: API |
+| Audit Trail: журнал дій | `audit.py` (ланцюжок хешів), `GET /admin/audit-log`, `POST /admin/audit-log/verify`; якір назовні (файл WORM / мітка часу RFC 3161, `services/audit_anchor.py`); перегляди чужих підрозділів: `GET /admin/result-views` | `#audit` з перевіркою й карткою якоря журналу, `#views` «Перегляди підрозділів»; автоматичний експорт якоря: лише API |
 | Reporting Module | `GET /campaigns/{id}/report?format=json\|csv\|xlsx\|docx` | `#report` |
 | Кабінет учасника: узагальнені результати свого підрозділу | `GET /me/results`, за посиланням `GET /respond/results` | `#me`, `/s/<токен>` після закриття |
-| Інтеграція з іншими системами | `POST /indicators` (ключ на джерело), вхід через проксі організації (`POST /auth/proxy`), `ROOT_PATH` | `#sources` джерела фактів |
+| Інтеграція з іншими системами | `POST /indicators` (ключ на джерело), вхід через проксі організації (`POST /auth/proxy`), `ROOT_PATH` | `#sources` джерела фактів; картка стану Mitra в `#manage` |
 | «Адвокат диявола»: питання аудитора до хвилі за правилами | `GET /campaigns/{id}/devils-advocate` | `#advocate` «Питання перевірки» |
-| Агент-черговий: що впало, чому, як виправити | `GET /agent/digest` | дзвіночок у шапці й «Що потребує уваги» |
-| Аналіз нормативки: які пункти зачіпає новий наказ | `POST /normative/analyze` (локальний пошук, без моделей) | `#normative` «Нормативка» |
+| Агент-черговий: що впало, чому, як виправити | `GET /agent/digest` | «Сигнали»: дзвіночок у шапці й «Що потребує уваги» на `#overview` |
+| Аналіз нормативки: які пункти зачіпає новий наказ | `POST /normative/analyze` (локальний пошук, без моделей) | `#normative` «Що змінилось» |
 | Автопілот хвилі: відкриття, нагадування всім, закриття, звіт | `PUT /campaigns/{id}/autopilot`, `POST /autopilot/tick`, `GET /me/notifications` | розділ у «Керуванні циклом», дзвіночок |
 | Флешкартки доброчесності: джерело охоплення навчанням | `/learning/*` | `#learn` «Навчання» |
-| Детектор відвертості: непрямі питання й «дзеркало», картка «Що люди бояться сказати прямо» | `services/candor.py`, `GET /campaigns/{id}/candor`, `candor_card` у `GET /dashboard` | API (у формі анкети непряме питання приходить як вибір «0…N») |
-| Урна з трьома ключами: відповіді розшифрують лише двоє з трьох власників | `services/urn.py`, `routers/urn.py` | API |
-| Квитанції: жетон зі сліпим підписом, перевірка «моя відповідь урахована» | `services/ballots.py`, `/campaigns/{id}/questionnaires/{qid}/ballot`, `/respond/ballot`, `/respond/receipts/{квитанція}` | API |
-| Детектор Гудхарта, лотерея перевірок, шлях до наступного рівня, брифінг, стійкість ваг | `services/goodhart.py`, `services/planning.py`, `routers/insights_plus.py` | API |
-| Довідники (категорії, посади, факти з власниками джерел), Департамент, реєстр ризиків, принцип двох осіб, запрошення | `routers/dictionaries.py`, `routers/department.py`, `routers/risks.py`, `services/approvals.py`, `services/invites.py` | API |
-| Профіль безпеки: `SECURITY_PROFILE=production` вмикає всі запобіжники разом | `config.py` (`PRODUCTION_PROFILE`), `GET /config` → `policies` | попередження адміну: API |
+| Детектор відвертості: непрямі питання й «дзеркало», картка «Що люди бояться сказати прямо» | `services/candor.py`, `GET /campaigns/{id}/candor`, `candor_card` у `GET /dashboard` | картка «Що люди бояться сказати прямо» на `#overview`; непряме питання в анкеті — вибір «0…N» |
+| Урна з трьома ключами: відповіді розшифрують лише двоє з трьох власників | `services/urn.py`, `routers/urn.py` | розділ урни вибраної хвилі в `#manage`; `#urn` для власника частини ключа (аудит) |
+| Квитанції: жетон зі сліпим підписом, перевірка «моя відповідь урахована» | `services/ballots.py`, `/campaigns/{id}/questionnaires/{qid}/ballot`, `/respond/ballot`, `/respond/receipts/{квитанція}` | квитанція після надсилання анкети, перевірка в `#me` |
+| Детектор Гудхарта, лотерея перевірок, шлях до наступного рівня, брифінг, стійкість ваг | `services/goodhart.py`, `services/planning.py`, `routers/insights_plus.py` | картка «Ознаки підгонки» на `#overview`; «Брифінг за 30 секунд» і «Шлях до наступного рівня» в «Що потребує уваги» та `#report`; лотерея — у `#checklist` аудиту; стійкість ваг і рівень, що переважає, — у панелі «Як це рахується» |
+| Довідники (категорії, посади, факти з власниками джерел), Департамент, реєстр ризиків, принцип двох осіб, запрошення | `routers/dictionaries.py`, `routers/department.py`, `routers/risks.py`, `services/approvals.py`, `services/invites.py` | `#dicts`, `#institutions` (Департамент), `#risks`, `#approvals` «Запити другій людині», `#people` і `#units` (технічний адміністратор), сторінка `/invite/<токен>` |
+| Профіль безпеки: `SECURITY_PROFILE=production` вмикає всі запобіжники разом | `config.py` (`PRODUCTION_PROFILE`), `GET /config` → `policies` | лише API (попередження адміну про вимкнені запобіжники ще не показується) |
 | Асистент (опційно, вимкнено) | `POST /assistant/ask`, `/api/assistant` (OpenAI-сумісний, `LLM_*`) | кнопка «Асистент» |

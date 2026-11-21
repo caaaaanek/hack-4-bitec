@@ -20,7 +20,7 @@
 |---|---|---|
 | `POST /session` | `POST /auth/session` | JSON `{login, password}` → `access_token`, `expires_in`, `role`, `user` (є й `POST /auth/login` з form-data) |
 | `GET /session` | `GET /auth/session` (= `GET /auth/me`) | роль, категорія, `unit_id` |
-| `DELETE /session` | `DELETE /auth/session` | 204; JWT без стану, фронтенд видаляє токен |
+| `DELETE /session` | `DELETE /auth/session` | 204; токен відкликається на сервері (`revoked_tokens`), фронтенд теж видаляє його |
 | — | `POST /auth/proxy` | вхід через SSO організації, якщо `GET /config` → `auth.proxy` |
 | `PUT /demo/role` | — | у демо — вхід під іншим демо-логіном (`docs/run.md`) |
 | `GET/POST /questionnaires`, `GET/PATCH /questionnaires/{id}` | ті самі шляхи | |
@@ -56,12 +56,25 @@
 | «Що, якщо» (`WhatIf.jsx`) | `POST /campaigns/{id}/what-if` | сценарій «що, якщо»: `baseline` / `scenario` / `delta`, `levers`, `options` для перемикачів і повзунків; див. `docs/backend.md` |
 | «Навчання» (`Learn.jsx`), картка в «Мої результати» | `GET /learning/decks`, `GET /learning/decks/{code}`, `POST .../complete`, `GET /learning/stats` | стос карток із перегортанням (Пробіл, стрілки); де людина зупинилась, зберігається лише в браузері; охоплення з порогом k; `training_coverage` приходить у фактах результатів |
 | «Питання перевірки» (`Insights.jsx`): повний екран і панель «Підготуватися до перевірки» на «Огляді» та у «Звіті» | `GET /campaigns/{id}/devils-advocate` | лише читання; «До числа» веде за `evidence[].path` на розклад, порівняння чи динаміку; позначка «Відповідь підготовлено» зберігається в браузері |
-| «Черговий» (`Insights.jsx`): повний екран і пункти в «Що потребує уваги» | `GET /agent/digest` | на «Огляді» лише критичні й попередження, до трьох |
-| Автопілот (`Autopilot.jsx`): розділ хвилі в «Керуванні циклом», окремий екран для координатора й аудитора | `GET/PUT /campaigns/{id}/autopilot`, `POST /autopilot/tick`, `GET .../autopilot/report`; координатор бере список хвиль із `GET /admin/overview` | змінює лише `admin` |
+| «Сигнали» (`Insights.jsx`, `components/NotesPop.jsx`): дзвіночок у шапці й пункти в «Що потребує уваги» | `GET /agent/digest` | окремої вкладки немає; на «Огляді» лише критичні й попередження, до трьох |
+| Автопілот (`Autopilot.jsx`): розділ хвилі в «Керуванні циклом» | `GET/PUT /campaigns/{id}/autopilot`, `POST /autopilot/tick`, `GET .../autopilot/report` | змінює лише `admin`; `auditor` читає лише через API, окремого екрана немає; координатор хвиль не бачить |
 | «Нормативка» (`Normative.jsx`) | `POST /normative/analyze` (multipart) | документ не зберігається |
 | «Перевірки» (`Checks.jsx`) | `GET /checks/mock/{kind}`, `POST /checks/procurement\|declarations`, `GET /checks/runs`, `GET /checks/findings`, `POST .../review`, `POST /checks/publish` | бекенд пускає лише `admin`, координатору екрана немає |
 | Сповіщення (`components/NotesPop.jsx`, дзвіночок у шапці) | `GET /me/notifications` | рядки «• …» тіла показуються списком |
 | Період фактів у «Порівнянні» | поле `periods` фактів у `GET /campaigns/{id}/results` | показується кварталами («4 кв. 2025 – 3 кв. 2026»): факти рахуються лише цілими завершеними кварталами |
+| Детектор відвертості й ознаки підгонки (`Candor.jsx`) на «Огляді» | `GET /campaigns/{id}/candor` | `candor` і `goodhart`; порожні дані — картку не показувати |
+| Брифінг і шлях до наступного рівня (`Leadership.jsx`) | `GET /campaigns/{id}/briefing`, `GET /campaigns/{id}/next-level-plan` (`?format=docx`) | Word — лише з сервером |
+| Розподіл рівнів дочірніх (`Oversight.jsx`) у «Динаміці» | `GET /units/{id}/children-levels` | без назв; `hidden: true` — лише правило |
+| «Перегляди підрозділів» (`Oversight.jsx`) | `GET /admin/result-views` | фільтри дат і людини |
+| Рівень, що переважає; стійкість ваг (`IndexExtras.jsx`) | `index.modal_levels` у результатах, `GET /campaigns/{id}/sensitivity` | |
+| Якір журналу, лотерея, запити другій людині (`Transparency.jsx`) | `POST /admin/audit-log/anchor`, `GET .../anchors`, `POST .../verify-anchor`; `GET /campaigns/{id}/audit-lottery`; `GET /admin/approvals`, `POST .../approve\|reject` | `export-anchor` у UI немає |
+| Урна (`Urn.jsx`) | `GET/PUT/DELETE /campaigns/{id}/urn`, `GET .../urn/my-share`, `POST .../urn/shares` | |
+| Квитанції (`Receipts.jsx`, `lib/ballot.js`) | `GET .../questionnaires/{qid}/ballot-key`, `POST .../ballot`, `POST /respond/ballot`, `GET /respond/receipts/{квитанція}` | сліпий підпис рахується в браузері |
+| «Що саме ми зберігаємо» (`Privacy.jsx`) | `GET /respond/privacy` | без входу |
+| Учасники й відповідальні (`WaveAdmin.jsx`) | `GET/PUT /campaigns/{id}/participants`, `GET /campaigns/{id}/people`, `GET/PUT /campaigns/{id}/checklist/assignments` | |
+| Стан Mitra (`Integrations.jsx`) | `GET /integrations/status`, `POST /integrations/theme2/sync` | |
+| Люди, підрозділи, довідники, реєстр ризиків, запрошення (`Admin.jsx`) | `/admin/users` (+ `/import`, `/{id}/invite`), `/admin/units`, `/admin/overview`, `/dictionaries/categories\|positions\|facts`, `/units/{id}/risk-register` (+ `/import`), `POST /auth/invite` | |
+| Заклади Департаменту (`Department.jsx`) | `GET /department/institutions`, `GET /department/institutions/{unit_id}` | без індексів і рейтингу |
 | `GET /audit` | `GET /admin/audit-log` | фільтри й `offset` |
 | `POST /audit/verify` | `POST /admin/audit-log/verify` | |
 | `GET /methodology` | `GET /methodology` | |
@@ -69,12 +82,12 @@
 
 ## Відповіді на питання фронтенду
 
-1. **Анонімність.** Окремі таблиці «хто пройшов» і «що відповіли» без зв'язку, плюс буфер: відповіді переносяться пачками ≥ k
-   у перемішаному порядку, тому навіть системні поля БД не вказують на людину. Є й одноразові посилання (хвиля `access_mode: token`)
+1. **Анонімність.** Окремі таблиці «хто пройшов» і «що відповіли» без зв'язку, плюс зашифрований буфер: відповіді переносяться
+   лише при закритті хвилі, однією транзакцією й у перемішаному порядку, тому навіть системні поля БД не вказують на людину. Є й одноразові посилання (хвиля `access_mode: token`)
    без облікових записів. Деталі: [`docs/anonymity.md`](../anonymity.md).
 2. **Вхід.** Логін і пароль, JWT (HS256, 8 годин); або через довірений проксі організації (`POST /auth/proxy`).
-3. **Ролі.** `admin`, `commissioner`, `respondent`, `leader`, `auditor`. Ваші `observer` → `leader` без підрозділу,
-   `checklist_editor` → респондент категорії `working_group`, `checklist_approver` → `commissioner`.
+3. **Ролі.** `admin`, `coordinator`, `department`, `leader`, `auditor`, `respondent`. Фронтенд: `observer` → `department`,
+   `checklist_editor` → респондент категорії `working_group`, `checklist_approver` → `auditor` (`lib/api.js`, `frontRole`).
 4. **Ваги питань** — у анкеті (`weight` питання). Ваги джерел і компонентів — у методиці.
 5. **Індекс, обмежувач і достовірність рахує бекенд.** Фронтенд лише показує; `lib/scoring` можна лишити для демо.
 6. **Хеш методики** — поки лише `version`. **Журнал** — ланцюжок sha256 (`seq`, `prev_hash`, `hash`).

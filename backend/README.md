@@ -8,11 +8,11 @@ API опитувальників, конструктора анкет, роле�
 2. `docker compose up --build`
 3. Відкрити `http://localhost:8000/docs`
 
-Під час старту застосовуються міграції й створюються синтетичні демо-дані: підрозділи, користувачі `admin` (уповноважений), `coordinator` (технічний адміністратор), `department`, `leader`, `leader_a`, `auditor`, `wg1`…`wg6`, `staff01`…`staff75`, `expert1`…`expert5` (пароль: `DEMO_PASSWORD`), чотири опубліковані анкети з додатків Б і В і факти за 18 місяців. З `SEED_WITH_WAVES=true` (за замовчуванням у compose) ще дві закриті хвилі, рішення керівника й заходи. З `SEED_DEMO=false` — лише анкети й адміністратор `admin`, без демо-даних і хвиль.
+Під час старту застосовуються міграції й створюються синтетичні демо-дані: підрозділи, користувачі `admin` (уповноважений), `coordinator` (технічний адміністратор), `department`, `leader`, `leader_a`, `auditor`, `wg1`…`wg6`, `staff01`…`staff75`, `expert1`…`expert5` (пароль: `DEMO_PASSWORD`), чотири опубліковані анкети з додатків Б і В і факти за 18 місяців. З `SEED_WITH_WAVES=true` (за замовчуванням у compose) ще дві закриті хвилі, рішення керівника й заходи. З `SEED_DEMO=false` — лише анкети й два адміністратори (`admin` і `techadmin`) з одноразовими запрошеннями в консолі, без демо-даних і хвиль (див. `docs/run.md`, «Перший запуск: два адміністратори»).
 
 ## Локальний запуск без Docker
 
-Потрібні Python 3.12+ і PostgreSQL.
+Потрібні Python 3.13 (як у Docker і CI) і PostgreSQL.
 
 ```bash
 cd backend
@@ -39,7 +39,7 @@ python scripts/demo_wave.py --title "Хвиля 2" --shift 1   # друга хв
 cd backend && pytest
 ```
 
-За замовчуванням тести працюють на тимчасовій SQLite. Щоб прогнати їх на PostgreSQL, задайте `TEST_DATABASE_URL`
+За замовчуванням тести (443, з них 5 лише для PostgreSQL) працюють на тимчасовій SQLite. Щоб прогнати їх на PostgreSQL, задайте `TEST_DATABASE_URL`
 (тоді виконується й перевірка `xmin` для анонімності). CI (`.github/workflows/backend.yml`) проганяє обидва варіанти й міграції з нуля.
 
 ## Де що лежить
@@ -55,6 +55,6 @@ cd backend && pytest
 | `migrations/` | Міграції Alembic |
 | `scripts/demo_wave.py` | Демо-хвиля через API від початку до кінця |
 | `adapters/`, `scripts/mock_sources.py` | Моки 5 джерел фактів (ARTEMIDA, атестація, навчання, закупівлі, повідомлення) → `POST /indicators`, кожне своїм ключем |
-| `scripts/export_openapi.py` | Оновлює `docs/api/openapi.json` з коду (запускати після змін API) |
+| `scripts/export_openapi.py`, `scripts/export_checks_contracts.py` | Оновлюють `docs/api/openapi.json` і контракти модуля «Перевірки» (`docs/contracts/`) з коду (запускати після змін API; потрібен `DATABASE_URL`, база не відкривається) |
 | `scripts/smoke.py`, `scripts/mitra_mock.py` | Перевірка стенду з кінця в кінець; мок Mitra (тема 2) для інтеграції |
-| `scripts/gen_docs.py` | Генерує `docs/recommendations.md` і `docs/cross-check.md` з прогону на тимчасовій базі (демо-seed, фіксована дата) |
+| `scripts/gen_docs.py` | Генерує `docs/recommendations.md` і `docs/cross-check.md` з прогону на тимчасовій базі (демо-seed, фіксована дата; поза Docker задайте `EVIDENCE_DIR`) |
