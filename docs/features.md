@@ -6,9 +6,9 @@
 
 | Модуль | Для кого | Ендпоінти | Код |
 |---|---|---|---|
-| «Питання перевірки» | керівник перед перевіркою | `GET /campaigns/{id}/devils-advocate` | `services/devils_advocate.py`, `routers/insights.py` |
+| «Питання перевірки» | керівник, Департамент, аудит, уповноважений перед перевіркою | `GET /campaigns/{id}/devils-advocate` | `services/devils_advocate.py`, `routers/insights.py` |
 | Агент-черговий | кожна роль — своє (див. розділ 2) | `GET /agent/digest` | `services/watchdog.py`, `routers/insights.py` |
-| «Що змінилося для нас» (нормативка) | керівник, комісія, аудитор | `POST /normative/analyze` | `services/normative.py`, `routers/normative.py` |
+| «Що змінилося для нас» (нормативка) | керівник, Департамент, аудит, уповноважений | `POST /normative/analyze` | `services/normative.py`, `routers/normative.py` |
 | Автопілот хвилі | адміністратор | `PUT/GET /campaigns/{id}/autopilot`, `POST /autopilot/tick`, `GET /campaigns/{id}/autopilot/report`, `GET /me/notifications` | `services/autopilot.py`, `services/lifecycle.py`, `routers/autopilot.py` |
 | Флешкартки доброчесності | усі учасники | `GET /learning/decks`, `GET /learning/decks/{code}`, `POST /learning/decks/{code}/complete`, `GET /learning/stats`, `POST /learning/publish` | `services/learning.py`, `routers/learning.py`, `seed/data/flashcards.json` |
 | Факти з модулів системи | усі | (через наявні `/units/{id}/indicators`, результати хвилі) | `seed/system_facts.py` |
@@ -22,7 +22,7 @@
 Найнеприємніші питання зовнішнього аудитора (у стилі оцінювання НАТО Building Integrity) до результатів
 закритої хвилі. Керівник готується до перевірки заздалегідь.
 
-**Як працює.** 18 правил (`RULES`), кожне — умова на числах знімка хвилі, вага (наскільки болюче питання),
+**Як працює.** 21 правило (`RULES`), кожне — умова на числах знімка хвилі, вага (наскільки болюче питання),
 текст питання з підставленими числами, докази з шляхом до числа в результатах (`evidence[].path`), що
 підготувати (`prepare`) і на який екран перейти (`link.view`). Питання сортуються за вагою, за рівної — за `id`:
 той самий вхід дає той самий результат. Відповідь містить і перелік усіх правил (`rules`) для прозорості.
@@ -184,7 +184,7 @@
 | `GET /campaigns/{id}/devils-advocate` | admin, leader, auditor, department | `unit_id?`, `limit` 1–30 (10), `rephrase` (false) | `{questions[], total_found, rules[], rephrased_by_model, note}`; 409 для незакритої хвилі |
 | `GET /agent/digest` | admin, leader, auditor, department | `unit_id?`, `include_info?` | `{status, summary, counts, items[]}`; лише пункти, які роль може виправити |
 | `POST /normative/analyze` | admin, leader, auditor, department | multipart: `file` або `text`, `title?` | `{document, matches[], by_kind, corpus_size, method, note}` |
-| `GET /campaigns/{id}/autopilot` | admin, coordinator, auditor | — | `{enabled, planned_*, close_at_percent, remind_every_days, plan[], report_ready, events[]}` |
+| `GET /campaigns/{id}/autopilot` | admin, auditor | — | `{enabled, planned_*, close_at_percent, remind_every_days, plan[], report_ready, events[]}` |
 | `PUT /campaigns/{id}/autopilot` | admin | `{enabled, planned_open_on?, planned_close_on?, close_at_percent?, remind_every_days?}` | те саме; 422 без умови закриття, 409 для закритої |
 | `POST /autopilot/tick` | admin | — | `{events[]}` |
 | `GET /campaigns/{id}/autopilot/report` | admin, leader, auditor, department | — | `.docx`; 404, якщо ще не готовий |
@@ -201,9 +201,9 @@
 ## Де модулі в інтерфейсі (frontend-proto, Integra)
 
 - «Питання перевірки»: кнопка «Підготуватися до перевірки» на «Огляді» і у «Звіті» відкриває бічну панель із питаннями; кожне питання має «До числа» (розклад, порівняння чи динаміка за `evidence[].path`). Повний перегляд: екран «Питання перевірки».
-- Агент-черговий: критичні пункти й попередження (до трьох) у блоці «Що потребує уваги» на «Огляді» з пігулкою серйозності й розгортуваним «Як виправити»; ті самі пункти в дзвіночку в шапці («Потребує дії»). Окремої вкладки немає, пункти «до відома» не показуються.
+- Агент-черговий (в інтерфейсі — «Сигнали»): критичні пункти й попередження (до трьох) у блоці «Що потребує уваги» на «Огляді» з пігулкою серйозності й розгортуваним «Як виправити»; ті самі пункти в дзвіночку в шапці («Потребує дії»). Окремої вкладки немає, пункти «до відома» не показуються.
 - Флешкартки: пункт меню «Навчання» для всіх ролей і картка «Навчання» в «Мої результати»; охоплення бачать ролі з доступом до `GET /learning/stats`.
-- Автопілот: розділ вибраної хвилі в «Керуванні циклом» (уповноважений; старі посилання `#autopilot` ведуть туди). Окремого пункту меню для перегляду немає. Для закритої хвилі показано лише план кроків і журнал.
+- Автопілот: розділ вибраної хвилі в «Керуванні циклом» (уповноважений; старі посилання `#autopilot` ведуть туди). Окремого пункту меню для перегляду немає, тож аудит читає автопілот лише через API. Для закритої хвилі показано лише план кроків і журнал.
 - Що змінилось: пункт меню «Що змінилось», екран «Що змінилось для нас». Збіги знаходять правила; ШІ за кнопкою «Підсумувати» пише чернетку висновку (лише для керівника, Департаменту й аудиту, з вимикачем ШІ).
 - Сповіщення: дзвіночок у шапці.
 

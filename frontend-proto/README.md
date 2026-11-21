@@ -27,13 +27,41 @@ npm run build                   # збірка в dist/
 
 | Модуль | Де в інтерфейсі | Файл | Ролі |
 |---|---|---|---|
-| Питання перевірки | кнопка «Підготуватися до перевірки» на «Огляді» і у «Звіті» (бічна панель), повний екран «Питання перевірки»; кожне питання має «До числа» | `views/Insights.jsx` | admin, commissioner, leader, auditor |
+| Питання перевірки | кнопка «Підготуватися до перевірки» на «Огляді» і у «Звіті» (бічна панель), повний екран «Питання перевірки»; кожне питання має «До числа» | `views/Insights.jsx` | admin, observer, leader, auditor |
 | Сигнали | у дзвіночку в шапці («Потребує дії», лише критичні й попередження, клік веде туди, де виправляють) і до трьох пунктів у «Що потребує уваги» на «Огляді»; окремої вкладки немає | `views/Insights.jsx`, `components/NotesPop.jsx` | leader, observer, auditor, admin |
-| Навчання (флешкартки) | пункт меню «Навчання» (стос карток із перегортанням), картка «Навчання» в «Мої результати» | `views/Learn.jsx` | усі; охоплення: admin, coordinator, commissioner, leader, auditor |
-| Автопілот хвилі | розділ вибраної хвилі в «Керуванні циклом» (уповноважений, `#autopilot` веде туди) | `views/Autopilot.jsx` | admin |
-| Що змінилось | пункт меню «Що змінилось», екран «Що змінилось для нас» | `views/Normative.jsx` | admin, coordinator, commissioner, leader, auditor |
+| Навчання (флешкартки) | пункт меню «Навчання» (стос карток із перегортанням), картка «Навчання» в «Мої результати» | `views/Learn.jsx` | усі, крім coordinator; охоплення: admin, observer, leader, auditor |
+| Автопілот хвилі | розділ вибраної хвилі в «Керуванні циклом» (уповноважений, `#autopilot` веде туди) | `views/Autopilot.jsx` | admin (окремого екрана для аудиту немає) |
+| Що змінилось | пункт меню «Що змінилось», екран «Що змінилось для нас» | `views/Normative.jsx` | admin, observer, leader, auditor |
 | Перевірки | пункт меню «Перевірки» | `views/Checks.jsx` | admin |
 | Сповіщення | дзвіночок у шапці | `components/NotesPop.jsx` | усі після входу |
+
+## Екрани ролей, прозорості й захисту
+
+Лише з бекендом, крім позначених «є демо».
+
+| Функція | Де в інтерфейсі | Файл | Ролі |
+|---|---|---|---|
+| Детектор відвертості, ознаки підгонки | картки на «Огляді» (є демо) | `views/Candor.jsx` | leader, observer, auditor, admin |
+| Брифінг за 30 секунд, шлях до наступного рівня | «Що потребує уваги» на «Огляді» і «Звіт» (Word з сервером) | `views/Leadership.jsx` | leader, observer, auditor |
+| Розподіл рівнів дочірніх без назв | «Динаміка» | `views/Oversight.jsx` | leader, observer, auditor |
+| Перегляди підрозділів | пункт меню «Перегляди підрозділів» | `views/Oversight.jsx` | admin, auditor |
+| Рівень, що переважає; стійкість ваг ±10 % | панель «Як це рахується» | `views/IndexExtras.jsx` | ролі з результатами |
+| Якір журналу | картка на екрані «Журнал» | `views/Transparency.jsx` | admin, auditor |
+| Лотерея перевірок | угорі «Чек-листа» | `views/Transparency.jsx` | auditor |
+| Запити другій людині | пункт меню, якщо `policies.four_eyes` | `views/Transparency.jsx` | admin, auditor, coordinator |
+| Урна з трьома ключами | розділ хвилі в «Керуванні циклом»; пункт меню для аудиту (є демо) | `views/Urn.jsx` | admin, auditor |
+| Квитанції | після надсилання анкети, «Мої квитанції» в «Моїх результатах» | `views/Receipts.jsx`, `lib/ballot.js` | респонденти |
+| «Що саме ми зберігаємо» | вступ анкети | `views/Privacy.jsx` | респонденти |
+| Учасники хвилі й відповідальні за чек-лист | розділ хвилі в «Керуванні циклом» | `views/WaveAdmin.jsx` | admin |
+| Стан інтеграції з Mitra | картка в «Керуванні циклом» | `views/Integrations.jsx` | admin |
+| Люди, підрозділи, зведення | пункти меню; запрошення `/invite/<токен>` | `views/Admin.jsx`, `views/invite.jsx` | coordinator |
+| Довідники | категорії й посади — coordinator, факти — admin, перегляд — observer | `views/Admin.jsx` | admin, coordinator, observer |
+| Реєстр ризиків | пункт меню; імпорт CSV — admin | `views/Admin.jsx` | leader, admin, auditor, observer |
+| Заклади Департаменту | «Заклади», без індексів і рейтингу | `views/Department.jsx` | observer |
+| Конструктор анкети | повноекранне вікно з «Анкет» | `views/Builder.jsx` | observer |
+
+Ролі інтерфейсу: `observer` — Департамент (бекенд `department`), `checklist_editor` — член робочої групи (`respondent` з
+категорією `working_group`); решта збігаються з бекендом (`lib/api.js`, `frontRole`).
 
 Нові екрани мають той самий каркас, що й «Огляд»: ряд KPI-плиток, заголовки секцій з іконкою в тонованому колі (`components/modkit.jsx`), довгі пояснення під «Докладніше».
 
