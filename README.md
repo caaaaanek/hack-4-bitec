@@ -98,6 +98,7 @@ Integra пропонує п'ять ідей, на яких тримається 
 
 - Відео (до 3 хвилин): **ПОСИЛАННЯ_НА_ВІДЕО**
 - Покроковий сценарій для самостійної перевірки: [`docs/demo-scenario.md`](docs/demo-scenario.md)
+- Робоча версія: [`https://integra.csit-mitit.com`](https://integra.csit-mitit.com)
 
 ## Як запустити
 
